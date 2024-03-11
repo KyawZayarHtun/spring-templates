@@ -1,0 +1,42 @@
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.profile-pic_img {
+    width: 100px;
+}
+
+.profile-summery {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.profile-summery_name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.profile-summery_name > .profile-name {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.profile-body {
+    /*margin-inline: auto;*/
+    /*max-width: 400px;*/
+}
+
+.profile-body_title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.whitespace-cover-up_img {
+    width: 500px;
+}

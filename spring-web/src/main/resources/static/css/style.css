@@ -1,0 +1,640 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:ital,wght@0,300;0,400;0,600;1,400&display=swap');
+/* For Default Css */
+
+:root {
+    --white-color: #FFF;
+    --white-smoke: #F5F7F8;
+    --danger-color: #D80032;
+    --darkgrey-color: #331D2C;
+    --border-grey: #8f8f8f;
+    --theme-color: #0043D8;
+    --green-color:  #10793F;
+    --grey-color: #EBEBEB;
+    --btn-active-shadow: rgba(50, 50, 93, 0.25) 0 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0 18px 36px -18px inset;
+    --sidebar-icon-size: 17px;
+    --icon-size: 24px;
+    --default-font-size: 14px;
+
+    --sidebar-bg: var(--white-smoke);
+    --sidebar-color: var(--darkgrey-color);
+    --sidebar-active-bg: var(--theme-color);
+    --sidebar-active-color: var(--white-color);
+    --primary-bg: var(--white-color);
+    --primary-color: var(--darkgrey-color);
+    --disable-bg: var(--grey-color);
+
+    /* Bootstrap Override Variable */
+    --bs-offcanvas-width: 300px !important;
+    --bs-border-radius: 0 !important;
+    --bs-dropdown-link-color: var(--bs-dark) !important;
+    --bs-body-bg: var(--sidebar-bg) !important;
+
+    /* Font Sizes */
+    --input-font-size: var(--default-font-size);
+    --btn-font-size: 12px;
+    --sidebar-text-font-size: 12px;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+}
+
+body {
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    font-family: 'Poppins', sans-serif;
+    font-size: var(--default-font-size);
+}
+
+main {
+    min-height: calc(100vh - 65px);
+}
+
+img, picture, video, canvas, svg {
+    display: block;
+    max-width: 100%;
+}
+
+input, button, textarea, select {
+    font: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+    overflow-wrap: break-word;
+    margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Open Sans', sans-serif;
+}
+
+h3 {
+    font-size: 20px;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    display: inline-block;
+    font-size: 14px;
+    /*opacity: 0.8;*/
+    cursor: pointer;
+}
+
+/* Colors */
+.primary-color {
+    background-color: var(--white-color);
+    color: var(--darkgrey-color);
+}
+
+.secondary-color {
+    background-color: var(--theme-color);
+    color: var(--white-color)
+}
+
+.success-color {
+    background-color: var(--green-color);
+    color: var(--white-color);
+}
+
+.danger-color {
+    background-color: var(--danger-color);
+    color: var(--white-color);
+}
+
+
+/* For Buttons */
+button {
+    display: inline-block;
+    padding-inline: 0;
+    font-size: var(--btn-font-size);
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    background: inherit;
+    /*opacity: 0.8;*/
+}
+
+button:hover, button:focus,
+a:hover, a:focus {
+    /*opacity: 1;*/
+}
+
+/* Font Sizes and weights */
+h1, h3, h5 {
+    font-weight: 700;
+}
+
+h2 {
+    font-weight: 600;
+}
+
+label {
+    font-size: 14px;
+}
+
+/* override bootstrap class */
+.btn-close {
+    --bs-btn-close-focus-shadow: none;
+}
+
+.dropdown-menu {
+    border: 1px solid var(--border-grey);
+    box-shadow: rgba(0, 0, 0, 0.35) 0 5px 15px;
+}
+
+.dropdown-item {
+    font-size: 14px;
+}
+
+.dropdown-toggle {
+    font-size: var(--default-font-size);
+}
+
+.dropdown-toggle:after {
+    margin-left: 0.8em;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: var(--theme-color);
+    color: var(--white-smoke);
+}
+
+/* Button Style */
+a.primary-btn, a.border-btn, a.danger-btn, a.text-btn, a.success-btn {
+    font-size: var(--btn-font-size);
+}
+
+.primary-btn, .border-btn, .danger-btn, .text-btn, .success-btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 80px;
+    padding: 8px 13px;
+}
+
+.primary-btn {
+    background-color: var(--theme-color);
+    color: var(--white-color);
+    opacity: 1;
+}
+
+.danger-btn {
+    background-color: var(--danger-color);
+    color: var(--white-color);
+    opacity: 1;
+}
+
+.success-btn {
+    background-color: var(--green-color);
+    color: var(--white-color);
+    opacity: 1;
+}
+
+.primary-btn:hover, .primary-btn:focus,
+.danger-btn:hover, .danger-btn:focus,
+.success-btn:hover, .success-btn:focus {
+    box-shadow: var(--btn-active-shadow);
+}
+
+.border-btn {
+    background-color: var(--white-color);
+    border: 1px solid var(--darkgrey-color);
+    opacity: 1;
+}
+
+.border-btn:hover, .border-btn:focus {
+    background-color: var(--white-smoke);
+}
+
+.btn-icon {
+    width: 18px;
+}
+
+/* Override bootstrap value*/
+.btn {
+    font-size: var(--default-font-size);
+}
+
+/* Danger Link etc */
+.danger-text {
+    color: var(--danger-color);
+}
+
+.error-desc {
+    color: var(--danger-color);
+    font-size: 12px;
+}
+
+/* For icon */
+.icon {
+    width: var(--icon-size);
+    object-fit: cover;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 100ms ease-in;
+}
+
+.icon:hover {
+    opacity: 1;
+}
+
+/* For hr tag */
+hr {
+    border-color: var(--border-grey);
+    margin-block: 0;
+}
+
+/* Bs Modal */
+/* z-index is needed because of my sidebar minimized z-index */
+.modal {
+    z-index: 1058 !important;
+}
+
+.modal-content {
+    background-color: var(--white-smoke);
+    border: none;
+    border-radius: 0;
+}
+
+.modal-header {
+    border-radius: 0;
+    padding: 16px 22px;
+}
+
+.modal-header > .btn-close {
+    filter: invert(100%);
+}
+
+.modal-body {
+    padding: 16px 22px;
+}
+
+.modal-backdrop {
+    z-index: 1057 !important;
+}
+
+/* Input box */
+.form-input {
+    display: block;
+    width: 100%;
+    padding: 6px 12px;
+    background-color: inherit;
+    border: 1px solid var(--border-grey);
+    border-radius: 0;
+    font-size: var(--input-font-size);
+}
+
+input[disabled] {
+    border: none;
+    background: var(--disable-bg);
+}
+
+button[disabled] {
+    opacity: 50%;
+    cursor: not-allowed !important;
+}
+
+button[disabled] {
+    cursor: none;
+}
+
+/* For Password box*/
+.form-group {
+    position: relative;
+    margin-bottom: 16px;
+}
+
+.form-group > input[type=password] {
+}
+
+.password-wrapper {
+    display: flex;
+    position: relative;
+}
+
+.password-wrapper > .form-input__eye {
+    width: 18px;
+    position: absolute;
+    right: 10px;
+    top: 8px;
+    cursor: pointer;
+    transition: transform 100ms ease-in;
+}
+
+.password-wrapper > .form-input__eye:hover {
+    transform: scale(1.2);
+}
+
+/* For Both Input box and select2 input box*/
+.form-input:focus, .select2-search__field[type=search]:focus {
+    box-shadow: none;
+    outline: 1px solid var(--darkgrey-color);
+}
+
+/*Form Radio*/
+.form-group > div > .btn-check:checked + .btn {
+    background: var(--theme-color);
+    color: var(--white-color);
+}
+
+/* For Select2 select */
+.select2-container {
+    width: auto !important;
+    min-width: 200px !important;
+    display: block !important;
+}
+
+.select2-container:focus {
+    outline: 1px solid var(--darkgrey-color);
+}
+
+/* its for select box container */
+.select2-container .select2-selection--single {
+    border-radius: 0 !important;
+    background-color: inherit !important;
+    color: var(--darkgrey-color) !important;
+    padding: 6px 12px !important;
+    height: auto !important;
+    border: 1px solid var(--border-grey) !important;
+}
+
+.select2-container .select2-selection--single[aria-disabled="true"] {
+    background-color: var(--disable-bg) !important;
+    border: none !important;
+}
+
+/* its for selected item box */
+.select2-selection__rendered {
+    font-size: var(--input-font-size);
+    padding: 0 !important;
+    line-height: inherit !important;
+    color: var(--darkgrey-color);
+}
+
+/* its for dropdown arrow icon */
+.select2-selection__arrow {
+    height: 100% !important;
+}
+
+/* its search input */
+.select2-search__field[type=search] {
+    display: block !important;
+    width: 100% !important;
+    padding: 6px 12px !important;
+    background-color: inherit !important;
+    border: 1px solid var(--border-grey) !important;
+    border-radius: 0 !important;
+    outline-offset: 0 !important;
+    font-size: var(--input-font-size);
+}
+
+.select2-selection.select2-selection--multiple .select2-search__field[type=search] {
+    margin: 0 !important;
+    align-self: flex-start !important;
+    border: none !important;
+    padding: 0 !important;
+    height: 21px !important;
+}
+
+.select2-container--default .select2-selection--multiple {
+    display: flex !important;
+    flex-wrap: wrap;
+    align-items: center;
+    width: 100% !important;
+    padding: 6px 12px !important;
+    background-color: inherit !important;
+    border: 1px solid var(--border-grey) !important;
+    border-radius: 0 !important;
+    outline-offset: 0 !important;
+    font-size: var(--input-font-size);
+}
+
+.select2-container--default .select2-selection--multiple[aria-disabled="true"] {
+    background-color: var(--disable-bg) !important;
+    border: none !important;
+}
+
+.select2-container--default .select2-selection--multiple[aria-disabled="true"] .select2-selection__choice {
+    background-color: var(--disable-bg) !important;
+    padding: 0 10px;
+}
+
+.select2-container--default .select2-selection--multiple[aria-disabled="true"] .select2-selection__choice__display {
+    padding: 0;
+}
+
+.select2-selection__rendered {
+    margin-inline: 0 0 !important;
+    margin-block: 0 !important;
+}
+
+.select2-selection__choice {
+    margin-inline: 0 10px !important;
+    margin-block: 0 !important;
+    background: var(--white-color) !important;
+    border: none !important;
+    outline: 1px solid var(--darkgrey-color) !important;
+    border-radius: 0 !important;
+}
+
+/* For Option Hover */
+.select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+    background: var(--theme-color) !important;
+    color: var(--white-color) !important;
+}
+
+/* For Option selected */
+.select2-container--default .select2-results__option--selected {
+    background-color: var(--darkgrey-color) !important;
+    color: var(--white-color) !important;
+}
+
+/* for select2 dropdown box z-index because bootstrap modal z-index is 1055 */
+.select2-dropdown {
+    z-index: 1056 !important;
+}
+
+/* For Toast */
+.toast-header {
+    background-color: inherit;
+    color: inherit;
+    border: none;
+    justify-content: space-between;
+}
+
+.toast-body {
+    padding: 20px 16px !important;
+    color: var(--darkgrey-color);
+    background: var(--white-smoke);
+    box-shadow: rgba(0, 0, 0, 0.45) 0px 25px 20px -20px;
+    border-left: 16px solid;
+}
+
+.toast-success {
+    border-left-color: var(--green-color);
+}
+
+.toast-error {
+    border-left-color: var(--danger-color);
+}
+
+.toast-body img {
+    width: 32px;
+    display: inline;
+    margin-right: 16px;
+}
+
+.toast-header .close-btn {
+    background: white;
+}
+
+/* Custom Component */
+.error-box {
+    background: var(--danger-color);
+    padding: 20px 15px;
+    margin-block-end: 16px;
+    font-size: 12px;
+    color: var(--white-color);
+}
+
+/* For Css Loader */
+.loader {
+    border-radius: 50%;
+    display: inline-block;
+    border-top: 3px solid var(--darkgrey-color);
+    border-right: 3px solid transparent;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+}
+
+.primary-btn > .loader,
+.danger-btn > .loader {
+    border-top: 3px solid var(--white-color);
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.chip {
+    width: min-content;
+    height: min-content;
+    padding: 2px 8px;
+    font-size: 10px;
+    font-weight: normal;
+}
+
+.chip-empty {
+    border: 1px solid var(--darkgrey-color);
+}
+
+/* Bootstrap Table */
+.table {
+    --bs-table-bg: var(--white-color) !important;
+}
+
+.table tr > td:not(:first-child), .table tr > th:not(:first-child) {
+    padding: 8px 30px 8px 8px !important;
+    color: inherit;
+    box-shadow: none;
+    vertical-align: middle;
+}
+
+.table tr > td:first-child, .table tr > th:first-child {
+    padding: 8px;
+    width: 0;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table tr > th:first-child, .table tr > td:first-child {
+    position: sticky !important;
+    background: var(--white-smoke);
+}
+
+.two-icon-width th:first-child,
+.two-icon-width td:first-child {
+    width: 37px !important;
+    min-width: 37px !important;
+    max-width: 37px !important;
+}
+
+/* For a lot of form field */
+.form-fields-grid {
+    display: grid;
+    gap: 10px 15px;
+    margin-bottom: 20px;
+}
+
+.form-two-column-grid {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.form-three-column-grid {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.form-four-column-grid {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+@media only screen and (max-width: 48em) {
+
+    .form-two-column-grid,
+    .form-three-column-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+/* Accordion */
+.accordion-item {
+    background: var(--white-color);
+}
+
+.accordion-header {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+}
+
+.accordion-body {
+    padding: 0 !important;
+}
+
+.accordion-button {
+    font-size: inherit !important;
+    padding: 5px 0 !important;
+    background: var(--white-color) !important;
+    border: none;
+}
+
+.accordion-button:not(.collapsed) {
+    color: inherit !important;
+    box-shadow: none !important;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+}
+
+.accordion-item {
+    border: none !important;
+}

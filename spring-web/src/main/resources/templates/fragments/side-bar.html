@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Side Bar</title>
+</head>
+<body>
+<div th:fragment="side-bar" class="side_bar_wrapper">
+    <div class="side_bar_menu_header-wrapper">
+        <div class="side_bar_menu_header-icon">
+            <img th:src="@{/images/logo/logo.png}" alt="Logo">
+        </div>
+        <div class="side_bar_menu_header-text">
+            <img th:src="@{/images/icon/cross-black.svg}" class="icon"
+                 data-bs-dismiss="offcanvas"
+                 alt="Close Button">
+        </div>
+    </div>
+    <div class="side_bar_menus-wrapper">
+
+        <!--
+            Important Note!
+            menuText and page variable from actual page like home must same (Like)
+            menuText = customer, In home page we need to add {th:with="page='Home'"} at html tag
+            both must same value to select the current page link -->
+
+        <!-- For Single Menu -->
+        <!-- linkPath is to use in href, iconPath is used for icon, menuText is Link Title -->
+        <div th:replace="~{fragments/side-bar-components :: single-link (linkPath = '/', iconPath = '/images/icon/home.svg', menuText = 'Home')}"></div>
+
+
+        <!-- For Dropdown Menu -->
+        <!-- Reminder: -> Watch out layout:include not th:replace -->
+        <!-- id is for using dropdown, menuText is Link Title, iconPath is used for icon -->
+        <div layout:include="~{fragments/side-bar-components :: dropdown-link-container (id = 'customer', menuText = 'List', iconPath = '/images/icon/user.svg')}"
+             th:remove="tag">
+            <div layout:fragment="sidebar-dropdown-links">
+                <a th:replace="~{fragments/side-bar-components :: link (menuText='Customer', href='/customer')}"></a>
+                <a th:replace="~{fragments/side-bar-components :: link (menuText='Courses', href='/courses')}"></a>
+            </div>
+        </div>
+
+       
+
+    </div>
+</div>
+</body>
+</html>

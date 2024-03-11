@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+<!-- For Side bar Single Link -->
+<div class="side_bar_menu-wrapper side_bar_single-link"
+     th:classappend="${menuText == page ? 'side_bar-menu-active' : ''}"
+     th:fragment="single-link (menuText, linkPath, iconPath)"
+     th:if="${not accessUrls.?[url == '__${linkPath}__' && requestMethod.name == 'GET'].isEmpty()}">
+    <!-- only show when sidebar is open -->
+    <a class="side_bar_menu" th:href="@{${linkPath}}">
+        <div class="side_bar_menu-icon">
+            <img th:src="@{${iconPath}}" alt="icon">
+        </div>
+        <div class="side_bar_menu-text" th:text="${menuText}"></div>
+        <div class="side-bar-menu__text--tooltips" th:text="${menuText}"></div>
+    </a>
+</div>
+
+<!-- For Sidebar Drop Link -->
+<div layout:fragment="dropdown-link-container (id, menuText, iconPath)">
+    <div class="side_bar_menu-wrapper side_bar_menu-wrapper-dropdown">
+        <!-- only show when sidebar is open -->
+        <div class="side_bar_menu" data-bs-toggle="collapse" th:href="'#' + ${id}"
+             role="button"
+             aria-expanded="false"
+             th:attr="aria-controls=${id}">
+            <div class="side_bar_dropdown--title-wrapper">
+                <div class="side_bar_dropdown--title">
+                    <div class="side_bar_menu-icon">
+                        <img th:src="@{${iconPath}}" th:alt="${menuText}">
+                    </div>
+                    <div class="side_bar_menu-text" th:text="${menuText}"></div>
+                </div>
+                <span class="side_bar_dropdown--arrow-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                         stroke="currentColor" class="w-6 h-6 side_bar_dropdown--arrow">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"/>
+                    </svg>
+                </span>
+            </div>
+            <!-- For Tooltips Dropdown -->
+            <div class="side-bar-menu__dropdown--wrapper">
+                <div class="side-bar-menu__dropdown--tooltips">
+                    <div class="side_bar_menu-dropdown--tooltips--header">
+                        <p th:text="${menuText}"></p>
+                    </div>
+                    <div class="side_bar_menu-dropdown--tooltips--body" layout:fragment="sidebar-dropdown-links">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- collapse div for open sidebar -->
+        <div class="collapse dropdown-collapse" th:id="${id}">
+            <div class="side_bar_menu__dropdown-list" layout:fragment="sidebar-dropdown-links">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<a th:fragment="link (menuText, href)"
+   th:if="${not accessUrls.?[url == '__${href}__' && requestMethod.name == 'GET'].isEmpty()}"
+   th:classappend="${menuText == page ? 'side_bar-menu-active' : ''}" class="side_bar_menu__dropdown-item"
+   th:href="@{${href}}"
+   th:text="${menuText}"/>
+</body>
+</html>

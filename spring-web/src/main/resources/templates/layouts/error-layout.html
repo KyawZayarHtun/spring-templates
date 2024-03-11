@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="icon" type="image/x-icon" th:href="@{/images/logos/agb-logo.png}">
+
+    <!--  $LAYOUT_TITLE = Sale, $CONTENT_TITLE will come from child title  -->
+    <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Error</title>
+
+    <!--  Reset Css  -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <!--  Layout Css  -->
+    <link rel="stylesheet" th:href="@{/css/layouts/error-layout.css}">
+
+</head>
+<body>
+<main class="error-page-wrapper">
+    <div layout:fragment="error-content" class="error-content">
+    </div>
+</main>
+
+<script layout:fragment="js"></script>
+</body>
+</html>

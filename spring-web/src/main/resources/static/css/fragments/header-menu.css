@@ -1,0 +1,47 @@
+/* Header Menu */
+.header {
+    display: flex;
+    align-items: center;
+}
+
+.header-menu-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-inline: 20px;
+    border-bottom: 1px solid var(--border-grey);
+}
+
+.hamburger-wrapper {
+    padding: 10px 10px 10px 0;
+    cursor: pointer;
+}
+
+.hamburger {
+    width: 24px;
+}
+
+.desktop-sidebar, .desktop-sidebar-btn {
+    display: block;
+}
+
+.mobile-sidebar, .mobile-sidebar-btn {
+    display: none;
+}
+
+@media only screen and (max-width: 48em) {
+
+    .desktop-sidebar, .desktop-sidebar-btn {
+        display: none;
+    }
+
+    .mobile-sidebar, .mobile-sidebar-btn {
+        display: block;
+    }
+
+    .mobile-sidebar .side_bar_menu_header-text {
+        display: block;
+    }
+
+}

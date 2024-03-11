@@ -1,0 +1,26 @@
+/* For Dashboard */
+.dashboard__wrapper {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    transition: grid cubic-bezier(0.31, 0.65, 0.56, 0.95) .5s;
+}
+
+.dashboard__wrapper-minimized {
+    grid-template-columns: 80px 1fr;
+}
+
+.header_main_content {
+    display: grid;
+    grid-template-rows: 50px 1fr;
+    background: var(--primary-bg);
+    color: var(--primary-color);
+}
+
+
+@media only screen and (max-width: 48em) {
+
+    .dashboard__wrapper {
+        grid-template-columns: 1fr;
+    }
+
+}

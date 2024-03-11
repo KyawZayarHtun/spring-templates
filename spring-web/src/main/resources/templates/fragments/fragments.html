@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<body>
+
+<!-- Dropdown Menu Button Using BS with custom css (use in header-menu!) -->
+<div layout:fragment="dropdown-menu (name)" class="dropdown">
+    <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+            data-bs-offset="auto, 0" th:text="${name}"></button>
+    <div class="dropdown-menu dropdown-menu-end" layout:fragment="dropdown-links">
+        <!--
+            "You Can Use This link if link is not for link"
+            <a th:href="@{/}" class="dropdown-item" type="button">Home</a>
+
+            "This is for divider"
+            <hr class="dropdown-divider">
+        -->
+    </div>
+</div>
+
+<!-- Dropdown Link  -->
+<a th:fragment="link (name, href)"
+   th:classappend="${name == page ? 'side_bar-menu-active' : ''}" class="dropdown-item"
+   th:href="@{${href}}"
+   th:text="${name}"/>
+
+<!-- End of Dropdown Menu -->
+
+<!-- Modal Box -->
+<div layout:fragment="modal-box (id,name,type)" class="">
+    <div class="modal fade"
+         th:id="${id}" tabindex="-1" aria-labelledby="Modal Box" aria-hidden="true">
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header"
+                     th:classappend="|${type == 'success'? 'success-color' : 'primary-color'}
+                                ${type == 'danger'? 'danger-color' : 'primary-color'}
+                                ${type == 'secondary'? 'secondary-color' : 'primary-color'}|">
+                    <p class="modal-title" th:text="${name}">Modal title</p>
+                    <div>
+                        <img th:src="@{/images/icon/cross-white.svg}" class="icon"
+                             data-bs-dismiss="modal"
+                             alt="Close Button">
+                    </div>
+                </div>
+                <div layout:fragment="modal-body-and-footer" th:remove="tag">
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- Modal Usage -->
+<!--<a id="delete-btn" class="data-table-action"
+   data-bs-toggle="modal" data-bs-target="#deleteModal">
+    <img src="/images/icon/trash.svg" alt="delete">
+</a>
+&lt;!&ndash; Hidden Modal Box &ndash;&gt;
+<div
+        layout:include="~{fragments/fragments :: modal-box (id = 'deleteModal',name = 'Confirmation', type = 'secondary')}">
+    <div layout:fragment="modal-body-and-footer">
+        <input type="hidden" id="deleteId" name="id">
+        <div class="modal-body">
+            Are you sure you want to delete this?
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="text-btn" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="danger-btn" onclick="deleteAgent()">Delete</button>
+        </div>
+    </div>
+</div>-->
+
+<!-- For Toast -->
+<div layout:fragment="toast (toastId, showToast )">
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div th:id="${toastId}" class="toast" role="alert"
+             aria-live="assertive"
+             aria-atomic="true"
+             layout:fragment="toast-header-body">
+
+        </div>
+    </div>
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            const showToast = [[${showToast}]]
+            let toastId = [[${toastId}]].toString()
+            const toastLiveExample = document.getElementById(toastId)
+
+            if (showToast) {
+                const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample, {
+                    delay: 3000
+                })
+                toastBootstrap.show()
+            }
+        });
+    </script>
+</div>
+<!-- Toast Usage -->
+<!--<div layout:include="~{fragments/fragments :: toast (toastId='egToast', showToast=${true} )}">
+    <div layout:fragment="toast-header-body">
+        <div class="toast-body toast-success">
+            <img src="/images/icon/check-badge.svg" alt="success">
+            Successfully!!
+        </div>
+    </div>
+</div>-->
+
+</body>
+</html>

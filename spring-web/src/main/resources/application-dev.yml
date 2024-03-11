@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/web_template
+    username: root
+    password: kyawzayar
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+  mvc:
+    format:
+      date: dd MMM yyyy
+      time: HH:mm a
+      date-time: dd MMM yyyy hh:mm:ss a
+
+server:
+#  address: 192.168.1.5
+  port: 8080

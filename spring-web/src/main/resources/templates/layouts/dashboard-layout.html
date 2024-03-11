@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="icon" type="image/x-icon" th:href="@{/images/logo/favicon.jpg}">
+
+    <!--  $LAYOUT_TITLE = Dashboard, $CONTENT_TITLE will come from child title  -->
+    <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Dashboard</title>
+
+    <!--  BootStrap Css  -->
+    <link rel="stylesheet" th:href="@{/css/external/bootstrap/bootstrap.min.css}">
+
+    <!--  Reset Css  -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <!--  Layout Css  -->
+    <link rel="stylesheet" th:href="@{/css/layouts/layout.css}">
+
+    <!--  Sidebar Css  -->
+    <link rel="stylesheet" th:href="@{/css/fragments/sidebar.css}">
+
+    <!--  Header Menu Css  -->
+    <link rel="stylesheet" th:href="@{/css/fragments/header-menu.css}">
+
+    <!--  Main Content Css  -->
+    <link rel="stylesheet" th:href="@{/css/fragments/main-content.css}">
+
+    <!--  Fragments Css  -->
+    <link rel="stylesheet" th:href="@{/css/fragments/fragments.css}">
+
+    <!-- BootStrap Js -->
+    <script th:src="@{/js/external/bootstrap/bootstrap.bundle.min.js}"></script>
+
+    <!-- JQuery -->
+    <script th:src="@{/js/external/jquery/jquery-3.7.1.min.js}"></script>
+
+</head>
+<body>
+
+<div class="dashboard__wrapper">
+    <aside th:insert="~{fragments/side-bar :: side-bar}" class="desktop-sidebar"></aside>
+    <aside th:insert="~{fragments/side-bar :: side-bar}"
+           class="offcanvas offcanvas-start mobile-sidebar"
+           id="mobile-sidebar"></aside>
+    <div class="header_main_content">
+        <header class="header" th:insert="~{fragments/header-menu :: header-menu}">Header</header>
+        <main class="main-content" layout:fragment="content">main</main>
+    </div>
+</div>
+
+<!-- Global Js -->
+<script th:src="@{/js/script.js}"></script>
+<!-- For this class -->
+<script>
+    $(document).ready(() => {
+        let isSideBarOpen = true;
+
+
+        $("#collapse-side-bar").click(() => {
+            isSideBarOpen = !isSideBarOpen;
+            let sideBarMenu = $(".side_bar_menu");
+            if (isSideBarOpen) {
+                sideBarMenu.attr('data-bs-toggle', 'collapse')
+            } else {
+                sideBarMenu.removeAttr('data-bs-toggle')
+                $(".collapse").removeClass("show")
+            }
+            $(".dashboard__wrapper").toggleClass("dashboard__wrapper-minimized")
+            $(".side_bar_wrapper").toggleClass("side_bar_wrapper-minimized")
+            $(".side_bar_menu_header-wrapper").toggleClass("side_bar_menu_header-wrapper-minimized")
+            sideBarMenu.toggleClass("justify-content-center");
+            $(".side_bar_dropdown--title-wrapper").toggleClass("justify-content-center");
+            $(".side_bar_menu-text, .side_bar_menu_header-text, .side_bar_dropdown--arrow-btn").toggleClass("d-none")
+
+        })
+
+        $(".mobile-sidebar-btn").click(() => {
+            let sideBarMenu = $(".side_bar_menu");
+
+
+            $(".side_bar_single-link > .side_bar_menu").removeAttr('data-bs-toggle')
+
+            $(".dashboard__wrapper").removeClass("dashboard__wrapper-minimized")
+            $(".side_bar_wrapper").removeClass("side_bar_wrapper-minimized")
+            $(".side_bar_menu_header-wrapper").removeClass("side_bar_menu_header-wrapper-minimized")
+            sideBarMenu.removeClass("justify-content-center");
+            $(".side_bar_dropdown--title-wrapper").removeClass("justify-content-center");
+            $(".side_bar_menu-text, .side_bar_menu_header-text, .side_bar_dropdown--arrow-btn").removeClass("d-none")
+
+        })
+
+        if ($('.side_bar_menu-wrapper .side_bar_menu__dropdown-item').hasClass('side_bar-menu-active')) {
+            $('.side_bar_menu-wrapper .side_bar_menu__dropdown-item.side_bar-menu-active')
+                .closest('.side_bar_menu')
+                .addClass('side_bar-menu-active')
+        }
+    })
+    // for hide dropdown menu if it has no child
+    $(".side_bar_menu-wrapper.side_bar_menu-wrapper-dropdown").each((index, ele) => {
+        if ($(ele).has($(".side_bar_menu__dropdown-list > .side_bar_menu__dropdown-item")).length === 0)
+            $(ele).addClass("d-none")
+    })
+</script>
+
+<!-- Will come from child html -->
+<!-- only for script files-->
+<div layout:fragment="js-scripts" th:remove="tag"></div>
+
+<!-- for js or jquery codes -->
+<script layout:fragment="js"></script>
+</body>
+</html>
