@@ -7,51 +7,104 @@
 </head>
 <body>
 <main layout:fragment="content">
-    <div class="table-responsive">
-        <div class="mb-3 d-flex justify-content-between p-1">
-            <div>
-                <button class="primary-btn me-2">
+    <div class="mb-3 d-flex justify-content-between p-1">
+        <div>
+            <button class="primary-btn me-2">
                     <span>
                         <img th:src="@{/images/icon/download.svg}" alt=""
                              class="btn-icon me-2">
                     </span>
-                    Excel Export
-                </button>
-                <button class="border-btn">
+                Excel Export
+            </button>
+            <button class="border-btn">
                     <span>
                         <img th:src="@{/images/icon/upload.svg}" alt=""
                              class="btn-icon me-2">
                     </span>
-                    Excel Import
-                </button>
-            </div>
-            <div>
-                <div class="d-flex align-items-center gap-2">
-                    <label for="list-size" class="text-nowrap">List Size:</label>
-                    <select id="list-size" class="form-input">
-                        <option value="10">10</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>
-                </div>
-
-            </div>
+                Excel Import
+            </button>
         </div>
+        <div>
+            <div class="d-flex align-items-center gap-2">
+                <label for="list-size" class="text-nowrap">List Size:</label>
+                <select id="list-size" class="form-input">
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </div>
+
+        </div>
+    </div>
+    <div class="table-responsive">
         <table class="table" id="user-list">
             <thead>
             <tr>
                 <th>Id</th>
-                <th data-column-name="name">Name</th>
-                <th data-column-name="email">Email</th>
-                <th data-column-name="phoneNo">Phone No</th>
-                <th data-column-name="gender">Gender</th>
-                <th data-column-name="dob">Date of Birth</th>
-                <th data-column-name="locked">Locked</th>
-                <th data-column-name="activated">Activated</th>
-                <th data-column-name="createdAt">Created At</th>
-                <th data-column-name="UpdatedAt">Updated At</th>
+                <th data-column-name="name">
+                    <span>
+                        Name
+                        <img th:src="@{/images/icon/sort-up.svg}" alt=""
+                             class="sort-icon">
+                    </span>
+                </th>
+                <th data-column-name="email">
+                    <span>
+                        Email
+                        <img th:src="@{/images/icon/sort-up.svg}" alt=""
+                             class="sort-icon d-none">
+                    </span>
+                </th>
+                <th data-column-name="phoneNo">
+                    <span>
+                        Phone Number
+                        <img th:src="@{/images/icon/sort-up.svg}" alt=""
+                             class="sort-icon d-none">
+                    </span></th>
+                <th data-column-name="gender">
+                    <span>
+                        Gender
+                        <img th:src="@{/images/icon/sort-up.svg}" alt=""
+                             class="sort-icon d-none">
+                    </span>
+                </th>
+                <th data-column-name="dob">
+                    <span>
+                        Date of Birth
+                        <img th:src="@{/images/icon/sort-up.svg}" alt=""
+                             class="sort-icon d-none">
+                    </span>
+                </th>
+                <th data-column-name="locked">
+                    <span>
+                        Locked
+                        <img th:src="@{/images/icon/sort-up.svg}" alt=""
+                             class="sort-icon d-none">
+                    </span>
+                </th>
+                <th data-column-name="activated">
+                    <span>
+                        Activated
+                        <img th:src="@{/images/icon/sort-up.svg}" alt=""
+                             class="sort-icon d-none">
+                    </span>
+                </th>
+                <th data-column-name="createdAt">
+                    <span>
+                        Created At
+                        <img th:src="@{/images/icon/sort-up.svg}" alt=""
+                             class="sort-icon d-none">
+                    </span>
+                </th>
+                <th data-column-name="UpdatedAt">
+                    <span>
+                        Updated At
+                        <img th:src="@{/images/icon/sort-up.svg}" alt=""
+                             class="sort-icon d-none">
+                    </span>
+                </th>
             </tr>
             </thead>
             <tbody>
@@ -67,32 +120,18 @@
 <!-- For Javascript Codes -->
 <script layout:fragment="js" th:inline="javascript">
 
+    // For search Payload
     const searchPayload = {
         name: '',
         pageNo: 1,
         size: 10,
-        sortColumnName: '',
-        sortDir: ''
+        sortColumnName: 'name',
+        sortDir: 'asc'
     }
 
-    const fetchUserData = async () => {
-
-        const response = await fetch("http://localhost:8080/user/list", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(searchPayload)
-        })
-
-        if (!response.ok) throw new Error("Something Wrong!")
-
-        return await response.json();
-    }
-
+    // For Adding rows into table
     const addTableBody = async () => {
-        let tableBody = document.querySelector("#user-list > tbody");
-        const data = await fetchUserData();
+        const data = await fetchDataForTable("http://localhost:8080/user/list", searchPayload);
         const apiResponse = {
             totalCount: data.totalCount,
             filterCount: data.filterCount,
@@ -102,13 +141,15 @@
 
         let rows = ''
         apiResponse.contents.forEach((data, index) => {
-            const {dob, gender, createdAt, email, activated, name, locked, phoneNo, updatedAt} =
-                data;
+            const {
+                dob, gender, createdAt, email,
+                activated, name, locked, phoneNo, updatedAt
+            } = data;
             rows += `<tr>
                 <td>${index + 1}</td>
                 <td style="min-width: 200px;">${name}</td>
                 <td style="min-width: 250px;">${email}</td>
-                <td style="min-width: 100px;">${phoneNo}</td>
+                <td style="min-width: 180px;">${phoneNo}</td>
                 <td style="min-width: 100px;">${gender}</td>
                 <td style="min-width: 150px;">${dob}</td>
                 <td style="min-width: 100px;">${locked}</td>
@@ -118,12 +159,21 @@
             </tr>`
         });
 
-        tableBody.innerHTML = rows
-        // console.log(table)
+        document.querySelector("#user-list > tbody").innerHTML = rows
+        return apiResponse;
     }
-
     addTableBody();
 
+    // For sorting header
+    addSortingHeader("user-list", searchPayload, addTableBody)
+
+    // For list size change
+    changeBaseOnListSize("list-size", addTableBody)
+
+    // For Pagination
+    addTableBody().then(({totalPages}) => {
+        console.log(totalPages)
+    });
 </script>
 </body>
 </html>

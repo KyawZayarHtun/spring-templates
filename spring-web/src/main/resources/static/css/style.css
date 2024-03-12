@@ -222,6 +222,10 @@ a.primary-btn, a.border-btn, a.danger-btn, a.text-btn, a.success-btn {
     width: 18px;
 }
 
+.sort-icon {
+    width: 14px;
+}
+
 /* Override bootstrap value*/
 .btn {
     font-size: var(--default-font-size);
@@ -548,6 +552,12 @@ button[disabled] {
 /* Bootstrap Table */
 .table {
     --bs-table-bg: var(--white-color) !important;
+}
+
+.table th > span {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .table tr > td:not(:first-child), .table tr > th:not(:first-child) {

@@ -69,68 +69,68 @@ function checkLinkNullOrRenderStringForDataTable(data) {
     }
 }
 
-$(document).ready(function () {
+// For Fetch Data for Table
+const fetchDataForTable = async (url, searchPayload) => {
 
-    $(".input-date").on("click", function (e) {
-        e.target.showPicker();
+    const response = await fetch(url , {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(searchPayload)
     })
-})
 
-// for current Date
-function getCurrentDate() {
-    const dt = new Date();
-    const padL = (nr) => `${nr}`.padStart(2, `0`);
-    return `${
-        padL(dt.getDate())}-${
-        padL(dt.getMonth() + 1)}-${
-        dt.getFullYear()} ${
-        padL(dt.getHours())}:${
-        padL(dt.getMinutes())}:${
-        padL(dt.getSeconds())}`;
+    if (!response.ok) throw new Error("Something Wrong!")
+
+    return await response.json();
 }
 
-// for refresh btn for datatable
-/*let refreshBtnAndExcelExport = (tableId, needExport, exportId) => {
-    let parentDivForRefreshBtn = $(`#${tableId}_length`);
-    let refreshDataTableBtn = `<button class="primary-btn d-flex gap-2" onclick="location.reload()">
-                                        <img src="/images/icon/refresh.svg" class="btn-icon" alt="">
-                                        <span>Refresh</span>
-                                    </button>`;
-    parentDivForRefreshBtn.append(refreshDataTableBtn)
-}*/
+const addSortingHeader = (id, searchPayload, addTableBody) => {
+    const tableHeaders = document.querySelectorAll(`#${id} thead  th`)
+    tableHeaders.forEach(header => {
+        header.addEventListener('click', () => {
 
+            // for default ascending for new selected column
+            if (searchPayload.sortColumnName === header.dataset.columnName) {
+                searchPayload.sortDir = searchPayload.sortDir === 'desc' ? 'asc' : 'desc'
+            } else {
+                searchPayload.sortDir = 'asc'
+            }
 
-let refreshBtnAndExcelExport = (tableId, needExport, exportId) => {
-    let parentDiv = $(`#${tableId}_length`);
+            // set column Name
+            searchPayload.sortColumnName = header.dataset.columnName
 
-    const div = document.createElement("div");
-    div.className = "d-flex gap-2"
-    let refreshDataTableBtn = `<button class="border-btn d-flex gap-2" onclick="location.reload()">
-                                          <img src="/images/icon/refresh.svg" class="btn-icon" alt="">
-                                          <span>Refresh</span>
-                                      </button>`;
-    if (needExport) {
-        let exportBtn = `<button class="success-btn d-flex gap-2" id="${exportId}">
-                                    <img src="/images/icon/document-arrow-down.svg" class="btn-icon" alt="">
-                                    <span>Export</span>
-                                </button>`;
-        div.insertAdjacentHTML("beforeend", exportBtn)
-    }
+            // show and hide sort icon based on direction
+            let icon = header.querySelector("span > img");
+            if (searchPayload.sortDir === 'asc') {
+                icon.classList.remove("d-none")
+                icon.src = "images/icon/sort-up.svg"
+            } else {
+                icon.classList.remove("d-none")
+                icon.src = "images/icon/sort-down.svg"
+            }
 
-    div.insertAdjacentHTML("beforeend", refreshDataTableBtn);
-    parentDiv.append(div);
+            // for removing sort icon for unselected column
+            tableHeaders.forEach(header => {
+                if (searchPayload.sortColumnName !== header.dataset.columnName) {
+                    let icon = header.querySelector("span > img");
+                    if (icon != null) {
+                        icon.classList.add("d-none")
+                    }
+                }
+            })
+
+            // Adding content
+            addTableBody();
+        });
+
+    })
 }
 
-function createExportBtn(tableId, exportId) {
-    let parentDiv = $(`#${tableId}_length`);
-    console.log(parentDiv)
-
-    const div = document.createElement("div");
-    div.className = "d-flex gap-2"
-    let exportBtn = `<button class="success-btn d-flex gap-2" id="${exportId}">
-                                    <img src="/images/icon/document-arrow-down.svg" class="btn-icon" alt="">
-                                    <span>Export</span>
-                                </button>`;
-    div.insertAdjacentHTML("beforeend", exportBtn);
-    parentDiv.append(div);
+const changeBaseOnListSize = (id, addTableBody) => {
+    let listSize = document.getElementById(id);
+    listSize.addEventListener('change', () => {
+        searchPayload.size = listSize.value;
+        addTableBody()
+    })
 }

@@ -44,7 +44,7 @@ public record UserListDto(
             sortDir = "asc";
 
         if (!StringUtils.hasText(sortColumnName))
-            sortColumnName = "id";
+            sortColumnName = "name";
 
         switch (sortDir) {
             case "asc" -> cq.orderBy(cb.asc(root.get(sortColumnName)));
