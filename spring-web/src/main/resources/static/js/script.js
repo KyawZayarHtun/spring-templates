@@ -72,7 +72,7 @@ function checkLinkNullOrRenderStringForDataTable(data) {
 // For Fetch Data for Table
 const fetchDataForTable = async (url, searchPayload) => {
 
-    const response = await fetch(url , {
+    const response = await fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -85,8 +85,8 @@ const fetchDataForTable = async (url, searchPayload) => {
     return await response.json();
 }
 
-const addSortingHeader = (id, searchPayload, addTableBody) => {
-    const tableHeaders = document.querySelectorAll(`#${id} thead  th`)
+const addSortingHeader = (searchPayload, addTableBody, tableId) => {
+    const tableHeaders = document.querySelectorAll(`#${tableId} thead  th`)
     tableHeaders.forEach(header => {
         header.addEventListener('click', () => {
 
@@ -127,10 +127,31 @@ const addSortingHeader = (id, searchPayload, addTableBody) => {
     })
 }
 
-const changeBaseOnListSize = (id, addTableBody) => {
-    let listSize = document.getElementById(id);
+const changeBaseOnListSize = (searchPayload, addTableBody, selectId, footerId) => {
+    let listSize = document.getElementById(selectId);
     listSize.addEventListener('change', () => {
         searchPayload.size = listSize.value;
-        addTableBody()
+        tablePagination(searchPayload, addTableBody, footerId)
     })
+}
+
+const tablePagination = (searchPayload, addTableBody, footerId) => {
+    addTableBody().then(({totalPages, totalCount, filterCount, contents}) => {
+        const tableFooter = document.getElementById(footerId);
+        const infoDiv = tableFooter.children.item(0)
+        const paginationDiv = tableFooter.children.item(1)
+
+        const startItem = searchPayload.pageNo === 1
+            ? 1
+            : searchPayload.pageNo * searchPayload.size - searchPayload.size + 1
+        const endItem = filterCount < searchPayload.size
+            ? filterCount
+            : contents.length < searchPayload.size
+                ? startItem + contents.length - 1
+                : searchPayload.pageNo * searchPayload.size
+        const isFiltered = totalCount !== filterCount
+            ? `(filtered from ${totalCount} entries)`
+            : ``
+        infoDiv.innerHTML = `Showing ${startItem} to ${endItem} of ${filterCount} entries ${isFiltered}`
+    });
 }

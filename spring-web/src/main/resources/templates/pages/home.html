@@ -112,6 +112,10 @@
             </tbody>
         </table>
     </div>
+    <div id="table-footer" class="d-flex justify-content-between">
+        <div>Info</div>
+        <div>Pagination</div>
+    </div>
 </main>
 
 <!-- For Only Script Tags -->
@@ -122,7 +126,7 @@
 
     // For search Payload
     const searchPayload = {
-        name: '',
+        name: '%b',
         pageNo: 1,
         size: 10,
         sortColumnName: 'name',
@@ -162,18 +166,16 @@
         document.querySelector("#user-list > tbody").innerHTML = rows
         return apiResponse;
     }
-    addTableBody();
 
     // For sorting header
-    addSortingHeader("user-list", searchPayload, addTableBody)
+    addSortingHeader(searchPayload, addTableBody, "user-list")
 
     // For list size change
-    changeBaseOnListSize("list-size", addTableBody)
+    changeBaseOnListSize(searchPayload, addTableBody, "list-size", "table-footer")
 
     // For Pagination
-    addTableBody().then(({totalPages}) => {
-        console.log(totalPages)
-    });
+    tablePagination(searchPayload, addTableBody, "table-footer")
+
 </script>
 </body>
 </html>

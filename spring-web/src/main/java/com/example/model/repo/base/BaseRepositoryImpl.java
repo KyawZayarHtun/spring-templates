@@ -49,6 +49,6 @@ public class BaseRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> implem
         query.setFirstResult((pageNo - 1) * size);
         query.setMaxResults(size);
 
-        return new PageImpl<>(query.getResultList(), PageRequest.of(pageNo, size), totalCount);
+        return new PageImpl<>(query.getResultList(), PageRequest.of(pageNo - 1, size), totalCount);
     }
 }
