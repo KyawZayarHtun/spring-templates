@@ -163,18 +163,13 @@
             </tr>`
         });
 
+        // table id
         document.querySelector("#user-list > tbody").innerHTML = rows
         return apiResponse;
     }
 
-    // For sorting header
-    addSortingHeader(searchPayload, addTableBody, "user-list")
+    createDataTable(searchPayload, addTableBody, "user-list", "list-size", "table-footer")
 
-    // For list size change
-    changeBaseOnListSize(searchPayload, addTableBody, "list-size", "table-footer")
-
-    // For Pagination
-    tablePagination(searchPayload, addTableBody, "table-footer")
 
 </script>
 </body>
