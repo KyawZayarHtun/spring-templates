@@ -85,21 +85,48 @@ const fetchDataForTable = async (url, searchPayload) => {
     return await response.json();
 }
 
-const createDataTable = (searchPayload, addTableBody, tableId, selectId, footerId) => {
-    // For sorting header
-    addSortingHeader(searchPayload, addTableBody, tableId)
-
-    // For list size change
-    changeBaseOnListSize(searchPayload, addTableBody, selectId, "table-footer")
-
-    // For Pagination
-    tablePagination(searchPayload, addTableBody, footerId)
+const getApiResponse = data => {
+    return {
+        totalCount: data.totalCount,
+        filterCount: data.filterCount,
+        totalPages: data.totalPages,
+        contents: data.contents
+    }
 }
 
-const addSortingHeader = (searchPayload, addTableBody, tableId) => {
+const getDummyTableNumber = (searchPayload, index) => {
+    return `${(searchPayload.pageNo - 1) * searchPayload.size + (index + 1)}`
+}
+
+const createDataTable = (searchPayload, addTableBody, tableId, selectId, footerId) => {
+
+    const essentialData = {
+        searchPayload,
+        addTableBody,
+        tableId,
+        selectId,
+        footerId
+    }
+
+    // For sorting header
+    addSortingHeader(essentialData)
+
+    // For list size change
+    changeBaseOnListSize(essentialData)
+
+    // For Pagination
+    tablePagination(essentialData)
+}
+
+const addSortingHeader = ({searchPayload, addTableBody, tableId}) => {
     const tableHeaders = document.querySelectorAll(`#${tableId} thead  th`)
     tableHeaders.forEach(header => {
         header.addEventListener('click', () => {
+
+            let columnName = header.dataset.columnName;
+            if (columnName == null) {
+                return;
+            }
 
             // for default ascending for new selected column
             if (searchPayload.sortColumnName === header.dataset.columnName) {
@@ -109,24 +136,58 @@ const addSortingHeader = (searchPayload, addTableBody, tableId) => {
             }
 
             // set column Name
-            searchPayload.sortColumnName = header.dataset.columnName
+            searchPayload.sortColumnName = columnName
 
             // show and hide sort icon based on direction
-            let icon = header.querySelector("span > img");
-            if (searchPayload.sortDir === 'asc') {
-                icon.classList.remove("d-none")
-                icon.src = "images/icon/sort-up.svg"
-            } else {
-                icon.classList.remove("d-none")
-                icon.src = "images/icon/sort-down.svg"
+            let icon = header.querySelector("span > span");
+            if (icon == null) {
+                const iconSpan = document.createElement("span")
+                icon = header.querySelector("span").appendChild(iconSpan)
             }
+
+            if (searchPayload.sortDir === 'asc') {
+                icon.outerHTML = `<span class="ascending-icon d-flex">
+                        <!-- arrow up -->
+                        <svg xmlns='http://www.w3.org/2000/svg' stroke="" viewBox='0 0 24 24'
+                             fill='#331D2C'
+                             width='14'
+                             height='14'>
+                            <path d="M3 19h18a1.002 1.002 0 0 0 .823-1.569l-9-13c-.373-.539-1.271-.539-1.645 0l-9 13A.999.999 0 0 0 3 19z"></path>
+                        </svg>
+                        <!-- arrow down-->
+                        <svg xmlns='http://www.w3.org/2000/svg' stroke="#000" viewBox='0 0 24 24'
+                             fill='transparent'
+                             width='14'
+                             height='14'>
+                            <path d="M11.178 19.569a.998.998 0 0 0 1.644 0l9-13A.999.999 0 0 0 21 5H3a1.002 1.002 0 0 0-.822 1.569l9 13z"></path>
+                        </svg>
+                    </span>`
+            } else {
+                icon.outerHTML = `<span class="descending-icon d-flex">
+                        <!-- arrow up -->
+                        <svg xmlns='http://www.w3.org/2000/svg' stroke="#000" viewBox='0 0 24 24'
+                             fill='transparent'
+                             width='14'
+                             height='14'>
+                            <path d="M3 19h18a1.002 1.002 0 0 0 .823-1.569l-9-13c-.373-.539-1.271-.539-1.645 0l-9 13A.999.999 0 0 0 3 19z"></path>
+                        </svg>
+                        <!-- arrow down-->
+                        <svg xmlns='http://www.w3.org/2000/svg' stroke="" viewBox='0 0 24 24'
+                             fill='#331D2C'
+                             width='14'
+                             height='14'>
+                            <path d="M11.178 19.569a.998.998 0 0 0 1.644 0l9-13A.999.999 0 0 0 21 5H3a1.002 1.002 0 0 0-.822 1.569l9 13z"></path>
+                        </svg>
+                    </span>`
+            }
+
 
             // for removing sort icon for unselected column
             tableHeaders.forEach(header => {
                 if (searchPayload.sortColumnName !== header.dataset.columnName) {
-                    let icon = header.querySelector("span > img");
+                    let icon = header.querySelector("span > span");
                     if (icon != null) {
-                        icon.classList.add("d-none")
+                        icon.remove()
                     }
                 }
             })
@@ -138,22 +199,24 @@ const addSortingHeader = (searchPayload, addTableBody, tableId) => {
     })
 }
 
-const changeBaseOnListSize = (searchPayload, addTableBody, selectId, footerId) => {
-    let listSize = document.getElementById(selectId);
+const changeBaseOnListSize = (essentialData) => {
+    let listSize = document.getElementById(essentialData.selectId);
     listSize.addEventListener('change', () => {
-        searchPayload.size = listSize.value;
-        tablePagination(searchPayload, addTableBody, footerId)
+        essentialData.searchPayload.size = listSize.value;
+        essentialData.searchPayload.pageNo = 1
+        tablePagination(essentialData)
     })
 }
 
-const tablePagination = (searchPayload, addTableBody, footerId) => {
-    addTableBody().then(({totalPages, totalCount, filterCount, contents}) => {
-        const tableFooter = document.getElementById(footerId);
+const tablePagination = (essentialData) => {
+    essentialData.addTableBody().then(({totalPages, totalCount, filterCount, contents}) => {
+        const tableFooter = document.getElementById(essentialData.footerId);
         const infoDiv = tableFooter.children.item(0)
         const paginationDiv = tableFooter.children.item(1)
 
-        paginationInfo(searchPayload, totalCount, filterCount, contents, infoDiv)
-        pagination(totalPages)
+        paginationInfo(essentialData.searchPayload, totalCount, filterCount, contents, infoDiv)
+        // pagination(paginationDiv, filterCount, essentialData.searchPayload, addTableBody, infoDiv)
+        pagination(essentialData, filterCount, paginationDiv, infoDiv)
     });
 }
 
@@ -172,6 +235,25 @@ const paginationInfo = (searchPayload, totalCount, filterCount, contents, infoDi
     infoDiv.innerHTML = `Showing ${startItem} to ${endItem} of ${filterCount} entries ${isFiltered}`
 }
 
-const pagination = (totalPage) => {
-    console.log(totalPage)
+const pagination = ({searchPayload, addTableBody}, filterCount, paginationDiv, infoDiv) => {
+    let pagination = new tui.Pagination(paginationDiv, {
+        totalItems: filterCount,
+        itemsPerPage: searchPayload.size,
+        visiblePages: 5,
+        centerAlign: true,
+        template: {
+            page: '<a href="#" class="pagination-btn">{{page}}</a>',
+            currentPage: '<span class="pagination-btn current-page">{{page}}</span>',
+            moveButton: `<a href="#" class="pagination-btn {{type}}-page">{{type}}</a>`,
+            disabledMoveButton: `<span class="pagination-btn page-disabled {{type}}-page">{{type}}</span>`,
+            moreButton: `<a href="#" class="pagination-btn">...</a>`
+        }
+    });
+    pagination.on('beforeMove', function (eventData) {
+        searchPayload.pageNo = eventData.page;
+        addTableBody().then(({totalPages, totalCount, filterCount, contents}) => {
+            paginationInfo(searchPayload, totalCount, filterCount, contents, infoDiv)
+        })
+    });
+
 }

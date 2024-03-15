@@ -46,63 +46,47 @@
                 <th data-column-name="name">
                     <span>
                         Name
-                        <img th:src="@{/images/icon/sort-up.svg}" alt=""
-                             class="sort-icon">
+                        <span th:replace="fragments/fragments :: sort-asc-icon"></span>
                     </span>
                 </th>
                 <th data-column-name="email">
                     <span>
                         Email
-                        <img th:src="@{/images/icon/sort-up.svg}" alt=""
-                             class="sort-icon d-none">
                     </span>
                 </th>
                 <th data-column-name="phoneNo">
                     <span>
                         Phone Number
-                        <img th:src="@{/images/icon/sort-up.svg}" alt=""
-                             class="sort-icon d-none">
-                    </span></th>
+                    </span>
+                </th>
                 <th data-column-name="gender">
                     <span>
                         Gender
-                        <img th:src="@{/images/icon/sort-up.svg}" alt=""
-                             class="sort-icon d-none">
                     </span>
                 </th>
                 <th data-column-name="dob">
                     <span>
                         Date of Birth
-                        <img th:src="@{/images/icon/sort-up.svg}" alt=""
-                             class="sort-icon d-none">
                     </span>
                 </th>
                 <th data-column-name="locked">
                     <span>
                         Locked
-                        <img th:src="@{/images/icon/sort-up.svg}" alt=""
-                             class="sort-icon d-none">
                     </span>
                 </th>
                 <th data-column-name="activated">
                     <span>
                         Activated
-                        <img th:src="@{/images/icon/sort-up.svg}" alt=""
-                             class="sort-icon d-none">
                     </span>
                 </th>
                 <th data-column-name="createdAt">
                     <span>
                         Created At
-                        <img th:src="@{/images/icon/sort-up.svg}" alt=""
-                             class="sort-icon d-none">
                     </span>
                 </th>
                 <th data-column-name="UpdatedAt">
                     <span>
                         Updated At
-                        <img th:src="@{/images/icon/sort-up.svg}" alt=""
-                             class="sort-icon d-none">
                     </span>
                 </th>
             </tr>
@@ -112,9 +96,9 @@
             </tbody>
         </table>
     </div>
-    <div id="table-footer" class="d-flex justify-content-between">
+    <div id="table-footer" class="table-footer">
         <div>Info</div>
-        <div>Pagination</div>
+        <div class="pagination">Pagination</div>
     </div>
 </main>
 
@@ -126,7 +110,7 @@
 
     // For search Payload
     const searchPayload = {
-        name: '%b',
+        name: '',
         pageNo: 1,
         size: 10,
         sortColumnName: 'name',
@@ -136,12 +120,7 @@
     // For Adding rows into table
     const addTableBody = async () => {
         const data = await fetchDataForTable("http://localhost:8080/user/list", searchPayload);
-        const apiResponse = {
-            totalCount: data.totalCount,
-            filterCount: data.filterCount,
-            totalPages: data.totalPages,
-            contents: data.contents
-        }
+        const apiResponse = getApiResponse(data)
 
         let rows = ''
         apiResponse.contents.forEach((data, index) => {
@@ -150,14 +129,14 @@
                 activated, name, locked, phoneNo, updatedAt
             } = data;
             rows += `<tr>
-                <td>${index + 1}</td>
+                <td>${getDummyTableNumber(searchPayload, index)}</td>
                 <td style="min-width: 200px;">${name}</td>
                 <td style="min-width: 250px;">${email}</td>
                 <td style="min-width: 180px;">${phoneNo}</td>
-                <td style="min-width: 100px;">${gender}</td>
-                <td style="min-width: 150px;">${dob}</td>
-                <td style="min-width: 100px;">${locked}</td>
-                <td style="min-width: 100px;">${activated}</td>
+                <td style="min-width: 150px;">${gender}</td>
+                <td style="min-width: 180px;">${dob}</td>
+                <td style="min-width: 150px;">${locked}</td>
+                <td style="min-width: 150px;">${activated}</td>
                 <td style="min-width: 230px;">${createdAt}</td>
                 <td style="min-width: 230px;">${updatedAt}</td>
             </tr>`
@@ -171,6 +150,10 @@
     createDataTable(searchPayload, addTableBody, "user-list", "list-size", "table-footer")
 
 
+    const filterTable = (name) => {
+        searchPayload.name = name
+        createDataTable(searchPayload, addTableBody, "user-list", "list-size", "table-footer")
+    }
 </script>
 </body>
 </html>

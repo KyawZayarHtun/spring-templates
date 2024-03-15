@@ -223,7 +223,7 @@ a.primary-btn, a.border-btn, a.danger-btn, a.text-btn, a.success-btn {
 }
 
 .sort-icon {
-    width: 14px;
+    display: flex;
 }
 
 /* Override bootstrap value*/
@@ -549,7 +549,7 @@ button[disabled] {
     border: 1px solid var(--darkgrey-color);
 }
 
-/* Bootstrap Table */
+/* Data Table */
 .table {
     --bs-table-bg: var(--white-color) !important;
 }
@@ -575,6 +575,55 @@ button[disabled] {
     position: sticky !important;
     background: var(--white-smoke);
 }
+
+.table th:not(:first-child) {
+    cursor: pointer;
+}
+
+.table th:not([data-column-name]) {
+    cursor: default;
+}
+
+.table-footer {
+    margin-block: 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.table-footer > .pagination {
+    display: flex;
+    gap: 5px;
+}
+
+/* Pagination */
+.pagination-btn {
+    display: inline-block;
+    position: relative;
+    padding: 0.5em 1em;
+    cursor: pointer;
+}
+
+.pagination-btn:hover:not(.pagination-btn.page-disabled) {
+    background-color: var(--theme-color);
+    color: var(--white-color);
+    border-radius: 0 !important;
+    border-color: transparent !important;
+}
+
+.pagination-btn.first-page, .pagination-btn.next-page,
+.pagination-btn.last-page, .pagination-btn.prev-page {
+    text-transform: capitalize;
+}
+
+.pagination-btn.page-disabled {
+    color: #666;
+    cursor: not-allowed;
+}
+.pagination-btn.current-page {
+    border: 1px solid var(--darkgrey-color);
+}
+/* End of Table */
 
 .two-icon-width th:first-child,
 .two-icon-width td:first-child {

@@ -107,5 +107,39 @@
     </div>
 </div>-->
 
+<!-- For Sorting Icon-->
+<span th:fragment="sort-asc-icon" class="ascending-icon d-flex">
+    <!-- arrow up -->
+    <svg xmlns='http://www.w3.org/2000/svg' stroke="" viewBox='0 0 24 24'
+         fill='#331D2C'
+         width='14'
+         height='14'>
+        <path d="M3 19h18a1.002 1.002 0 0 0 .823-1.569l-9-13c-.373-.539-1.271-.539-1.645 0l-9 13A.999.999 0 0 0 3 19z"></path>
+    </svg>
+    <!-- arrow down-->
+    <svg xmlns='http://www.w3.org/2000/svg' stroke="#000" viewBox='0 0 24 24'
+         fill='transparent'
+         width='14'
+         height='14'>
+        <path d="M11.178 19.569a.998.998 0 0 0 1.644 0l9-13A.999.999 0 0 0 21 5H3a1.002 1.002 0 0 0-.822 1.569l9 13z"></path>
+    </svg>
+</span>
+<span th:fragment="sort-desc-icon" class="descending-icon d-flex">
+    <!-- arrow up -->
+    <svg xmlns='http://www.w3.org/2000/svg' stroke="#000" viewBox='0 0 24 24'
+         fill='transparent'
+         width='14'
+         height='14'>
+        <path d="M3 19h18a1.002 1.002 0 0 0 .823-1.569l-9-13c-.373-.539-1.271-.539-1.645 0l-9 13A.999.999 0 0 0 3 19z"></path>
+    </svg>
+    <!-- arrow down-->
+    <svg xmlns='http://www.w3.org/2000/svg' stroke="" viewBox='0 0 24 24'
+         fill='#331D2C'
+         width='14'
+         height='14'>
+        <path d="M11.178 19.569a.998.998 0 0 0 1.644 0l9-13A.999.999 0 0 0 21 5H3a1.002 1.002 0 0 0-.822 1.569l9 13z"></path>
+    </svg>
+</span>
+
 </body>
 </html>
