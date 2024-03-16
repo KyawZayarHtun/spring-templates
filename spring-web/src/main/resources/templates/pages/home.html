@@ -4,11 +4,22 @@
       layout:decorate="~{layouts/dashboard-layout}" th:with="page='Home'">
 <head>
     <title>Home</title>
+    <link rel="stylesheet" th:href="@{/css/pagination.css}">
 </head>
 <body>
 <main layout:fragment="content">
-    <div class="mb-3 d-flex justify-content-between p-1">
-        <div>
+    <div class="table-search">
+        <h5 class="mb-2">Search</h5>
+        <div class="d-flex align-items-end gap-2">
+            <div>
+                <label for="name">Name</label>
+                <input type="text" id="name" class="form-input">
+            </div>
+            <button class="primary-btn" onclick="filterTable()">Filter</button>
+        </div>
+    </div>
+    <div class="table-actions">
+        <div class="action-buttons">
             <button class="primary-btn me-2">
                     <span>
                         <img th:src="@{/images/icon/download.svg}" alt=""
@@ -24,18 +35,15 @@
                 Excel Import
             </button>
         </div>
-        <div>
-            <div class="d-flex align-items-center gap-2">
-                <label for="list-size" class="text-nowrap">List Size:</label>
-                <select id="list-size" class="form-input">
-                    <option value="10">10</option>
-                    <option value="25">25</option>
-                    <option value="50">50</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                </select>
-            </div>
-
+        <div class="action-list-size">
+            <label for="list-size" class="text-nowrap">List Size:</label>
+            <select id="list-size" class="form-input">
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
         </div>
     </div>
     <div class="table-responsive">
@@ -103,7 +111,10 @@
 </main>
 
 <!-- For Only Script Tags -->
-<div layout:fragment="js-scripts"></div>
+<div layout:fragment="js-scripts">
+    <script th:src="@{/js/external/pagination/pagination.min.js}"></script>
+    <script th:src="@{/js/pagination.js}"></script>
+</div>
 
 <!-- For Javascript Codes -->
 <script layout:fragment="js" th:inline="javascript">
@@ -138,9 +149,13 @@
                 <td style="min-width: 150px;">${locked}</td>
                 <td style="min-width: 150px;">${activated}</td>
                 <td style="min-width: 230px;">${createdAt}</td>
-                <td style="min-width: 230px;">${updatedAt}</td>
+                <td style="min-width: 230px;">${checkStringNullOrRenderStringForDataTable(updatedAt)}</td>
             </tr>`
         });
+
+        if (rows === '') {
+            rows = getEmptyRow(10)
+        }
 
         // table id
         document.querySelector("#user-list > tbody").innerHTML = rows
@@ -150,8 +165,8 @@
     createDataTable(searchPayload, addTableBody, "user-list", "list-size", "table-footer")
 
 
-    const filterTable = (name) => {
-        searchPayload.name = name
+    const filterTable = () => {
+        searchPayload.name = document.getElementById("name").value
         createDataTable(searchPayload, addTableBody, "user-list", "list-size", "table-footer")
     }
 </script>

@@ -1,0 +1,131 @@
+/* Data Table */
+.table {
+    --bs-table-bg: var(--white-color) !important;
+}
+
+.table th > span {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.table tr > td:not(:first-child), .table tr > th:not(:first-child) {
+    padding: 8px 30px 8px 8px !important;
+    color: inherit;
+    box-shadow: none;
+    vertical-align: middle;
+}
+
+.table tr > td:first-child, .table tr > th:first-child {
+    padding: 8px;
+    width: 0;
+    text-align: center;
+    vertical-align: middle;
+    position: sticky !important;
+    background: var(--white-smoke);
+}
+
+.table th:not(:first-child) {
+    cursor: pointer;
+}
+
+.table th:not([data-column-name]) {
+    cursor: default;
+}
+
+.table-footer {
+    margin-block: 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.table-footer > .pagination {
+    display: flex;
+    gap: 5px;
+}
+
+@media only screen and (max-width: 48em) {
+    .table-footer {
+        flex-direction: column;
+        gap: 1em;
+    }
+}
+
+/* Pagination */
+.pagination-btn {
+    display: inline-block;
+    position: relative;
+    padding: 0.5em 1em;
+    cursor: pointer;
+}
+
+.pagination-btn:hover:not(.pagination-btn.page-disabled) {
+    background-color: var(--theme-color);
+    color: var(--white-color);
+    border-radius: 0 !important;
+    border-color: transparent !important;
+}
+
+.pagination-btn.first-page, .pagination-btn.next-page,
+.pagination-btn.last-page, .pagination-btn.prev-page {
+    text-transform: capitalize;
+}
+
+.pagination-btn.page-disabled {
+    color: #8a8a8a;
+    cursor: not-allowed;
+}
+
+.pagination-btn.current-page {
+    border: 1px solid var(--darkgrey-color);
+}
+
+@media only screen and (max-width: 48em) {
+    .pagination-btn {
+        padding: 0.5em;
+    }
+}
+/* End of Pagination */
+
+/* Table Actions */
+.table-actions {
+    padding: 1em 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.table-actions > .action-list-size {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+@media only screen and (max-width: 48em) {
+    .table-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+    }
+
+    .table-actions > .action-list-size {
+        justify-content: flex-end;
+    }
+
+    .table-actions > .action-list-size > select {
+        width: auto;
+    }
+}
+
+@media only screen and (max-width: 30em) {
+    .table-actions > .action-buttons {
+        display: flex;
+        justify-content: space-between;
+    }
+}
+/* End of Table Actions */
+
+/* Table Search */
+.table-search {
+    margin-block-end: 1em;
+}
