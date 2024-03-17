@@ -20,7 +20,7 @@
     </div>
     <div class="table-actions">
         <div class="action-buttons">
-            <button class="primary-btn me-2">
+            <button class="primary-btn me-2" onclick="exportExcel()">
                     <span>
                         <img th:src="@{/images/icon/download.svg}" alt=""
                              class="btn-icon me-2">
@@ -168,6 +168,30 @@
     const filterTable = () => {
         searchPayload.name = document.getElementById("name").value
         createDataTable(searchPayload, addTableBody, "user-list", "list-size", "table-footer")
+    }
+
+    const exportExcel = async () => {
+        const response = await fetch("http://localhost:8080/user/export-excel", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(searchPayload)
+        })
+        if (!response.ok) throw new Error("Something Wrong!")
+
+        console.log(response.headers.get("Content-Disposition"))
+        response.blob().then(blob => {
+            // Create a blob URL and create a link element to trigger the download
+            const blobUrl = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = blobUrl;
+            a.download = 'sample.xls'; // Set the desired file name with .xls extension
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(blobUrl);
+        })
     }
 </script>
 </body>
