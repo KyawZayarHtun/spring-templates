@@ -2,7 +2,6 @@ package com.example.model.service.document.excel.exported;
 
 import com.example.util.document.excel.ApachePoiUtil;
 import com.example.util.payload.dto.document.excel.*;
-import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -33,8 +32,8 @@ public class ExcelServiceImpl implements ExcelService {
 
     private final ApachePoiUtil apachePoiUtil;
 
-    @Value("${spring.mvc.format.date-time}")
-    private String dateTimeFormat;
+    @Value("${spring.mvc.format.excel-date-time}")
+    private String excelDateTimeFormat;
 
     @Override
     public ExcelExportHeadersAndByteStream generateExcel(ExcelSetting excelSetting, HttpServletResponse response) throws IOException {
@@ -45,9 +44,6 @@ public class ExcelServiceImpl implements ExcelService {
                 .stream()
                 .map(ExcelColumnIndexAndValue::fetchHeaders)
                 .toList();
-
-        // Response
-//        setNecessaryResponseSetting(excelSetting.getSheetName(), response);
 
         // Create Excel Sheet
         XSSFSheet sheet = workbook.createSheet(excelSetting.getSheetName());
@@ -70,11 +66,6 @@ public class ExcelServiceImpl implements ExcelService {
         // Column width setting
         columnWidthSetting(excelSetting, headers, sheet);
 
-        /*ServletOutputStream outputStream = response.getOutputStream();
-        workbook.write(outputStream);
-        workbook.close();
-        outputStream.close();*/
-
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         workbook.write(stream);
 
@@ -82,9 +73,9 @@ public class ExcelServiceImpl implements ExcelService {
     }
 
     private HttpHeaders getHeaders(String sheetName) {
-        String fileName = String.format("%s-%s.xlsx",
+        String fileName = String.format("%s_%s.xlsx",
                 sheetName,
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern(dateTimeFormat)));
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern(excelDateTimeFormat)));
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
@@ -109,7 +100,7 @@ public class ExcelServiceImpl implements ExcelService {
         dateCell.setCellValue(LocalDateTime.now());
         CreationHelper createHelper = workbook.getCreationHelper();
         var dateStyle = apachePoiUtil.headerCellStyle(workbook, 11);
-        dateStyle.setDataFormat(createHelper.createDataFormat().getFormat("m/d/yyyy h:mm AM/PM"));
+        dateStyle.setDataFormat(createHelper.createDataFormat().getFormat("dd MMM yyyy hh:mm:ss AM/PM"));
         dateCell.setCellStyle(dateStyle);
     }
 

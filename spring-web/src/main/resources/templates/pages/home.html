@@ -113,7 +113,8 @@
 <!-- For Only Script Tags -->
 <div layout:fragment="js-scripts">
     <script th:src="@{/js/external/pagination/pagination.min.js}"></script>
-    <script th:src="@{/js/pagination.js}"></script>
+    <script th:src="@{/js/search-table.js}"></script>
+    <script th:src="@{/js/generate-file.js}"></script>
 </div>
 
 <!-- For Javascript Codes -->
@@ -170,28 +171,8 @@
         createDataTable(searchPayload, addTableBody, "user-list", "list-size", "table-footer")
     }
 
-    const exportExcel = async () => {
-        const response = await fetch("http://localhost:8080/user/export-excel", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(searchPayload)
-        })
-        if (!response.ok) throw new Error("Something Wrong!")
-
-        console.log(response.headers.get("Content-Disposition"))
-        response.blob().then(blob => {
-            // Create a blob URL and create a link element to trigger the download
-            const blobUrl = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = blobUrl;
-            a.download = 'sample.xls'; // Set the desired file name with .xls extension
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(blobUrl);
-        })
+    const exportExcel = () => {
+        getFile("http://localhost:8080/user/export-excel", searchPayload)
     }
 </script>
 </body>

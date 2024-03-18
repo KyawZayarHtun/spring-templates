@@ -189,7 +189,7 @@ const tablePagination = (essentialData) => {
         const paginationDiv = tableFooter.children.item(1)
 
         paginationInfo(essentialData.searchPayload, totalCount, filterCount, contents, infoDiv)
-        pagination(essentialData, filterCount, paginationDiv, infoDiv)
+        paginationMenu(essentialData, filterCount, paginationDiv, infoDiv)
     });
 }
 
@@ -208,7 +208,7 @@ const paginationInfo = (searchPayload, totalCount, filterCount, contents, infoDi
     infoDiv.innerHTML = `Showing ${startItem} to ${endItem} of ${filterCount} entries ${isFiltered}`
 }
 
-const pagination = ({searchPayload, addTableBody}, filterCount, paginationDiv, infoDiv) => {
+const paginationMenu = ({searchPayload, addTableBody}, filterCount, paginationDiv, infoDiv) => {
     let visiblePages = 5;
     if (window.innerWidth <= 672) {
         visiblePages = 3

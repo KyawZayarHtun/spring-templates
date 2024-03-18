@@ -13,13 +13,12 @@ import com.example.util.payload.dto.user.UserListDto;
 import com.example.util.payload.dto.user.UserSearchDto;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.function.Function;
 
 @Service
@@ -54,12 +53,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ExcelExportHeadersAndByteStream generateExcelExport(HttpServletResponse response) throws IOException {
+    public ExcelExportHeadersAndByteStream generateExcelExport(UserSearchDto searchDto,
+                                                               HttpServletResponse response) throws IOException {
         var excelSetting = new ExcelSetting();
         excelSetting.setTitle("User List");
         excelSetting.setSheetName("User");
 
-        var userList = userRepo.findAll(userSearchQuery(new UserSearchDto()));
+        var userList = userRepo.findAll(userSearchQuery(searchDto));
 
         for (var dto : userList) {
             var excelRow = new ExcelRow();
@@ -70,6 +70,8 @@ public class UserServiceImpl implements UserService {
             );
             excelSetting.getRows().add(excelRow);
         }
+
+        excelSetting.setExcludeAutoSizeColumn(List.of(2));
         return service.generateExcel(excelSetting, response);
     }
 
