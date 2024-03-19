@@ -13,8 +13,6 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@ToString
 @Entity
 @Table(name = "user")
 public class User extends BaseField implements Serializable{
@@ -51,5 +49,10 @@ public class User extends BaseField implements Serializable{
     @Column(name = "activated", nullable = false)
     @Convert(converter = TrueFalseConverter.class)
     private Boolean activated;
+
+    @JoinColumn(name = "user_role_id", nullable = false,
+            foreignKey = @ForeignKey(name = "fk_user_role"))
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Role role;
 
 }
