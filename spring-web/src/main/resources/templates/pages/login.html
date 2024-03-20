@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!--  Reset Css  -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <!--  Main Content Css  -->
+    <link rel="stylesheet" th:href="@{/css/pages/login.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/images/logo/logo.png}">
+
+
+    <title>Login</title>
+</head>
+<body>
+<main class="login-wrapper">
+    <div class="login">
+        <div class="login__img">
+            <img th:src="@{/images/logo/logo.png}" alt="" class="login__img-logo">
+        </div>
+        <form th:action="@{/login}" method="post" class="login__form" id="login_form">
+            <div class="error-box" th:if="${param.error != null}" th:text="Something was wrong!">
+
+            </div>
+            <div class="form-group">
+                <label for="username">email</label>
+                <input type="text" class="form-input" id="username" name="username" autocomplete="off">
+                <span class="error-desc" id="username_blank"></span>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="password-wrapper">
+                    <input type="password" class="form-input" id="password" name="password" autocomplete="off">
+                    <img th:src="@{/images/icons/eye-slash.svg}" class="form-input__eye eye-close d-none" alt="">
+                    <img th:src="@{/images/icons/eye.svg}" class="form-input__eye eye-open" alt="">
+                </div>
+                <span class="error-desc" id="password_blank"></span>
+            </div>
+            <button id="login_submit_btn" class="primary-btn">Login</button>
+        </form>
+    </div>
+</main>
+<!-- JQuery -->
+<script th:src="@{/js/external/jquery/jquery-3.7.1.min.js}"></script>
+<script>
+    let loginForm = $("#login_form");
+
+    loginForm.submit(e => {
+        let usernameBlank = $("#username_blank");
+        let passwordBlank = $("#password_blank");
+
+        if (!$("#username").val()) {
+            usernameBlank.text("Please fill username!")
+            return false;
+        } else {
+            usernameBlank.text("")
+        }
+
+        if (!$("#password").val()) {
+            passwordBlank.text("Please fill your password!")
+            return false
+        } else {
+            passwordBlank.text("")
+        }
+
+        $("#login_submit_btn").html(`<span class="loader" style="width: 20px; height: 20px;"></span>`)
+
+        return true;
+    })
+
+
+    $(".form-input__eye").click(() => {
+        let passwordField = $(".password-wrapper > .form-input");
+        let openEye = $(".eye-close");
+        let closeEye = $(".eye-open");
+
+        if (passwordField.attr("type") === "password") {
+            passwordField.attr("type", "text")
+            openEye.removeClass("d-none")
+            closeEye.addClass("d-none")
+        } else {
+            passwordField.attr("type", "password")
+            openEye.addClass("d-none")
+            closeEye.removeClass("d-none")
+        }
+    });
+</script>
+</body>
+</html>

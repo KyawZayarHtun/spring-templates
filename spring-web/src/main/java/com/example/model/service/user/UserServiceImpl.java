@@ -9,6 +9,7 @@ import com.example.util.payload.dto.document.excel.ExcelExportHeadersAndByteStre
 import com.example.util.payload.dto.document.excel.ExcelRow;
 import com.example.util.payload.dto.document.excel.ExcelSetting;
 import com.example.util.payload.dto.table.TableResponse;
+import com.example.util.payload.dto.user.UserDetailForSecurity;
 import com.example.util.payload.dto.user.UserListDto;
 import com.example.util.payload.dto.user.UserSearchDto;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Service
@@ -73,6 +75,18 @@ public class UserServiceImpl implements UserService {
 
         excelSetting.setExcludeAutoSizeColumn(List.of(2));
         return service.generateExcel(excelSetting, response);
+    }
+
+    @Override
+    public Optional<UserDetailForSecurity> getUserDetailForSecurityByEmail(String email) {
+        Function<CriteriaBuilder, CriteriaQuery<UserDetailForSecurity>> searchByEmail = cb -> {
+            var cq = cb.createQuery(UserDetailForSecurity.class);
+            var root = cq.from(User.class);
+            UserDetailForSecurity.select(cq, root);
+            cq.where(cb.equal(root.get(User_.email), email));
+            return cq;
+        };
+        return userRepo.findOne(searchByEmail);
     }
 
     Function<CriteriaBuilder, CriteriaQuery<UserListDto>> userSearchQuery(UserSearchDto searchDto) {

@@ -3,7 +3,7 @@
     height: 100vh;
     display: grid;
     place-content: center;
-    background-image: url('/images/images/login-bg.png');
+    background-image: url('/images/image/login-bg.png');
     background-size: cover;
 }
 

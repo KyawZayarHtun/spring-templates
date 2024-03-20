@@ -2,11 +2,13 @@ package com.example.model.service.user;
 
 import com.example.util.payload.dto.document.excel.ExcelExportHeadersAndByteStream;
 import com.example.util.payload.dto.table.TableResponse;
+import com.example.util.payload.dto.user.UserDetailForSecurity;
 import com.example.util.payload.dto.user.UserListDto;
 import com.example.util.payload.dto.user.UserSearchDto;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public interface UserService {
     boolean isUniqueEmail(String email);
@@ -15,4 +17,6 @@ public interface UserService {
 
     ExcelExportHeadersAndByteStream generateExcelExport(UserSearchDto searchDto,
                                                         HttpServletResponse response) throws IOException;
+
+    Optional<UserDetailForSecurity> getUserDetailForSecurityByEmail(String email);
 }

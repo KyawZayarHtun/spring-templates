@@ -26,7 +26,7 @@ public class UserRestController {
         return userService.userList(searchDto);
     }
 
-    @PostMapping("/export-excel")
+    @PostMapping("export-excel")
     public ResponseEntity<byte[]> exportAgentType(@RequestBody UserSearchDto searchDto, HttpServletResponse response) throws IOException {
         var data = userService.generateExcelExport(searchDto, response);
         return ResponseEntity.ok()
