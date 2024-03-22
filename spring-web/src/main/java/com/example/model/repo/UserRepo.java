@@ -8,5 +8,5 @@ import java.util.Optional;
 public interface UserRepo extends BaseRepository<User, Long> {
 
     boolean existsByEmail(String email);
-    Optional<User> findByEmail(String email);
+
 }

@@ -1,6 +1,7 @@
 package com.example.config.security;
 
 import com.example.model.repo.UserRepo;
+import com.example.model.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,17 +15,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class CustomUserDetailService implements UserDetailsService {
 
     private final UserRepo repo;
+    private final UserService userService;
 
     @Transactional
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return repo.findByEmail(email).map(user -> User
+        return userService.getUserDetailByEmail(email).map(user -> User
                 .withUsername(email)
-                .username(user.getName())
-                .authorities(user.getRole().getName())
-                .password(user.getPassword())
-                .accountLocked(user.getLocked())
-                .disabled(!user.getActivated())
+                .username(user.name())
+                .authorities(user.role())
+                .password(user.password())
+                .accountLocked(user.isLocked())
+                .disabled(!user.isActivated())
                 .build()).orElseThrow(() -> new UsernameNotFoundException(email));
     }
 }

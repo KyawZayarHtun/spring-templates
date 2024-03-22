@@ -40,7 +40,7 @@ public class ExcelServiceImpl implements ExcelService {
         var workbook = new XSSFWorkbook();
 
 
-        var headers = excelSetting.getRows().get(0).getExcelColumns()
+        var headers = excelSetting.getRows().getFirst().getExcelColumns()
                 .stream()
                 .map(ExcelColumnIndexAndValue::fetchHeaders)
                 .toList();

@@ -11,9 +11,9 @@
         <img th:src="@{/images/icon/sidebar.svg}" class="hamburger" alt="">
     </div>
     <div>
-        <div layout:insert="~{fragments/fragments :: dropdown-menu (name = 'Kyaw Zayar')}">
+        <div layout:insert="~{fragments/fragments :: dropdown-menu (name = ${#authentication.getName()})}">
             <div layout:fragment="dropdown-links">
-                <a th:replace="~{fragments/fragments :: link (name='Profile', href='/user/profile')}"></a>
+                <a th:replace="~{fragments/fragments :: link (name='Profile', href='/user/user-profile')}"></a>
                 <hr class="dropdown-divider">
                 <form th:action="@{/logout}" method="post">
                     <button type="submit" class="dropdown-item">Logout</button>
