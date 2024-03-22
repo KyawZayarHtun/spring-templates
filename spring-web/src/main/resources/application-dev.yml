@@ -20,6 +20,10 @@ spring:
       date-time: dd MMM yyyy hh:mm:ss a
       excel-date-time: dd_MMM_yyyy-hh:mm:ss_a
 
+  security:
+    filter:
+      dispatcher-types: request
+
 server:
 #  address: 192.168.1.5
   port: 8080

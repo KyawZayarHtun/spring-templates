@@ -27,15 +27,6 @@ public class HomeController {
        return "pages/home";
     }
 
-    @GetMapping("customer")
-    public String customer() {
-       return "pages/customer";
-    }
-
-    @GetMapping("courses")
-    public String courses() {
-       return "pages/courses";
-    }
 
 
 }
