@@ -23,20 +23,20 @@
             <img th:src="@{/images/logo/logo.png}" alt="" class="login__img-logo">
         </div>
         <form th:action="@{/login}" method="post" class="login__form" id="login_form">
-            <div class="error-box" th:if="${param.error != null}" th:text="Something was wrong!">
-
+            <div class="error-box" th:if="${param.error != null}">
+                <p>Something was wrong!</p>
             </div>
             <div class="form-group">
-                <label for="username">email</label>
-                <input type="text" class="form-input" id="username" name="username" autocomplete="off">
-                <span class="error-desc" id="username_blank"></span>
+                <label for="email">Email</label>
+                <input type="email" class="form-input" id="email" name="email" autocomplete="off">
+                <span class="error-desc" id="email_blank"></span>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
                 <div class="password-wrapper">
                     <input type="password" class="form-input" id="password" name="password" autocomplete="off">
-                    <img th:src="@{/images/icons/eye-slash.svg}" class="form-input__eye eye-close d-none" alt="">
-                    <img th:src="@{/images/icons/eye.svg}" class="form-input__eye eye-open" alt="">
+                    <img th:src="@{/images/icon/eye-slash.svg}" class="form-input__eye eye-close d-none" alt="">
+                    <img th:src="@{/images/icon/eye.svg}" class="form-input__eye eye-open" alt="">
                 </div>
                 <span class="error-desc" id="password_blank"></span>
             </div>
@@ -49,15 +49,15 @@
 <script>
     let loginForm = $("#login_form");
 
-    loginForm.submit(e => {
-        let usernameBlank = $("#username_blank");
+    loginForm.submit(() => {
+        let emailBlank = $("#email_blank");
         let passwordBlank = $("#password_blank");
 
-        if (!$("#username").val()) {
-            usernameBlank.text("Please fill username!")
+        if (!$("#email").val()) {
+            emailBlank.text("Please fill email!")
             return false;
         } else {
-            usernameBlank.text("")
+            emailBlank.text("")
         }
 
         if (!$("#password").val()) {

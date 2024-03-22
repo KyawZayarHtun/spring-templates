@@ -38,11 +38,13 @@ function checkLinkNullOrRenderStringForDataTable(data) {
 
 // For Fetch Data for Table
 const fetchDataForTable = async (url, searchPayload) => {
+    const csrfToken = document.querySelector('meta[name="_csrf"]').content;
 
     const response = await fetch(url, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
         },
         body: JSON.stringify(searchPayload)
     })

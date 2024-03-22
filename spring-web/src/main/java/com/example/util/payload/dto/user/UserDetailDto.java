@@ -1,14 +1,12 @@
 package com.example.util.payload.dto.user;
 
-import com.example.model.entity.Role;
 import com.example.model.entity.Role_;
 import com.example.model.entity.User;
 import com.example.model.entity.User_;
 import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Root;
 
-public record UserDetailForSecurity(
+public record UserDetailDto(
     String name,
     String email,
     String password,
@@ -18,7 +16,7 @@ public record UserDetailForSecurity(
 ) {
 
 
-    public static void select(CriteriaQuery<UserDetailForSecurity> cq, Root<User> root) {
+    public static void select(CriteriaQuery<UserDetailDto> cq, Root<User> root) {
         var role = root.join(User_.role);
         cq.multiselect(
                 root.get(User_.name),
