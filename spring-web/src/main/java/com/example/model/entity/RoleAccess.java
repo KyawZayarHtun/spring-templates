@@ -25,7 +25,7 @@ public class RoleAccess extends BaseField implements Serializable {
     @Column(length = 45, unique = true, nullable = false)
     private String name;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String url;
 
     @Column(nullable = false)

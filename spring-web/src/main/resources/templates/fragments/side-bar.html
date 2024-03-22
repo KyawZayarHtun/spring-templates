@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -35,15 +36,17 @@
         <!-- For Dropdown Menu -->
         <!-- Reminder: -> Watch out layout:include not th:replace -->
         <!-- id is for using dropdown, menuText is Link Title, iconPath is used for icon -->
-        <div layout:include="~{fragments/side-bar-components :: dropdown-link-container (id = 'customer', menuText = 'List', iconPath = '/images/icon/user.svg')}"
-             th:remove="tag">
+        <div
+                layout:include="~{fragments/side-bar-components :: dropdown-link-container (id = 'user-management', menuText = 'User Management', iconPath = '/images/icon/user.svg')}"
+                th:remove="tag">
             <div layout:fragment="sidebar-dropdown-links">
-                <a th:replace="~{fragments/side-bar-components :: link (menuText='Customer', href='/customer')}"></a>
-                <a th:replace="~{fragments/side-bar-components :: link (menuText='Courses', href='/courses')}"></a>
+                <a
+                        th:replace="~{fragments/side-bar-components :: link (menuText='User List', href='/user/user-list')}"></a>
+                <a
+                        th:replace="~{fragments/side-bar-components :: link (menuText='Create User', href='/user/create-user')}"></a>
             </div>
         </div>
 
-       
 
     </div>
 </div>

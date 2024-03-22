@@ -21,7 +21,7 @@ public class UserRestController {
 
     private final UserService userService;
 
-    @PostMapping("list")
+    @PostMapping("user-list")
     public TableResponse<UserListDto> userList(@RequestBody UserSearchDto searchDto) {
         return userService.userList(searchDto);
     }
