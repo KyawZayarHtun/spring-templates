@@ -6,7 +6,7 @@ import com.example.model.entity.User_;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 
-public record UserDetailDto(
+public record UserDetailDtoForSecurity(
     String name,
     String email,
     String password,
@@ -16,7 +16,7 @@ public record UserDetailDto(
 ) {
 
 
-    public static void select(CriteriaQuery<UserDetailDto> cq, Root<User> root) {
+    public static void select(CriteriaQuery<UserDetailDtoForSecurity> cq, Root<User> root) {
         var role = root.join(User_.role);
         cq.multiselect(
                 root.get(User_.name),

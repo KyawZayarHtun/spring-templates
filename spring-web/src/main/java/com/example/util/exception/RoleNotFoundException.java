@@ -1,7 +1,5 @@
 package com.example.util.exception;
 
-import org.springframework.lang.NonNull;
-
 import java.io.Serial;
 
 public class RoleNotFoundException extends RuntimeException{

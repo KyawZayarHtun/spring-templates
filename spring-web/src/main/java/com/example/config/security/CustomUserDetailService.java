@@ -22,7 +22,7 @@ public class CustomUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userService.getUserDetailByEmail(email).map(user -> User
                 .withUsername(email)
-                .username(user.name())
+                .username(user.email())
                 .authorities(user.role())
                 .password(user.password())
                 .accountLocked(user.isLocked())

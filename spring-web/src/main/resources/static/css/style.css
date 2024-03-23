@@ -543,6 +543,7 @@ button[disabled] {
     padding: 2px 8px;
     font-size: 10px;
     font-weight: normal;
+    text-transform: capitalize;
 }
 
 .chip-empty {

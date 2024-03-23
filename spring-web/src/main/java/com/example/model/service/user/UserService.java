@@ -2,7 +2,8 @@ package com.example.model.service.user;
 
 import com.example.util.payload.dto.document.excel.ExcelExportHeadersAndByteStream;
 import com.example.util.payload.dto.table.TableResponse;
-import com.example.util.payload.dto.user.UserDetailDto;
+import com.example.util.payload.dto.user.UserDetailDtoForProfile;
+import com.example.util.payload.dto.user.UserDetailDtoForSecurity;
 import com.example.util.payload.dto.user.UserListDto;
 import com.example.util.payload.dto.user.UserSearchDto;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,5 +19,13 @@ public interface UserService {
     ExcelExportHeadersAndByteStream generateExcelExport(UserSearchDto searchDto,
                                                         HttpServletResponse response) throws IOException;
 
-    Optional<UserDetailDto> getUserDetailByEmail(String email);
+    Optional<UserDetailDtoForSecurity> getUserDetailByEmail(String email);
+
+    String getLoginUserEmail();
+
+    UserDetailDtoForProfile getUserProfile();
+
+    String getLoginUsername();
+
+    void updateUserProfile(UserDetailDtoForProfile userDetail) throws IOException;
 }

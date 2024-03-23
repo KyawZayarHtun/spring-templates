@@ -4,20 +4,26 @@ import com.example.model.entity.User;
 import com.example.model.entity.User_;
 import com.example.model.repo.UserRepo;
 import com.example.model.service.document.excel.exported.ExcelService;
+import com.example.model.service.image.ImageService;
+import com.example.util.exception.LoginUserNotFoundException;
 import com.example.util.payload.dto.document.excel.ExcelColumn;
 import com.example.util.payload.dto.document.excel.ExcelExportHeadersAndByteStream;
 import com.example.util.payload.dto.document.excel.ExcelRow;
 import com.example.util.payload.dto.document.excel.ExcelSetting;
 import com.example.util.payload.dto.table.TableResponse;
-import com.example.util.payload.dto.user.UserDetailDto;
+import com.example.util.payload.dto.user.UserDetailDtoForProfile;
+import com.example.util.payload.dto.user.UserDetailDtoForSecurity;
 import com.example.util.payload.dto.user.UserListDto;
 import com.example.util.payload.dto.user.UserSearchDto;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -30,7 +36,8 @@ import java.util.function.Function;
 public class UserServiceImpl implements UserService {
 
     private final UserRepo userRepo;
-    private final ExcelService service;
+    private final ExcelService excelService;
+    private final ImageService imageService;
 
     @Override
     public boolean isUniqueEmail(String email) {
@@ -76,19 +83,70 @@ public class UserServiceImpl implements UserService {
         }
 
         excelSetting.setExcludeAutoSizeColumn(List.of(2));
-        return service.generateExcel(excelSetting, response);
+        return excelService.generateExcel(excelSetting, response);
     }
 
     @Override
-    public Optional<UserDetailDto> getUserDetailByEmail(String email) {
-        Function<CriteriaBuilder, CriteriaQuery<UserDetailDto>> searchByEmail = cb -> {
-            var cq = cb.createQuery(UserDetailDto.class);
+    public Optional<UserDetailDtoForSecurity> getUserDetailByEmail(String email) {
+        Function<CriteriaBuilder, CriteriaQuery<UserDetailDtoForSecurity>> searchByEmail = cb -> {
+            var cq = cb.createQuery(UserDetailDtoForSecurity.class);
             var root = cq.from(User.class);
-            UserDetailDto.select(cq, root);
+            UserDetailDtoForSecurity.select(cq, root);
             cq.where(cb.equal(root.get(User_.email), email));
             return cq;
         };
         return userRepo.findOne(searchByEmail);
+    }
+
+    @Override
+    public String getLoginUserEmail() {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth == null || auth instanceof AnonymousAuthenticationToken)
+            throw new LoginUserNotFoundException("You need to login first!");
+
+        return auth.getName();
+    }
+
+    @Override
+    public UserDetailDtoForProfile getUserProfile() {
+
+        Function<CriteriaBuilder, CriteriaQuery<UserDetailDtoForProfile>> searchQuery = cb -> {
+            var cq = cb.createQuery(UserDetailDtoForProfile.class);
+            var root = cq.from(User.class);
+            UserDetailDtoForProfile.select(cq, root);
+            cq.where(cb.equal(root.get(User_.email), getLoginUserEmail()));
+            return cq;
+        };
+
+        return userRepo.findOne(searchQuery).orElseThrow();
+    }
+
+    @Override
+    public String getLoginUsername() {
+        Function<CriteriaBuilder, CriteriaQuery<String>> searchQuery = cb -> {
+            var cq = cb.createQuery(String.class);
+            var root = cq.from(User.class);
+            cq.select(root.get(User_.name));
+            cq.where(cb.equal(root.get(User_.email), getLoginUserEmail()));
+            return cq;
+        };
+        return userRepo.findOne(searchQuery).orElseThrow();
+    }
+
+    @Transactional
+    @Override
+    public void updateUserProfile(UserDetailDtoForProfile userDetail) throws IOException {
+
+        var currentUser = userRepo.findByEmail(getLoginUserEmail()).orElseThrow();
+        currentUser.setName(userDetail.getName());
+        currentUser.setPhoneNo(userDetail.getPhoneNo());
+        currentUser.setDob(userDetail.getDob());
+
+        var fileName = imageService.saveImageToDesireLocation("profile", userDetail.getProfileImage());
+
+        if (StringUtils.hasLength(fileName))
+            currentUser.setProfileImagePath(fileName);
     }
 
     Function<CriteriaBuilder, CriteriaQuery<UserListDto>> userSearchQuery(UserSearchDto searchDto) {

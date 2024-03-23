@@ -5,17 +5,17 @@
 
 <!-- Dropdown Menu Button Using BS with custom css (use in header-menu!) -->
 <div layout:fragment="dropdown-menu (name)" class="dropdown">
-    <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
-            data-bs-offset="auto, 0" th:text="${name}"></button>
-    <div class="dropdown-menu dropdown-menu-end" layout:fragment="dropdown-links">
-        <!--
-            "You Can Use This link if link is not for link"
-            <a th:href="@{/}" class="dropdown-item" type="button">Home</a>
+  <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+          data-bs-offset="auto, 0" th:text="${name}"></button>
+  <div class="dropdown-menu dropdown-menu-end" layout:fragment="dropdown-links">
+    <!--
+        "You Can Use This link if link is not for link"
+        <a th:href="@{/}" class="dropdown-item" type="button">Home</a>
 
-            "This is for divider"
-            <hr class="dropdown-divider">
-        -->
-    </div>
+        "This is for divider"
+        <hr class="dropdown-divider">
+    -->
+  </div>
 </div>
 
 <!-- Dropdown Link  -->
@@ -28,29 +28,29 @@
 
 <!-- Modal Box -->
 <div layout:fragment="modal-box (id,name,type)" class="">
-    <div class="modal fade"
-         th:id="${id}" tabindex="-1" aria-labelledby="Modal Box" aria-hidden="true">
+  <div class="modal fade"
+       th:id="${id}" tabindex="-1" aria-labelledby="Modal Box" aria-hidden="true">
 
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header"
-                     th:classappend="|${type == 'success'? 'success-color' : 'primary-color'}
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header"
+             th:classappend="|${type == 'success'? 'success-color' : 'primary-color'}
                                 ${type == 'danger'? 'danger-color' : 'primary-color'}
                                 ${type == 'secondary'? 'secondary-color' : 'primary-color'}|">
-                    <p class="modal-title" th:text="${name}">Modal title</p>
-                    <div>
-                        <img th:src="@{/images/icon/cross-white.svg}" class="icon"
-                             data-bs-dismiss="modal"
-                             alt="Close Button">
-                    </div>
-                </div>
-                <div layout:fragment="modal-body-and-footer" th:remove="tag">
-
-                </div>
-            </div>
+          <p class="modal-title" th:text="${name}">Modal title</p>
+          <div>
+            <img th:src="@{/images/icon/cross-white.svg}" class="icon"
+                 data-bs-dismiss="modal"
+                 alt="Close Button">
+          </div>
         </div>
+        <div layout:fragment="modal-body-and-footer" th:remove="tag">
 
+        </div>
+      </div>
     </div>
+
+  </div>
 </div>
 <!-- Modal Usage -->
 <!--<a id="delete-btn" class="data-table-action"
@@ -74,28 +74,28 @@
 
 <!-- For Toast -->
 <div layout:fragment="toast (toastId, showToast )">
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
-        <div th:id="${toastId}" class="toast" role="alert"
-             aria-live="assertive"
-             aria-atomic="true"
-             layout:fragment="toast-header-body">
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div th:id="${toastId}" class="toast" role="alert"
+         aria-live="assertive"
+         aria-atomic="true"
+         layout:fragment="toast-header-body">
 
-        </div>
     </div>
-    <script th:inline="javascript">
-        $(document).ready(function () {
-            const showToast = [[${showToast}]]
-            let toastId = [[${toastId}]].toString()
-            const toastLiveExample = document.getElementById(toastId)
+  </div>
+  <script th:inline="javascript">
+      $(document).ready(function () {
+          const showToast = [[${showToast}]]
+          let toastId = [[${toastId}]].toString()
+          const toastLiveExample = document.getElementById(toastId)
 
-            if (showToast) {
-                const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample, {
-                    delay: 3000
-                })
-                toastBootstrap.show()
-            }
-        });
-    </script>
+          if (showToast) {
+              const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample, {
+                  delay: 3000
+              })
+              toastBootstrap.show()
+          }
+      });
+  </script>
 </div>
 <!-- Toast Usage -->
 <!--<div layout:include="~{fragments/fragments :: toast (toastId='egToast', showToast=${true} )}">
@@ -114,14 +114,16 @@
          fill='#331D2C'
          width='14'
          height='14'>
-        <path d="M3 19h18a1.002 1.002 0 0 0 .823-1.569l-9-13c-.373-.539-1.271-.539-1.645 0l-9 13A.999.999 0 0 0 3 19z"></path>
+        <path
+            d="M3 19h18a1.002 1.002 0 0 0 .823-1.569l-9-13c-.373-.539-1.271-.539-1.645 0l-9 13A.999.999 0 0 0 3 19z"></path>
     </svg>
-    <!-- arrow down-->
+  <!-- arrow down-->
     <svg xmlns='http://www.w3.org/2000/svg' stroke="#000" viewBox='0 0 24 24'
          fill='transparent'
          width='14'
          height='14'>
-        <path d="M11.178 19.569a.998.998 0 0 0 1.644 0l9-13A.999.999 0 0 0 21 5H3a1.002 1.002 0 0 0-.822 1.569l9 13z"></path>
+        <path
+            d="M11.178 19.569a.998.998 0 0 0 1.644 0l9-13A.999.999 0 0 0 21 5H3a1.002 1.002 0 0 0-.822 1.569l9 13z"></path>
     </svg>
 </span>
 <span th:fragment="sort-desc-icon" class="descending-icon d-flex">
@@ -130,16 +132,56 @@
          fill='transparent'
          width='14'
          height='14'>
-        <path d="M3 19h18a1.002 1.002 0 0 0 .823-1.569l-9-13c-.373-.539-1.271-.539-1.645 0l-9 13A.999.999 0 0 0 3 19z"></path>
+        <path
+            d="M3 19h18a1.002 1.002 0 0 0 .823-1.569l-9-13c-.373-.539-1.271-.539-1.645 0l-9 13A.999.999 0 0 0 3 19z"></path>
     </svg>
-    <!-- arrow down-->
+  <!-- arrow down-->
     <svg xmlns='http://www.w3.org/2000/svg' stroke="" viewBox='0 0 24 24'
          fill='#331D2C'
          width='14'
          height='14'>
-        <path d="M11.178 19.569a.998.998 0 0 0 1.644 0l9-13A.999.999 0 0 0 21 5H3a1.002 1.002 0 0 0-.822 1.569l9 13z"></path>
+        <path
+            d="M11.178 19.569a.998.998 0 0 0 1.644 0l9-13A.999.999 0 0 0 21 5H3a1.002 1.002 0 0 0-.822 1.569l9 13z"></path>
     </svg>
 </span>
+
+<!-- For Input box -->
+<div th:fragment="input-box(name, id, type, field, disable)" class="form-group">
+  <label th:for="${id}" th:text="${name}">Name</label>
+  <th:block th:switch="${type}">
+    <input th:case="text" type="text" class="form-input" th:id="${id}" th:field="*{__${field}__}"
+           autocomplete="off" th:disabled="${disable}">
+    <input th:case="number" type="number" class="form-input" th:id="${id}"
+           th:field="*{__${field}__}"
+           autocomplete="off" th:disabled="${disable}">
+    <input th:case="email" type="email" class="form-input" th:id="${id}" th:field="*{__${field}__}"
+           autocomplete="off" th:disabled="${disable}">
+    <input th:case="date" type="date" class="form-input" th:id="${id}" th:field="*{{__${field}__}}"
+           th:disabled="${disable}">
+    <input th:case="file" type="file" class="form-input" th:id="${id}" th:field="*{__${field}__}"
+           th:disabled="${disable}">
+  </th:block>
+  <span class="error-desc" th:errors="*{__${field}__}"></span>
+</div>
+
+<!-- For Image Preview -->
+<div class="form-group" th:fragment="image-preview(id)">
+  <img class="profile-pic_img" id="image-preview"
+       src="#" alt="Preview">
+  <script th:inline="javascript">
+      let previewImg = document.getElementById("image-preview")
+      previewImg.classList.add("d-none")
+
+      const imageInput = [[${id}]]
+
+      document.getElementById(imageInput).addEventListener('change', event => {
+          previewImg.classList.remove("d-none")
+          let imgUrl = URL.createObjectURL(event.target.files[0]);
+          previewImg.setAttribute('src', imgUrl);
+      })
+  </script>
+</div>
+
 
 </body>
 </html>

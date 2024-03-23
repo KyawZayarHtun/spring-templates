@@ -32,3 +32,8 @@ server:
       timeout: 60m
       cookie:
         max-age: 60m
+
+# For image saver
+img-server:
+  path: "/image-server/"
+  folder-path: C:/image-server/

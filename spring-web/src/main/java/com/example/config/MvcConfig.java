@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.time.format.DateTimeFormatter;
@@ -26,6 +27,12 @@ public class MvcConfig implements WebMvcConfigurer {
     @Value("${spring.mvc.format.date-time}")
     private String dateTimeFormat;
 
+    @Value("${img-server.folder-path}")
+    private String imageFolderPath;
+
+    @Value("${img-server.path}")
+    private String imageServerPath;
+
     @Bean
     Jackson2ObjectMapperBuilderCustomizer builderCustomizer() {
         return builder -> {
@@ -39,4 +46,8 @@ public class MvcConfig implements WebMvcConfigurer {
         };
     }
 
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler(imageServerPath.concat("**")).addResourceLocations("file:/".concat(imageFolderPath));
+    }
 }

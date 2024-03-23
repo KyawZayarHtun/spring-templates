@@ -15,9 +15,4 @@ public class UserController {
         return "pages/user-management/user-list";
     }
 
-    @GetMapping("user-profile")
-    public String profile() {
-        return "pages/user-management/user-profile";
-    }
-
 }

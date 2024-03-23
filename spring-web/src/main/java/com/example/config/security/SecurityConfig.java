@@ -1,6 +1,7 @@
 package com.example.config.security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,12 +26,15 @@ public class SecurityConfig {
 
     private final CustomUserDetailService userDetailService;
 
+    @Value("${img-server.path}")
+    private String imageServerPath;
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http, AuthorizationManager<RequestAuthorizationContext> authorizationManager) throws Exception {
 
         // Authorization Configuration
         http.authorizeHttpRequests(req -> {
-            req.requestMatchers("/login", "/css/**", "/images/**", "/js/**").permitAll();
+            req.requestMatchers("/login", "/css/**", "/images/**", "/js/**", imageServerPath.concat("**")).permitAll();
             req.anyRequest().access(authorizationManager);
         });
 
