@@ -145,11 +145,6 @@
     filter: invert(100%);
 }
 
-.side_bar_menu-wrapper:has(> .side_bar_menu.side_bar-menu-active) {
-    border: none;
-}
-
-
 /* For Sidebar tooltips*/
 /*make tooltips library */
 .side-bar-menu__text--tooltips {
