@@ -26,7 +26,7 @@ public class UserProfileCreateController {
         return "pages/user-management/user-profile";
     }
 
-    @PostMapping("user-profile-edit")
+    @PostMapping("edit-user-profile")
     public String editUserProfile(@ModelAttribute("userDetail") @Valid UserDetailDtoForProfile userDetail,
                                   BindingResult result,
                                   RedirectAttributes attr) throws IOException {

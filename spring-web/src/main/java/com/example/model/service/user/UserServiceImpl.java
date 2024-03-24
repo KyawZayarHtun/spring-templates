@@ -5,6 +5,7 @@ import com.example.model.entity.User_;
 import com.example.model.repo.UserRepo;
 import com.example.model.service.document.excel.exported.ExcelService;
 import com.example.model.service.image.ImageService;
+import com.example.model.service.table.TableService;
 import com.example.util.exception.LoginUserNotFoundException;
 import com.example.util.payload.dto.document.excel.ExcelColumn;
 import com.example.util.payload.dto.document.excel.ExcelExportHeadersAndByteStream;
@@ -38,6 +39,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepo userRepo;
     private final ExcelService excelService;
     private final ImageService imageService;
+    private final TableService tableService;
 
     @Override
     public boolean isUniqueEmail(String email) {
@@ -154,7 +156,7 @@ public class UserServiceImpl implements UserService {
             var cq = cb.createQuery(UserListDto.class);
             var root = cq.from(User.class);
             UserListDto.select(cq, root);
-            UserListDto.sort(cb, cq, root, searchDto.getSortColumnName(), searchDto.getSortDir());
+            tableService.sort(cb, cq, root, searchDto.getSortColumnName(), searchDto.getSortDir());
             cq.where(searchDto.predicates(cb, root));
             return cq;
         };

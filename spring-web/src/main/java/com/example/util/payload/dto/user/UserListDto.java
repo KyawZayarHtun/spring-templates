@@ -36,20 +36,4 @@ public record UserListDto(
         );
     }
 
-
-    public static void sort(CriteriaBuilder cb, CriteriaQuery<UserListDto> cq, Root<User> root,
-                            String sortColumnName, String sortDir) {
-
-        if (!StringUtils.hasText(sortDir))
-            sortDir = "asc";
-
-        if (!StringUtils.hasText(sortColumnName))
-            sortColumnName = "name";
-
-        switch (sortDir) {
-            case "asc" -> cq.orderBy(cb.asc(root.get(sortColumnName)));
-            case "desc" -> cq.orderBy(cb.desc(root.get(sortColumnName)));
-        }
-
-    }
 }

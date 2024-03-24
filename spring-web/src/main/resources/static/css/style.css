@@ -242,7 +242,7 @@ a.primary-btn, a.border-btn, a.danger-btn, a.text-btn, a.success-btn {
 }
 
 /* For icon */
-.icon {
+.icon, .table-action-icon {
     width: var(--icon-size);
     object-fit: cover;
     cursor: pointer;
@@ -250,7 +250,15 @@ a.primary-btn, a.border-btn, a.danger-btn, a.text-btn, a.success-btn {
     transition: opacity 100ms ease-in;
 }
 
-.icon:hover {
+.icon {
+    width: var(--icon-size);
+}
+
+.table-action-icon {
+    width: var(--sidebar-icon-size);
+}
+
+.icon:hover, .table-action-icon:hover {
     opacity: 1;
 }
 

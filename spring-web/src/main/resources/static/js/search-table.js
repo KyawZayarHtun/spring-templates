@@ -71,14 +71,20 @@ const getEmptyRow = (colspan) => {
     return `<tr><td colspan="${colspan}">No Entries</td></tr>`
 }
 
-const createDataTable = (searchPayload, addTableBody, tableId, selectId, footerId) => {
+const getEditIcon = id => {
+    return `<a href="/role/role-management?id=${id}">
+              <img src="/images/icon/edit.svg" alt="edit icon" class="table-action-icon">
+            </a>`;
+}
+
+const createDataTable = (searchPayload, addTableBody, tableId) => {
 
     const essentialData = {
         searchPayload,
         addTableBody,
         tableId,
-        selectId,
-        footerId
+        selectId: "list-size",
+        footerId: "table-footer"
     }
 
     // For sorting header

@@ -26,7 +26,7 @@
       <div class="profile-summery">
         <div class="profile-summery_name">
           <p class="profile-name" th:text="*{name}"></p>
-          <div class="chip secondary-color" th:text="*{role}"></div>
+          <div class="chip secondary-color text-nowrap" th:text="*{role}"></div>
         </div>
         <div class="profile-summery_phone">
           <p>Phone Number: <strong>[[*{phoneNo}]]</strong></p>
@@ -36,7 +36,7 @@
     <div class="profile-body">
       <p class="profile-body_title">Profile Detail</p>
       <div class="d-lg-flex justify-content-lg-between align-items-lg-center">
-        <form th:action="@{/user/user-profile-edit}" th:object="${userDetail}" class="profile-form"
+        <form th:action="@{/user/edit-user-profile}" th:object="${userDetail}" class="profile-form"
               method="post"
               enctype="multipart/form-data">
 

@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/dashboard-layout}" th:with="page='Role Management'">
+<head>
+  <title>Role Management</title>
+  <link rel="stylesheet" th:href="@{/css/pagination.css}">
+</head>
+<body>
+<main layout:fragment="content">
+  <div class="manage-form mb-5">
+    <h5 class="mb-2">Role Create</h5>
+
+    <form th:action="@{/role/manage-role}" th:object="${roleObject}" method="post"
+          class="d-flex align-items-end gap-2">
+      <input type="hidden" th:field="*{id}">
+      <div>
+        <label for="createdName">Name</label>
+        <input type="text" id="createdName" th:field="*{name}" class="form-input">
+      </div>
+      <button class="primary-btn" type="submit">Submit</button>
+    </form>
+  </div>
+  <h5 class="">Search</h5>
+  <div class="table-actions align-items-end">
+    <div class="d-flex align-items-end gap-2">
+      <div>
+        <label for="name">Name</label>
+        <input type="text" id="name" class="form-input">
+      </div>
+      <button class="primary-btn" onclick="filterTable()">Filter</button>
+    </div>
+    <div th:include="~{fragments/fragments :: list-size}" class="action-list-size"></div>
+  </div>
+  <div class="table-responsive">
+    <table class="table" id="role-list">
+      <thead>
+      <tr>
+        <th>Actions</th>
+        <th>Id</th>
+        <th data-column-name="name">
+          <span>
+              Name
+              <span th:replace="fragments/fragments :: sort-asc-icon"></span>
+          </span>
+        </th>
+        <th data-column-name="createdAt">
+          <span>
+              Created At
+          </span>
+        </th>
+        <th data-column-name="UpdatedAt">
+          <span>
+              Updated At
+          </span>
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+    </table>
+  </div>
+  <div th:replace="~{fragments/fragments :: table-footer}"></div>
+</main>
+
+<!-- For Only Script Tags -->
+<div layout:fragment="js-scripts">
+  <script th:src="@{/js/external/pagination/pagination.min.js}"></script>
+  <script th:src="@{/js/search-table.js}"></script>
+</div>
+
+<!-- For Javascript Codes -->
+<script layout:fragment="js" th:inline="javascript">
+    // For search Payload
+    const searchPayload = {
+        name: '',
+        pageNo: 1,
+        size: 10,
+        sortColumnName: 'name',
+        sortDir: 'asc'
+    }
+    const addTableBody = async () => {
+        const data = await fetchDataForTable("http://localhost:8080/role/role-list", searchPayload);
+        const apiResponse = getApiResponse(data)
+
+        let rows = ''
+        apiResponse.contents.forEach((data, index) => {
+            const {id, name, createdAt, updatedAt} = data;
+            rows += `<tr>
+                <td><span>
+                ${getEditIcon(id)}
+                </span></td>
+                <td>${getDummyTableNumber(searchPayload, index)}</td>
+                <td style="min-width: 200px;">${name}</td>
+                <td style="min-width: 230px;">${createdAt}</td>
+                <td style="min-width: 230px;">${checkStringNullOrRenderStringForDataTable(updatedAt)}</td>
+            </tr>`
+        });
+
+        if (rows === '') {
+            rows = getEmptyRow(4)
+        }
+
+        // table id
+        document.querySelector("#role-list > tbody").innerHTML = rows
+        return apiResponse;
+    }
+    createDataTable(searchPayload, addTableBody, "role-list")
+
+    const filterTable = () => {
+        searchPayload.name = document.getElementById("name").value
+        createDataTable(searchPayload, addTableBody, "role-list")
+    }
+</script>
+
+</body>
+</html>
