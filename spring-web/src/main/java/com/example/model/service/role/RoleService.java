@@ -19,4 +19,6 @@ public interface RoleService {
     void manageService(IdAndNameDto dto);
 
     TableResponse<RoleListDto> getRoleList(RoleSearchDto searchDto);
+
+    boolean roleNameExist(String roleName);
 }

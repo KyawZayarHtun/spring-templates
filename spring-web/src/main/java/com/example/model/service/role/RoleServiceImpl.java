@@ -101,6 +101,11 @@ public class RoleServiceImpl implements RoleService {
                 roleList.getTotalPages(), roleList.getContent());
     }
 
+    @Override
+    public boolean roleNameExist(String roleName) {
+        return roleRepo.existsByName(roleName);
+    }
+
     private String getRoleNameFromAuthentication(Authentication auth) {
         return auth.getAuthorities().stream().map(GrantedAuthority::getAuthority).findFirst()
                 .orElseThrow(RoleNotFoundException::new);

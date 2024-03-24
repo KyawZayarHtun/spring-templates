@@ -2,7 +2,7 @@ package com.example.config.security;
 
 import com.example.model.service.role.RoleService;
 import com.example.model.service.roleAccess.RoleAccessService;
-import com.example.util.payload.dto.roleAccess.RoleAccessDto;
+import jakarta.servlet.ServletException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authorization.AuthorizationDecision;
@@ -12,7 +12,6 @@ import org.springframework.security.web.access.intercept.RequestAuthorizationCon
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.function.Supplier;
 
 @Component
@@ -35,8 +34,18 @@ public class CustomAuthorizationManager implements AuthorizationManager<RequestA
         }
 
         if (auth.isAuthenticated()) {
+            String currentUserRoleName = roleService.getCurrentUserRoleName(auth);
+
+            if (!roleService.roleNameExist(currentUserRoleName)) {
+                try {
+                    httpRequest.logout();
+                } catch (ServletException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
             var hasRoleAccess =
-                    roleAccessService.findRoleAccessByRole(roleService.getCurrentUserRoleName(auth))
+                    roleAccessService.findRoleAccessByRole(currentUserRoleName)
                             .stream()
                             .filter(ra -> ra.url().equals(requestUri) && ra.requestMethod().name().equals(requestMethod))
                             .findAny();
