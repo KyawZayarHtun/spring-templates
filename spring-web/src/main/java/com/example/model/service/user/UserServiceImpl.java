@@ -42,8 +42,8 @@ public class UserServiceImpl implements UserService {
     private final TableService tableService;
 
     @Override
-    public boolean isUniqueEmail(String email) {
-        return userRepo.existsByEmail(email);
+    public boolean emailExist(String email) {
+        return !userRepo.existsByEmail(email);
     }
 
     @Override

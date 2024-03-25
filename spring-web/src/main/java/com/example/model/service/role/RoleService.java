@@ -1,6 +1,6 @@
 package com.example.model.service.role;
 
-import com.example.util.payload.dto.general.IdAndNameDto;
+import com.example.util.payload.dto.role.RoleForm;
 import com.example.util.payload.dto.role.RoleListDto;
 import com.example.util.payload.dto.role.RoleSearchDto;
 import com.example.util.payload.dto.table.TableResponse;
@@ -14,9 +14,9 @@ public interface RoleService {
 
     String getCurrentUserRoleName(Authentication auth);
 
-    Optional<IdAndNameDto> findByRoleId(Long id);
+    Optional<RoleForm> findByRoleId(Long id);
 
-    void manageService(IdAndNameDto dto);
+    void manageRole(RoleForm dto);
 
     TableResponse<RoleListDto> getRoleList(RoleSearchDto searchDto);
 

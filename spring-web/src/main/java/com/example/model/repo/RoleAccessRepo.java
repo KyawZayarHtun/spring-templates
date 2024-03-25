@@ -4,4 +4,6 @@ import com.example.model.entity.RoleAccess;
 import com.example.model.repo.base.BaseRepository;
 
 public interface RoleAccessRepo extends BaseRepository<RoleAccess, Long> {
+
+    boolean existsByName(String name);
 }

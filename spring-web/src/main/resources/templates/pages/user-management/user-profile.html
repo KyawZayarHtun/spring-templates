@@ -40,11 +40,11 @@
               method="post"
               enctype="multipart/form-data">
 
-          <div th:replace="~{fragments/fragments :: input-box(name='Name', id='name', type='text', field='name', disable=false)}"></div>
-          <div th:replace="~{fragments/fragments :: input-box(name='Email', id='email', type='email', field='email', disable=true)}"></div>
-          <div th:replace="~{fragments/fragments :: input-box(name='Phone Number', id='phoneNo', type='text', field='phoneNo', disable=false)}"></div>
-          <div th:replace="~{fragments/fragments :: input-box(name='Date of Birth', id='dob', type='date', field='dob', disable=false)}"></div>
-          <div th:replace="~{fragments/fragments :: input-box(name='Update Profile Pic', id='profileImage', type='file', field='profileImage', disable=false)}"></div>
+          <div th:replace="~{fragments/fragments :: input-box(name='Name', id='name', type='text', field='name', disable=false, require=true)}"></div>
+          <div th:replace="~{fragments/fragments :: input-box(name='Email', id='email', type='email', field='email', disable=true, require=false)}"></div>
+          <div th:replace="~{fragments/fragments :: input-box(name='Phone Number', id='phoneNo', type='text', field='phoneNo', disable=false, require=true)}"></div>
+          <div th:replace="~{fragments/fragments :: input-box(name='Date of Birth', id='dob', type='date', field='dob', disable=false, require=false)}"></div>
+          <div th:replace="~{fragments/fragments :: input-box(name='Update Profile Pic', id='profileImage', type='file', field='profileImage', disable=false, require=false)}"></div>
           <div th:replace="~{fragments/fragments :: image-preview(id='profileImage')}"></div>
           <div class="my-3 d-flex justify-content-end">
             <button type="submit" class="primary-btn">Edit</button>

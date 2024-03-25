@@ -241,6 +241,10 @@ a.primary-btn, a.border-btn, a.danger-btn, a.text-btn, a.success-btn {
     font-size: 12px;
 }
 
+.required-field {
+    color: var(--danger-color);
+}
+
 /* For icon */
 .icon, .table-action-icon {
     width: var(--icon-size);
@@ -490,7 +494,7 @@ button[disabled] {
     padding: 20px 16px !important;
     color: var(--darkgrey-color);
     background: var(--white-smoke);
-    box-shadow: rgba(0, 0, 0, 0.45) 0px 25px 20px -20px;
+    box-shadow: rgba(0, 0, 0, 0.45) 0 25px 20px -20px;
     border-left: 16px solid;
 }
 

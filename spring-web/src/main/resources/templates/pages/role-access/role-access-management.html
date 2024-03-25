@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/dashboard-layout}" th:with="page='Role Access Management'">
+<head>
+  <title>Role Access</title>
+</head>
+<body>
+<main layout:fragment="content">
+  <div class="manage-form mb-5">
+    <div class="d-flex justify-content-between">
+      <h5 class="mb-2">Role Access [[${title}]]</h5>
+      <div th:if="${title == 'Update'}">
+        <a th:href="@{/role-access/role-access-management}" class="primary-btn">Create Role Access</a>
+      </div>
+    </div>
+
+    <form th:action="@{/role-access/manage-role-access}" th:object="${roleAccessObject}"
+          method="post"
+          class="form-two-column-grid form-fields-grid">
+      <input type="hidden" th:field="*{id}">
+      <div
+          th:replace="~{fragments/fragments :: input-box(name='Name', id='name', type='text', field='name', disable=false, require=true)}"></div>
+      <div
+          th:replace="~{fragments/fragments :: input-box(name='Url', id='url', type='text', field='url', disable=false, require=true)}"></div>
+      <div
+          th:replace="~{fragments/fragments :: select-box(name='Request Method', list=${requestMethods}, id='request-method', field='requestMethod', disable=false, require=true)}"></div>
+      <div
+          th:replace="~{fragments/fragments :: input-box(name='Description', id='description', type='textarea', field='description', disable=false, require=false)}"></div>
+      <button class="primary-btn" type="submit">Submit</button>
+    </form>
+  </div>
+
+  <div
+      layout:include="~{fragments/fragments :: toast (toastId='editToast', showToast=${showToast} )}">
+    <div layout:fragment="toast-header-body">
+      <div class="toast-body toast-success">
+        <img src="/images/icon/check-badge.svg" alt="success">
+        Successfully [[${title}]]!!
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- For Only Script Tags -->
+<div layout:fragment="js-scripts"></div>
+
+<!-- For Javascript Codes -->
+<script layout:fragment="js" th:inline="javascript"></script>
+
+</body>
+</html>

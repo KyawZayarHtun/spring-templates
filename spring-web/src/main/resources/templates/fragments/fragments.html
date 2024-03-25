@@ -146,21 +146,33 @@
 </span>
 
 <!-- For Input box -->
-<div th:fragment="input-box(name, id, type, field, disable)" class="form-group">
-  <label th:for="${id}" th:text="${name}">Name</label>
+<div th:fragment="input-box(name, id, type, field, disable, require)" class="form-group">
+  <label th:for="${id}">[[${name}]] <span th:if="${require}" class="required-field">*</span></label>
   <th:block th:switch="${type}">
     <input th:case="text" type="text" class="form-input" th:id="${id}" th:field="*{__${field}__}"
-           autocomplete="off" th:disabled="${disable}">
+           autocomplete="off" th:disabled="${disable}" th:required="${require}">
     <input th:case="number" type="number" class="form-input" th:id="${id}"
            th:field="*{__${field}__}"
-           autocomplete="off" th:disabled="${disable}">
+           autocomplete="off" th:disabled="${disable}" th:required="${require}">
     <input th:case="email" type="email" class="form-input" th:id="${id}" th:field="*{__${field}__}"
-           autocomplete="off" th:disabled="${disable}">
+           autocomplete="off" th:disabled="${disable}" th:required="${require}">
     <input th:case="date" type="date" class="form-input" th:id="${id}" th:field="*{{__${field}__}}"
-           th:disabled="${disable}">
+           th:disabled="${disable}" th:required="${require}">
     <input th:case="file" type="file" class="form-input" th:id="${id}" th:field="*{__${field}__}"
-           th:disabled="${disable}">
+           th:disabled="${disable}" th:required="${require}">
+    <textarea th:case="textarea" class="form-input" th:id="${id}" th:field="*{__${field}__}"
+              th:disabled="${disable}" th:required="${require}"></textarea>
   </th:block>
+  <span class="error-desc" th:errors="*{__${field}__}"></span>
+</div>
+
+<div th:fragment="select-box(name, list, id, field, disable, require)" class="form-group">
+  <label th:for="${id}">[[${name}]] <span th:if="${require}" class="required-field">*</span></label>
+  <select th:id="${id}" th:field="*{__${field}__}" class="form-input"
+          th:disabled="${disable}" th:required="${require}">
+    <option value="">Select One</option>
+    <option th:each="obj : ${list}" th:value="${obj.name()}" th:text="${obj.name()}"></option>
+  </select>
   <span class="error-desc" th:errors="*{__${field}__}"></span>
 </div>
 

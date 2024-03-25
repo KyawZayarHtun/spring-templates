@@ -36,7 +36,7 @@ public class CustomAuthorizationManager implements AuthorizationManager<RequestA
         if (auth.isAuthenticated()) {
             String currentUserRoleName = roleService.getCurrentUserRoleName(auth);
 
-            if (!roleService.roleNameExist(currentUserRoleName)) {
+            if (roleService.roleNameExist(currentUserRoleName)) {
                 try {
                     httpRequest.logout();
                 } catch (ServletException e) {

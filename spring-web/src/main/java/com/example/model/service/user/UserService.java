@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 public interface UserService {
-    boolean isUniqueEmail(String email);
+    boolean emailExist(String email);
 
     TableResponse<UserListDto> userList(UserSearchDto searchDto);
 

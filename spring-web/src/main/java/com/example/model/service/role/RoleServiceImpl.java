@@ -5,7 +5,7 @@ import com.example.model.entity.Role_;
 import com.example.model.repo.RoleRepo;
 import com.example.model.service.table.TableService;
 import com.example.util.exception.RoleNotFoundException;
-import com.example.util.payload.dto.general.IdAndNameDto;
+import com.example.util.payload.dto.role.RoleForm;
 import com.example.util.payload.dto.role.RoleListDto;
 import com.example.util.payload.dto.role.RoleSearchDto;
 import com.example.util.payload.dto.table.TableResponse;
@@ -41,9 +41,9 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Optional<IdAndNameDto> findByRoleId(Long id) {
-        Function<CriteriaBuilder, CriteriaQuery<IdAndNameDto>> searchQuery = cb -> {
-            var cq = cb.createQuery(IdAndNameDto.class);
+    public Optional<RoleForm> findByRoleId(Long id) {
+        Function<CriteriaBuilder, CriteriaQuery<RoleForm>> searchQuery = cb -> {
+            var cq = cb.createQuery(RoleForm.class);
             var root = cq.from(Role.class);
             cq.multiselect(
                     root.get(Role_.id),
@@ -57,7 +57,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Transactional
     @Override
-    public void manageService(IdAndNameDto dto) {
+    public void manageRole(RoleForm dto) {
         if (dto.getId() == null || dto.getId() <= 0) {
             createRole(dto.getName());
         } else {
@@ -65,7 +65,7 @@ public class RoleServiceImpl implements RoleService {
         }
     }
 
-    private void editRole(IdAndNameDto dto) {
+    private void editRole(RoleForm dto) {
         var role = roleRepo.findById(dto.getId()).orElseThrow();
         role.setName(dto.getName());
     }
@@ -103,7 +103,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public boolean roleNameExist(String roleName) {
-        return roleRepo.existsByName(roleName);
+        return !roleRepo.existsByName(roleName);
     }
 
     private String getRoleNameFromAuthentication(Authentication auth) {

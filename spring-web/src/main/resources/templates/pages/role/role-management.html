@@ -9,13 +9,18 @@
 <body>
 <main layout:fragment="content">
   <div class="manage-form mb-5">
-    <h5 class="mb-2">Role Create</h5>
+    <div class="d-flex justify-content-between">
+      <h5 class="mb-2">Role [[${title}]]</h5>
+      <div th:if="${title == 'Update'}">
+        <a th:href="@{/role/role-management}" class="primary-btn">Create Role</a>
+      </div>
+    </div>
 
     <form th:action="@{/role/manage-role}" th:object="${roleObject}" method="post"
           class="d-flex align-items-end gap-2">
       <input type="hidden" th:field="*{id}">
       <div>
-        <label for="createdName">Name</label>
+        <label for="createdName">Name <span class="required-field">*</span><span class="error-desc ms-2" th:errors="*{name}"></span></label>
         <input type="text" id="createdName" th:field="*{name}" class="form-input">
       </div>
       <button class="primary-btn" type="submit">Submit</button>
@@ -62,6 +67,17 @@
     </table>
   </div>
   <div th:replace="~{fragments/fragments :: table-footer}"></div>
+
+  <!-- Toast -->
+  <div
+      layout:include="~{fragments/fragments :: toast (toastId='editToast', showToast=${showToast} )}">
+    <div layout:fragment="toast-header-body">
+      <div class="toast-body toast-success">
+        <img src="/images/icon/check-badge.svg" alt="success">
+        Successfully [[${title}]]!!
+      </div>
+    </div>
+  </div>
 </main>
 
 <!-- For Only Script Tags -->

@@ -1,7 +1,7 @@
 package com.example.controller.role;
 
 import com.example.model.service.role.RoleService;
-import com.example.util.payload.dto.general.IdAndNameDto;
+import com.example.util.payload.dto.role.RoleForm;
 import com.example.util.payload.dto.role.RoleListDto;
 import com.example.util.payload.dto.role.RoleSearchDto;
 import com.example.util.payload.dto.table.TableResponse;
@@ -32,14 +32,14 @@ public class RoleController {
     }
 
     @PostMapping("manage-role")
-    public String createRole(@ModelAttribute("roleObject") @Valid IdAndNameDto dto,
+    public String createRole(@ModelAttribute("roleObject") @Valid RoleForm dto,
                              BindingResult result,
                              RedirectAttributes attr) {
 
         if (result.hasErrors())
             return "pages/role/role-management";
 
-        roleService.manageService(dto);
+        roleService.manageRole(dto);
 
         if (dto.getId() == null || dto.getId() <= 0) {
             attr.addFlashAttribute("title", "Create");
@@ -52,9 +52,9 @@ public class RoleController {
     }
 
     @ModelAttribute("roleObject")
-    public IdAndNameDto roleObject(@RequestParam(required = false) Long id) throws BadRequestException {
+    public RoleForm roleObject(@RequestParam(required = false) Long id) throws BadRequestException {
         if (id == null || id <= 0)
-            return new IdAndNameDto();
+            return new RoleForm();
 
         var dto = roleService.findByRoleId(id);
         if (dto.isEmpty())
