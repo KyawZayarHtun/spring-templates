@@ -54,7 +54,7 @@
               Created At
           </span>
         </th>
-        <th data-column-name="UpdatedAt">
+        <th data-column-name="updatedAt">
           <span>
               Updated At
           </span>
@@ -105,7 +105,7 @@
             const {id, name, createdAt, updatedAt} = data;
             rows += `<tr>
                 <td><span>
-                ${getEditIcon(id)}
+                  ${getEditIcon(`/role/role-management?id=${id}`)}
                 </span></td>
                 <td>${getDummyTableNumber(searchPayload, index)}</td>
                 <td style="min-width: 200px;">${name}</td>

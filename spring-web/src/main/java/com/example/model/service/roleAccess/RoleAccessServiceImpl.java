@@ -1,11 +1,17 @@
 package com.example.model.service.roleAccess;
 
+import com.example.model.entity.Role;
 import com.example.model.entity.RoleAccess;
 import com.example.model.entity.RoleAccess_;
 import com.example.model.entity.Role_;
 import com.example.model.repo.RoleAccessRepo;
+import com.example.model.service.table.TableService;
+import com.example.util.payload.dto.role.RoleListDto;
 import com.example.util.payload.dto.roleAccess.RoleAccessDto;
 import com.example.util.payload.dto.roleAccess.RoleAccessForm;
+import com.example.util.payload.dto.roleAccess.RoleAccessListDto;
+import com.example.util.payload.dto.roleAccess.RoleAccessSearchDto;
+import com.example.util.payload.dto.table.TableResponse;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +28,7 @@ import java.util.function.Function;
 public class RoleAccessServiceImpl implements RoleAccessService {
 
     private final RoleAccessRepo roleAccessRepo;
+    private final TableService tableService;
 
     @Override
     public List<RoleAccessDto> findRoleAccessByRole(String roleName) {
@@ -88,6 +95,31 @@ public class RoleAccessServiceImpl implements RoleAccessService {
         }
 
         return false;
+    }
+
+    @Override
+    public TableResponse<RoleAccessListDto> getRoleAccessList(RoleAccessSearchDto searchDto) {
+        Function<CriteriaBuilder, CriteriaQuery<RoleAccessListDto>> searchFunction = cb -> {
+            var cq = cb.createQuery(RoleAccessListDto.class);
+            var root = cq.from(RoleAccess.class);
+            RoleAccessListDto.select(cq, root);
+            tableService.sort(cb, cq, root, searchDto.getSortColumnName(), searchDto.getSortDir());
+            cq.where(searchDto.predicates(cb, root));
+            return cq;
+        };
+
+        Function<CriteriaBuilder, CriteriaQuery<Long>> countFunction = cb -> {
+            var cq = cb.createQuery(Long.class);
+            var root = cq.from(RoleAccess.class);
+            cq.select(cb.count(root.get(Role_.id)));
+            cq.where(searchDto.predicates(cb, root));
+            return cq;
+        };
+
+        var roleAccessList = roleAccessRepo.findAll(searchFunction, countFunction, searchDto.getPageNo(), searchDto.getSize());
+
+        return new TableResponse<>(roleAccessRepo.count(), roleAccessList.getTotalElements(),
+                roleAccessList.getTotalPages(), roleAccessList.getContent());
     }
 
     private void editRoleAccess(RoleAccessForm dto) {

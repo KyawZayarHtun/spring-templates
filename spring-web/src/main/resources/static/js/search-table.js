@@ -71,8 +71,8 @@ const getEmptyRow = (colspan) => {
     return `<tr><td colspan="${colspan}">No Entries</td></tr>`
 }
 
-const getEditIcon = id => {
-    return `<a href="/role/role-management?id=${id}">
+const getEditIcon = url => {
+    return `<a href="${url}">
               <img src="/images/icon/edit.svg" alt="edit icon" class="table-action-icon">
             </a>`;
 }

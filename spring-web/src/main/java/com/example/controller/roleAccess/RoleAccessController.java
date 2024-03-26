@@ -3,6 +3,9 @@ package com.example.controller.roleAccess;
 import com.example.model.service.roleAccess.RoleAccessService;
 import com.example.util.constant.RequestMethod;
 import com.example.util.payload.dto.roleAccess.RoleAccessForm;
+import com.example.util.payload.dto.roleAccess.RoleAccessListDto;
+import com.example.util.payload.dto.roleAccess.RoleAccessSearchDto;
+import com.example.util.payload.dto.table.TableResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
@@ -68,5 +71,9 @@ public class RoleAccessController {
         return dto.get();
     }
 
-
+    @ResponseBody
+    @PostMapping("/role-access-list")
+    public TableResponse<RoleAccessListDto> roleList(@RequestBody RoleAccessSearchDto searchDto) {
+        return roleAccessService.getRoleAccessList(searchDto);
+    }
 }
