@@ -3,7 +3,6 @@ package com.example.util.payload.dto.roleAccess;
 import com.example.model.entity.RoleAccess;
 import com.example.model.entity.RoleAccess_;
 import com.example.util.constant.RequestMethod;
-import com.example.util.validation.roleAccessNameUnique.UniqueRoleAccessName;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import jakarta.validation.constraints.NotBlank;
@@ -22,7 +21,6 @@ public class RoleAccessForm {
     private Long id;
 
     @NotBlank(message = "Role Access name can't be blank!")
-    @UniqueRoleAccessName(message = "Role Access Name already exists!")
     private String name;
 
     @NotBlank(message = "Role Access url can't be blank!")

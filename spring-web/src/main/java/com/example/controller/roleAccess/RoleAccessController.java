@@ -37,6 +37,9 @@ public class RoleAccessController {
                                    BindingResult result, RedirectAttributes attr,
                                    ModelMap model) {
 
+        if (roleAccessService.roleAccessNameExists(dto.getId(), dto.getName()))
+            result.rejectValue("name", "", "Role Access name is already exist!");
+
         if (result.hasErrors()) {
             model.addAttribute("requestMethods", RequestMethod.values());
             return "pages/role-access/role-access-management";
@@ -45,9 +48,9 @@ public class RoleAccessController {
         roleAccessService.manageRoleAccess(dto);
 
         if (dto.getId() == null || dto.getId() <= 0) {
-            attr.addFlashAttribute("title", "Create");
+            attr.addFlashAttribute("prevTitle", "Create");
         } else {
-            attr.addFlashAttribute("title", "Update");
+            attr.addFlashAttribute("prevTitle", "Update");
         }
 
         attr.addFlashAttribute("showToast", true);

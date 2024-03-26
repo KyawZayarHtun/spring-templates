@@ -25,7 +25,7 @@ public class BaseRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> implem
     @Override
     public <R> Optional<R> findOne(Function<CriteriaBuilder, CriteriaQuery<R>> searchFunction) {
         var cq = searchFunction.apply(entityManager.getCriteriaBuilder());
-        return Optional.ofNullable(entityManager.createQuery(cq).getSingleResult());
+        return entityManager.createQuery(cq).getResultStream().findFirst();
     }
 
     @Override

@@ -12,6 +12,7 @@ import com.example.util.payload.dto.table.TableResponse;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -50,6 +51,21 @@ public class RoleServiceImpl implements RoleService {
                     root.get(Role_.name)
             );
             cq.where(cb.equal(root.get(Role_.id), id));
+            return cq;
+        };
+        return roleRepo.findOne(searchQuery);
+    }
+
+    @Override
+    public Optional<RoleForm> findByRoleName(String name) {
+        Function<CriteriaBuilder, CriteriaQuery<RoleForm>> searchQuery = cb -> {
+            var cq = cb.createQuery(RoleForm.class);
+            var root = cq.from(Role.class);
+            cq.multiselect(
+                    root.get(Role_.id),
+                    root.get(Role_.name)
+            );
+            cq.where(cb.equal(root.get(Role_.name), name));
             return cq;
         };
         return roleRepo.findOne(searchQuery);
@@ -104,6 +120,24 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public boolean roleNameExist(String roleName) {
         return !roleRepo.existsByName(roleName);
+    }
+
+    @Override
+    public boolean roleNameExist(@Nullable Long id, String roleName) {
+        if (id == null)
+            return roleRepo.existsByName(roleName);
+
+        var roleById = roleRepo.findById(id);
+        if (roleById.isPresent()) {
+            var role = roleById.get();
+            if (role.getName().equalsIgnoreCase(roleName)) {
+                return false;
+            } else {
+                return findByRoleName(roleName).isPresent();
+            }
+        }
+
+        return false;
     }
 
     private String getRoleNameFromAuthentication(Authentication auth) {

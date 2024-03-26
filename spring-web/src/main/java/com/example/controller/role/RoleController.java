@@ -36,15 +36,18 @@ public class RoleController {
                              BindingResult result,
                              RedirectAttributes attr) {
 
+        if (roleService.roleNameExist(dto.getId(), dto.getName()))
+            result.rejectValue("name", "", "Role Name already exists!");
+
         if (result.hasErrors())
             return "pages/role/role-management";
 
         roleService.manageRole(dto);
 
         if (dto.getId() == null || dto.getId() <= 0) {
-            attr.addFlashAttribute("title", "Create");
+            attr.addFlashAttribute("prevTitle", "Create");
         } else {
-            attr.addFlashAttribute("title", "Update");
+            attr.addFlashAttribute("prevTitle", "Update");
         }
         attr.addFlashAttribute("showToast", true);
 

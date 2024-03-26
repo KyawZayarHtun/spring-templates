@@ -11,23 +11,25 @@
     <div class="d-flex justify-content-between">
       <h5 class="mb-2">Role Access [[${title}]]</h5>
       <div th:if="${title == 'Update'}">
-        <a th:href="@{/role-access/role-access-management}" class="primary-btn">Create Role Access</a>
+        <a th:href="@{/role-access/role-access-management}" class="primary-btn">Create Role
+          Access</a>
       </div>
     </div>
 
     <form th:action="@{/role-access/manage-role-access}" th:object="${roleAccessObject}"
-          method="post"
-          class="form-two-column-grid form-fields-grid">
+          method="post">
       <input type="hidden" th:field="*{id}">
-      <div
-          th:replace="~{fragments/fragments :: input-box(name='Name', id='name', type='text', field='name', disable=false, require=true)}"></div>
-      <div
-          th:replace="~{fragments/fragments :: input-box(name='Url', id='url', type='text', field='url', disable=false, require=true)}"></div>
-      <div
-          th:replace="~{fragments/fragments :: select-box(name='Request Method', list=${requestMethods}, id='request-method', field='requestMethod', disable=false, require=true)}"></div>
-      <div
-          th:replace="~{fragments/fragments :: input-box(name='Description', id='description', type='textarea', field='description', disable=false, require=false)}"></div>
-      <button class="primary-btn" type="submit">Submit</button>
+      <div class="form-two-column-grid form-fields-grid">
+        <div
+            th:replace="~{fragments/fragments :: input-box(name='Name', id='name', type='text', field='name', disable=false, require=true)}"></div>
+        <div
+            th:replace="~{fragments/fragments :: input-box(name='Url', id='url', type='text', field='url', disable=false, require=true)}"></div>
+        <div
+            th:replace="~{fragments/fragments :: select-box(name='Request Method', list=${requestMethods}, id='request-method', field='requestMethod', disable=false, require=true)}"></div>
+        <div
+            th:replace="~{fragments/fragments :: input-box(name='Description', id='description', type='textarea', field='description', disable=false, require=false)}"></div>
+      </div>
+      <button class="primary-btn d-block mx-auto" type="submit">Submit</button>
     </form>
   </div>
 
@@ -36,7 +38,7 @@
     <div layout:fragment="toast-header-body">
       <div class="toast-body toast-success">
         <img src="/images/icon/check-badge.svg" alt="success">
-        Successfully [[${title}]]!!
+        Successfully [[${prevTitle}]]!!
       </div>
     </div>
   </div>

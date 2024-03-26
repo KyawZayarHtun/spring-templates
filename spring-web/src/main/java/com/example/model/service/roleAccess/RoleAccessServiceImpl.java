@@ -9,6 +9,7 @@ import com.example.util.payload.dto.roleAccess.RoleAccessForm;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +48,18 @@ public class RoleAccessServiceImpl implements RoleAccessService {
         return roleAccessRepo.findOne(searchQuery);
     }
 
+    @Override
+    public Optional<RoleAccessForm> findRoleAccessByName(String roleAccessName) {
+        Function<CriteriaBuilder, CriteriaQuery<RoleAccessForm>> searchQuery = cb -> {
+            var cq = cb.createQuery(RoleAccessForm.class);
+            var root = cq.from(RoleAccess.class);
+            RoleAccessForm.select(cq, root);
+            cq.where(cb.equal(root.get(RoleAccess_.name), roleAccessName));
+            return cq;
+        };
+        return roleAccessRepo.findOne(searchQuery);
+    }
+
     @Transactional
     @Override
     public void manageRoleAccess(RoleAccessForm dto) {
@@ -58,8 +71,23 @@ public class RoleAccessServiceImpl implements RoleAccessService {
     }
 
     @Override
-    public boolean roleAccessNameExists(String roleAccessName) {
-        return !roleAccessRepo.existsByName(roleAccessName);
+    public boolean roleAccessNameExists(@Nullable Long id, String roleAccessName) {
+
+        if (id == null) {
+            return roleAccessRepo.existsByName(roleAccessName);
+        }
+
+        var roleAccessById = roleAccessRepo.findById(id);
+        if (roleAccessById.isPresent()) {
+            var roleAccess = roleAccessById.get();
+            if (roleAccess.getName().equalsIgnoreCase(roleAccessName)) {
+                return false;
+            } else {
+                return findRoleAccessByName(roleAccessName).isPresent();
+            }
+        }
+
+        return false;
     }
 
     private void editRoleAccess(RoleAccessForm dto) {
