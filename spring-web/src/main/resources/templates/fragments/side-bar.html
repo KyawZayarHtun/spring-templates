@@ -52,8 +52,8 @@
         layout:include="~{fragments/side-bar-components :: dropdown-link-container (id = 'setting', menuText = 'Setting', iconPath = '/images/icon/setting.svg')}"
         th:remove="tag">
       <div layout:fragment="sidebar-dropdown-links">
-        <a th:replace="~{fragments/side-bar-components :: link (menuText='Role Management', href='/role/role-management')}"></a>
-        <a th:replace="~{fragments/side-bar-components :: link (menuText='Role Access Management', href='/role-access/role-access-management')}"></a>
+        <a th:replace="~{fragments/side-bar-components :: link (menuText='Role Management', href='/role/manage-role')}"></a>
+        <a th:replace="~{fragments/side-bar-components :: link (menuText='Role Access Management', href='/role-access/manage-role-access')}"></a>
       </div>
     </div>
 

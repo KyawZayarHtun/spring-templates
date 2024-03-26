@@ -21,14 +21,14 @@ public class RoleController {
 
     private final RoleService roleService;
 
-    @GetMapping("role-management")
+    @GetMapping("manage-role")
     public String roleManagement(@RequestParam(required = false) Long id, ModelMap model) {
         if (id == null || id <= 0) {
             model.put("title", "Create");
         } else {
             model.put("title", "Update");
         }
-        return "pages/role/role-management";
+        return "pages/role/manage-role";
     }
 
     @PostMapping("manage-role")
@@ -40,7 +40,7 @@ public class RoleController {
             result.rejectValue("name", "", "Role Name already exists!");
 
         if (result.hasErrors())
-            return "pages/role/role-management";
+            return "pages/role/manage-role";
 
         roleService.manageRole(dto);
 
@@ -51,7 +51,7 @@ public class RoleController {
         }
         attr.addFlashAttribute("showToast", true);
 
-        return "redirect:/role/role-management";
+        return "redirect:/role/manage-role";
     }
 
     @ModelAttribute("roleObject")

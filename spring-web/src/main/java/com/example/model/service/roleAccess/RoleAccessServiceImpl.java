@@ -118,8 +118,9 @@ public class RoleAccessServiceImpl implements RoleAccessService {
 
         var roleAccessList = roleAccessRepo.findAll(searchFunction, countFunction, searchDto.getPageNo(), searchDto.getSize());
 
-        return new TableResponse<>(roleAccessRepo.count(), roleAccessList.getTotalElements(),
+        TableResponse<RoleAccessListDto> roleAccessListDtoTableResponse = new TableResponse<>(roleAccessRepo.count(), roleAccessList.getTotalElements(),
                 roleAccessList.getTotalPages(), roleAccessList.getContent());
+        return roleAccessListDtoTableResponse;
     }
 
     private void editRoleAccess(RoleAccessForm dto) {

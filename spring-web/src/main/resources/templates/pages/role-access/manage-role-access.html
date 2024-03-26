@@ -12,7 +12,7 @@
     <div class="d-flex justify-content-between">
       <h5 class="mb-2">Role Access [[${title}]]</h5>
       <div th:if="${title == 'Update'}">
-        <a th:href="@{/role-access/role-access-management}" class="primary-btn">Create Role
+        <a th:href="@{/role-access/manage-role-access}" class="primary-btn">Create Role
           Access</a>
       </div>
     </div>
@@ -38,8 +38,8 @@
   <div class="table-actions align-items-end">
     <div class="d-flex align-items-end gap-2">
       <div>
-        <label for="name">Name</label>
-        <input type="text" id="name" class="form-input">
+        <label for="raName">Name</label>
+        <input type="text" id="raName" class="form-input">
       </div>
       <button class="primary-btn" onclick="filterTable()">Filter</button>
     </div>
@@ -128,7 +128,7 @@
       const {id, name, url, requestMethod, description, createdAt, updatedAt} = data;
       rows += `<tr>
                 <td><span>
-                  ${getEditIcon(`/role-access/role-access-management?id=${id}`)}
+                  ${getEditIcon(`/role-access/manage-role-access?id=${id}`)}
                 </span></td>
                 <td>${getDummyTableNumber(searchPayload, index)}</td>
                 <td style="min-width: 200px;">${name}</td>
@@ -151,7 +151,7 @@
   createDataTable(searchPayload, addTableBody, "role-access-list")
 
   const filterTable = () => {
-    searchPayload.name = document.getElementById("name").value
+    searchPayload.name = document.getElementById("raName").value
     createDataTable(searchPayload, addTableBody, "role-access-list")
   }
 </script>

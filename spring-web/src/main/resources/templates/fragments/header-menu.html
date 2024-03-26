@@ -13,7 +13,7 @@
     <div>
         <div layout:insert="~{fragments/fragments :: dropdown-menu (name = ${loginUsername})}">
             <div layout:fragment="dropdown-links">
-                <a th:replace="~{fragments/fragments :: link (name='Profile', href='/user/user-profile')}"></a>
+                <a th:replace="~{fragments/fragments :: link (name='Profile', href='/user/edit-user-profile')}"></a>
                 <hr class="dropdown-divider">
                 <form th:action="@{/logout}" method="post">
                     <button type="submit" class="dropdown-item">Logout</button>

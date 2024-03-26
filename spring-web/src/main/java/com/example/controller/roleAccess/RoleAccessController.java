@@ -24,7 +24,7 @@ public class RoleAccessController {
 
     private final RoleAccessService roleAccessService;
 
-    @GetMapping("/role-access-management")
+    @GetMapping("/manage-role-access")
     public String roleManagement(@RequestParam(required = false) Long id, ModelMap model) {
         if (id == null || id <= 0) {
             model.put("title", "Create");
@@ -32,7 +32,7 @@ public class RoleAccessController {
             model.put("title", "Update");
         }
         model.addAttribute("requestMethods", RequestMethod.values());
-        return "pages/role-access/role-access-management";
+        return "pages/role-access/manage-role-access";
     }
 
     @PostMapping("/manage-role-access")
@@ -45,7 +45,7 @@ public class RoleAccessController {
 
         if (result.hasErrors()) {
             model.addAttribute("requestMethods", RequestMethod.values());
-            return "pages/role-access/role-access-management";
+            return "pages/role-access/manage-role-access";
         }
 
         roleAccessService.manageRoleAccess(dto);
@@ -57,7 +57,7 @@ public class RoleAccessController {
         }
 
         attr.addFlashAttribute("showToast", true);
-        return "redirect:/role-access/role-access-management";
+        return "redirect:/role-access/manage-role-access";
     }
 
     @ModelAttribute("roleAccessObject")

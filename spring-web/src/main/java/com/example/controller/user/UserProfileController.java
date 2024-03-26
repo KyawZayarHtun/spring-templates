@@ -17,13 +17,13 @@ import java.io.IOException;
 @Controller
 @RequestMapping("user")
 @RequiredArgsConstructor
-public class UserProfileCreateController {
+public class UserProfileController {
 
     private final UserService userService;
 
-    @GetMapping("user-profile")
+    @GetMapping("edit-user-profile")
     public String profile() {
-        return "pages/user-management/user-profile";
+        return "pages/user-management/edit-user-profile";
     }
 
     @PostMapping("edit-user-profile")
@@ -31,10 +31,10 @@ public class UserProfileCreateController {
                                   BindingResult result,
                                   RedirectAttributes attr) throws IOException {
         if (result.hasErrors())
-            return "pages/user-management/user-profile";
+            return "pages/user-management/edit-user-profile";
         userService.updateUserProfile(userDetail);
         attr.addFlashAttribute("showToast", true);
-        return "redirect:/user/user-profile";
+        return "redirect:/user/edit-user-profile";
     }
 
     @ModelAttribute("userDetail")
