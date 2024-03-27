@@ -20,4 +20,11 @@ public record RoleAccessDto(
                 root.get(RoleAccess_.description)
         );
     }
+
+    public static String getUrlStartName(String url) {
+        String[] split = url.split("/");
+        if (split.length == 0)
+            return "home";
+        return split[1];
+    }
 }

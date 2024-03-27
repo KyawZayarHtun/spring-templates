@@ -77,6 +77,12 @@ const getEditIcon = url => {
             </a>`;
 }
 
+const getDetailIcon = url => {
+    return `<a href="${url}">
+              <img src="/images/icon/info.svg" alt="edit icon" class="table-action-icon">
+            </a>`;
+}
+
 const createDataTable = (searchPayload, addTableBody, tableId) => {
 
     const essentialData = {

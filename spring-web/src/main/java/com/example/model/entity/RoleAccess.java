@@ -34,6 +34,8 @@ public class RoleAccess extends BaseField implements Serializable {
 
     private String description;
 
+
+
     @ManyToMany(mappedBy = "roleAccesses")
     private List<Role> roles;
 

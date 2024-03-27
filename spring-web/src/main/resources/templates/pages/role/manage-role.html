@@ -104,9 +104,14 @@
         apiResponse.contents.forEach((data, index) => {
             const {id, name, createdAt, updatedAt} = data;
             rows += `<tr>
-                <td><span>
-                  ${getEditIcon(`/role/manage-role?id=${id}`)}
-                </span></td>
+                <td>
+                  <span>
+                    ${getEditIcon(`/role/manage-role?id=${id}`)}
+                  </span>
+                  <span>
+                    ${getDetailIcon(`/role/role-detail?id=${id}`)}
+                  </span>
+                </td>
                 <td>${getDummyTableNumber(searchPayload, index)}</td>
                 <td style="min-width: 200px;">${name}</td>
                 <td style="min-width: 230px;">${createdAt}</td>

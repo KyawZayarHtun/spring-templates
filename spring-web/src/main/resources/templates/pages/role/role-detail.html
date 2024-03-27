@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/dashboard-layout}" th:with="page='Role Detail'">
+<head>
+  <title>Role Detail</title>
+</head>
+<body>
+<main layout:fragment="content">
+  <div th:each="dto : ${roleAccess}" class="mb-5">
+    <p th:text="${dto.name}" class="mb-2"></p>
+    <div th:each="ra : ${dto.roleAccessList}">
+      <p th:text="${ra.url()}"></p>
+    </div>
+  </div>
+</main>
+
+<!-- For Only Script Tags -->
+<div layout:fragment="js-scripts"></div>
+
+<!-- For Javascript Codes -->
+<script layout:fragment="js" th:inline="javascript"></script>
+
+</body>
+</html>

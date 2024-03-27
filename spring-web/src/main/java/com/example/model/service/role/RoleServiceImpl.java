@@ -3,11 +3,14 @@ package com.example.model.service.role;
 import com.example.model.entity.Role;
 import com.example.model.entity.Role_;
 import com.example.model.repo.RoleRepo;
+import com.example.model.service.roleAccess.RoleAccessService;
 import com.example.model.service.table.TableService;
 import com.example.util.exception.RoleNotFoundException;
+import com.example.util.payload.dto.role.RoleAccessDetail;
 import com.example.util.payload.dto.role.RoleForm;
 import com.example.util.payload.dto.role.RoleListDto;
 import com.example.util.payload.dto.role.RoleSearchDto;
+import com.example.util.payload.dto.roleAccess.RoleAccessDto;
 import com.example.util.payload.dto.table.TableResponse;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -19,8 +22,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +33,7 @@ public class RoleServiceImpl implements RoleService {
 
     private final RoleRepo roleRepo;
     private final TableService tableService;
+    private final RoleAccessService roleAccessService;
 
     @Override
     public String getCurrentUserRoleName() {
@@ -138,6 +143,21 @@ public class RoleServiceImpl implements RoleService {
         }
 
         return false;
+    }
+
+    @Override
+    public List<RoleAccessDetail> roleDetailWithRoleAccess(Long id) {
+        var role = findByRoleId(id).orElseThrow();
+        var roleAccessList = roleAccessService.findRoleAccessByRole(role.getName());
+        var dto = roleAccessList.stream()
+                .collect(Collectors.groupingBy(ra -> RoleAccessDto.getUrlStartName(ra.url())));
+
+        List<RoleAccessDetail> roleAccessDetails = new ArrayList<>();
+        for (var entry : dto.entrySet()) {
+            roleAccessDetails.add(new RoleAccessDetail(entry.getKey(), entry.getValue()));
+        }
+
+        return roleAccessDetails;
     }
 
     private String getRoleNameFromAuthentication(Authentication auth) {
