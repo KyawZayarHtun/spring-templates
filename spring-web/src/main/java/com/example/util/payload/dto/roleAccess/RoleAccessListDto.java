@@ -2,6 +2,7 @@ package com.example.util.payload.dto.roleAccess;
 
 import com.example.model.entity.RoleAccess;
 import com.example.model.entity.RoleAccess_;
+import com.example.util.constant.CrudOperation;
 import com.example.util.constant.RequestMethod;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
@@ -13,6 +14,8 @@ public record RoleAccessListDto(
         String name,
         String url,
         RequestMethod requestMethod,
+
+        CrudOperation requestOperation,
         String description,
         LocalDateTime createdAt,
         LocalDateTime updatedAt) {
@@ -23,6 +26,7 @@ public record RoleAccessListDto(
                 root.get(RoleAccess_.name),
                 root.get(RoleAccess_.url),
                 root.get(RoleAccess_.requestMethod),
+                root.get(RoleAccess_.crudOperation),
                 root.get(RoleAccess_.description),
                 root.get(RoleAccess_.createdAt),
                 root.get(RoleAccess_.updatedAt)

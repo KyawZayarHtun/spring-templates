@@ -28,6 +28,8 @@
         <div
             th:replace="~{fragments/fragments :: select-box(name='Request Method', list=${requestMethods}, id='request-method', field='requestMethod', disable=false, require=true)}"></div>
         <div
+            th:replace="~{fragments/fragments :: select-box(name='Request Operation', list=${requestOperations}, id='request-operation', field='requestOperation', disable=false, require=true)}"></div>
+        <div
             th:replace="~{fragments/fragments :: input-box(name='Description', id='description', type='textarea', field='description', disable=false, require=false)}"></div>
       </div>
       <button class="primary-btn d-block mx-auto" type="submit">Submit</button>
@@ -65,6 +67,11 @@
         <th data-column-name="requestMethod">
           <span>
             Request Method
+          </span>
+        </th>
+        <th data-column-name="crudOperation">
+          <span>
+            Request Operation
           </span>
         </th>
         <th data-column-name="description">
@@ -125,22 +132,23 @@
 
     let rows = ''
     apiResponse.contents.forEach((data, index) => {
-      const {id, name, url, requestMethod, description, createdAt, updatedAt} = data;
+      const {id, name, url, requestMethod, requestOperation, description, createdAt, updatedAt} = data;
       rows += `<tr>
                 <td><span>
                   ${getEditIcon(`/role-access/manage-role-access?id=${id}`)}
                 </span></td>
                 <td>${getDummyTableNumber(searchPayload, index)}</td>
                 <td style="min-width: 200px;">${name}</td>
-                <td style="min-width: 200px;">${url}</td>
+                <td style="min-width: 300px;">${url}</td>
                 <td style="min-width: 200px;">${requestMethod}</td>
+                <td style="min-width: 200px;">${requestOperation}</td>
                 <td style="min-width: 200px;">${checkStringNullOrRenderStringForDataTable(description)}</td>
                 <td style="min-width: 230px;">${createdAt}</td>
                 <td style="min-width: 230px;">${checkStringNullOrRenderStringForDataTable(updatedAt)}</td>
             </tr>`
     });
     if (rows === '') {
-      rows = getEmptyRow(8)
+      rows = getEmptyRow(9)
     }
 
     // table id

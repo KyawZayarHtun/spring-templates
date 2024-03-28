@@ -1,5 +1,6 @@
 package com.example.model.entity;
 
+import com.example.util.constant.CrudOperation;
 import com.example.util.constant.RequestMethod;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,10 @@ public class RoleAccess extends BaseField implements Serializable {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private RequestMethod requestMethod;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private CrudOperation crudOperation;
 
     private String description;
 

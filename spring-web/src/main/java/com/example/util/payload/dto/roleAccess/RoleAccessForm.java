@@ -2,6 +2,7 @@ package com.example.util.payload.dto.roleAccess;
 
 import com.example.model.entity.RoleAccess;
 import com.example.model.entity.RoleAccess_;
+import com.example.util.constant.CrudOperation;
 import com.example.util.constant.RequestMethod;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
@@ -28,6 +29,10 @@ public class RoleAccessForm {
 
     @NotNull(message = "Request method can't be empty!")
     private RequestMethod requestMethod;
+
+    @NotNull(message = "Request operation can't be empty!")
+    private CrudOperation requestOperation;
+
     private String description;
 
 
@@ -37,6 +42,7 @@ public class RoleAccessForm {
                 root.get(RoleAccess_.name),
                 root.get(RoleAccess_.url),
                 root.get(RoleAccess_.requestMethod),
+                root.get(RoleAccess_.crudOperation),
                 root.get(RoleAccess_.description)
         );
     }

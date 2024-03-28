@@ -128,6 +128,7 @@ public class RoleAccessServiceImpl implements RoleAccessService {
         roleAccess.setName(dto.getName());
         roleAccess.setUrl(dto.getUrl());
         roleAccess.setRequestMethod(dto.getRequestMethod());
+        roleAccess.setCrudOperation(dto.getRequestOperation());
         roleAccess.setDescription(dto.getDescription());
     }
 
@@ -136,6 +137,7 @@ public class RoleAccessServiceImpl implements RoleAccessService {
         roleAccess.setName(dto.getName());
         roleAccess.setUrl(dto.getUrl());
         roleAccess.setRequestMethod(dto.getRequestMethod());
+        roleAccess.setCrudOperation(dto.getRequestOperation());
         roleAccess.setDescription(dto.getDescription());
         roleAccessRepo.save(roleAccess);
     }

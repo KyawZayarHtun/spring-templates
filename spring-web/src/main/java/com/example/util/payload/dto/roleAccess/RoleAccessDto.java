@@ -7,6 +7,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 
 public record RoleAccessDto(
+        Long id,
         String name,
         String url,
         RequestMethod requestMethod,
@@ -14,6 +15,7 @@ public record RoleAccessDto(
 
     public static void select(CriteriaQuery<RoleAccessDto> cq, Root<RoleAccess> root) {
         cq.multiselect(
+                root.get(RoleAccess_.id),
                 root.get(RoleAccess_.name),
                 root.get(RoleAccess_.url),
                 root.get(RoleAccess_.requestMethod),

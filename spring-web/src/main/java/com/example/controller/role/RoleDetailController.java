@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("role")
@@ -22,7 +24,7 @@ public class RoleDetailController {
     }
 
     @PostMapping("role-detail")
-    public String manageRoleDetail() {
+    public String manageRoleDetail(Long ...id) {
 
         return "redirect:/role/role-detail";
     }

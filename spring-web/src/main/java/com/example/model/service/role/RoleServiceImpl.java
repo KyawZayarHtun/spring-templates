@@ -149,15 +149,13 @@ public class RoleServiceImpl implements RoleService {
     public List<RoleAccessDetail> roleDetailWithRoleAccess(Long id) {
         var role = findByRoleId(id).orElseThrow();
         var roleAccessList = roleAccessService.findRoleAccessByRole(role.getName());
-        var dto = roleAccessList.stream()
-                .collect(Collectors.groupingBy(ra -> RoleAccessDto.getUrlStartName(ra.url())));
 
-        List<RoleAccessDetail> roleAccessDetails = new ArrayList<>();
-        for (var entry : dto.entrySet()) {
-            roleAccessDetails.add(new RoleAccessDetail(entry.getKey(), entry.getValue()));
-        }
-
-        return roleAccessDetails;
+        return roleAccessList.stream()
+                .collect(Collectors.groupingBy(ra -> RoleAccessDto.getUrlStartName(ra.url())))
+                .entrySet().stream()
+                .map(RoleAccessDetail::new)
+                .sorted((r, r1) -> r1.getRoleAccessList().size() - r.getRoleAccessList().size())
+                .toList();
     }
 
     private String getRoleNameFromAuthentication(Authentication auth) {

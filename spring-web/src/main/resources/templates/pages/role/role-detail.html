@@ -7,12 +7,28 @@
 </head>
 <body>
 <main layout:fragment="content">
-  <div th:each="dto : ${roleAccess}" class="mb-5">
+
+  <form th:action="@{/role/role-detail}">
+    <div class="access-wrapper">
+      <div class="access-item" th:each="dto : ${roleAccess}">
+        <h5 class="access-item-header" th:text="${dto.name}">Home</h5>
+        <div class="access-list">
+          <div class="form-group-check" th:each="ra : ${dto.roleAccessList}">
+            <input type="checkbox" th:id="${ra.id()}" th:value="${ra.id()}" th:name="${ra.id()}"
+                   class="form-input-check">
+            <label th:for="${ra.id()}" th:text="${ra.name()}">User List Excel Export Api</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="primary-btn d-block mx-auto">Save</button>
+  </form>
+  <!--<div th:each="dto : ${roleAccess}" class="mb-5">
     <p th:text="${dto.name}" class="mb-2"></p>
     <div th:each="ra : ${dto.roleAccessList}">
       <p th:text="${ra.url()}"></p>
     </div>
-  </div>
+  </div>-->
 </main>
 
 <!-- For Only Script Tags -->

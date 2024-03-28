@@ -18,8 +18,8 @@ public class RoleAccessDetail {
     private String name;
     private List<RoleAccessDto> roleAccessList;
 
-    /*public RoleAccessDetail(Map<String, List<RoleAccessDto>> dto) {
-        this.name = dto.get();
-        this.roleAccessList = roleAccessList;
-    }*/
+    public RoleAccessDetail(Map.Entry<String, List<RoleAccessDto>> dto) {
+        this.name = dto.getKey();
+        this.roleAccessList = dto.getValue();
+    }
 }

@@ -631,3 +631,33 @@ button[disabled] {
 .accordion-item {
     border: none !important;
 }
+
+.access-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem 1rem;
+    margin-bottom: 2rem;
+}
+
+.access-item {
+    height: 100%;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--white-smoke);
+}
+
+.access-item-header {
+    text-transform: capitalize;
+    padding-block-end: 1rem;
+}
+
+.form-group-check {
+    padding-block: 5px;
+}
+
+.form-input-check {
+    margin-inline-end: 8px;
+}
+
+.access-list label {
+    cursor: pointer;
+}

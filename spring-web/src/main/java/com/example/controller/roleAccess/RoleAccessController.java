@@ -1,6 +1,7 @@
 package com.example.controller.roleAccess;
 
 import com.example.model.service.roleAccess.RoleAccessService;
+import com.example.util.constant.CrudOperation;
 import com.example.util.constant.RequestMethod;
 import com.example.util.payload.dto.roleAccess.RoleAccessForm;
 import com.example.util.payload.dto.roleAccess.RoleAccessListDto;
@@ -32,6 +33,7 @@ public class RoleAccessController {
             model.put("title", "Update");
         }
         model.addAttribute("requestMethods", RequestMethod.values());
+        model.addAttribute("requestOperations", CrudOperation.values());
         return "pages/role-access/manage-role-access";
     }
 
