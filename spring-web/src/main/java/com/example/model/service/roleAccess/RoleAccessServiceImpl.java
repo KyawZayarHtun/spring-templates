@@ -1,16 +1,11 @@
 package com.example.model.service.roleAccess;
 
-import com.example.model.entity.Role;
 import com.example.model.entity.RoleAccess;
 import com.example.model.entity.RoleAccess_;
 import com.example.model.entity.Role_;
 import com.example.model.repo.RoleAccessRepo;
 import com.example.model.service.table.TableService;
-import com.example.util.payload.dto.role.RoleListDto;
-import com.example.util.payload.dto.roleAccess.RoleAccessDto;
-import com.example.util.payload.dto.roleAccess.RoleAccessForm;
-import com.example.util.payload.dto.roleAccess.RoleAccessListDto;
-import com.example.util.payload.dto.roleAccess.RoleAccessSearchDto;
+import com.example.util.payload.dto.roleAccess.*;
 import com.example.util.payload.dto.table.TableResponse;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -22,23 +17,38 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class RoleAccessServiceImpl implements RoleAccessService {
 
     private final RoleAccessRepo roleAccessRepo;
     private final TableService tableService;
 
     @Override
-    public List<RoleAccessDto> findRoleAccessByRole(String roleName) {
+    public List<RoleAccessDto> findRoleAccessByRoleId(Long roleId) {
         Function<CriteriaBuilder, CriteriaQuery<RoleAccessDto>> searchQuery = cb -> {
           var cq = cb.createQuery(RoleAccessDto.class);
           var root = cq.from(RoleAccess.class);
           var role = root.join(RoleAccess_.roles);
           RoleAccessDto.select(cq, root);
-          cq.where(cb.equal(role.get(Role_.name), roleName));
+          cq.where(cb.equal(role.get(Role_.id), roleId));
           return cq;
+        };
+        return roleAccessRepo.findAll(searchQuery);
+    }
+
+    @Override
+    public List<RoleAccessDto> findRoleAccessByRoleName(String roleName) {
+        Function<CriteriaBuilder, CriteriaQuery<RoleAccessDto>> searchQuery = cb -> {
+            var cq = cb.createQuery(RoleAccessDto.class);
+            var root = cq.from(RoleAccess.class);
+            var role = root.join(RoleAccess_.roles);
+            RoleAccessDto.select(cq, root);
+            cq.where(cb.equal(role.get(Role_.name), roleName));
+            return cq;
         };
         return roleAccessRepo.findAll(searchQuery);
     }
@@ -118,9 +128,28 @@ public class RoleAccessServiceImpl implements RoleAccessService {
 
         var roleAccessList = roleAccessRepo.findAll(searchFunction, countFunction, searchDto.getPageNo(), searchDto.getSize());
 
-        TableResponse<RoleAccessListDto> roleAccessListDtoTableResponse = new TableResponse<>(roleAccessRepo.count(), roleAccessList.getTotalElements(),
+        return new TableResponse<>(roleAccessRepo.count(), roleAccessList.getTotalElements(),
                 roleAccessList.getTotalPages(), roleAccessList.getContent());
-        return roleAccessListDtoTableResponse;
+    }
+
+    @Override
+    public List<RoleAccessDto> findAllRoleAccess() {
+        Function<CriteriaBuilder, CriteriaQuery<RoleAccessDto>> searchQuery = cb -> {
+          var cq = cb.createQuery(RoleAccessDto.class);
+          var root = cq.from(RoleAccess.class);
+          RoleAccessDto.select(cq, root);
+          return cq;
+        };
+        return roleAccessRepo.findAll(searchQuery);
+    }
+
+    public List<RoleAccessDetail> convertToRoleAccessDetail(List<RoleAccessDto> roleAccessList) {
+        return roleAccessList.stream()
+                .collect(Collectors.groupingBy(ra -> RoleAccessDto.getUrlStartName(ra.url())))
+                .entrySet().stream()
+                .map(RoleAccessDetail::new)
+                .sorted((r, r1) -> r1.getRoleAccessList().size() - r.getRoleAccessList().size())
+                .toList();
     }
 
     private void editRoleAccess(RoleAccessForm dto) {

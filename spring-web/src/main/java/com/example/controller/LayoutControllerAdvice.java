@@ -26,7 +26,7 @@ public class LayoutControllerAdvice {
         if (auth == null || auth instanceof AnonymousAuthenticationToken)
             return new ArrayList<>();
         String role = roleService.getCurrentUserRoleName(auth);
-        return roleAccessService.findRoleAccessByRole(role);
+        return roleAccessService.findRoleAccessByRoleName(role);
     }
 
     @ModelAttribute("loginUsername")

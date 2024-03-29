@@ -1,9 +1,6 @@
 package com.example.model.service.roleAccess;
 
-import com.example.util.payload.dto.roleAccess.RoleAccessDto;
-import com.example.util.payload.dto.roleAccess.RoleAccessForm;
-import com.example.util.payload.dto.roleAccess.RoleAccessListDto;
-import com.example.util.payload.dto.roleAccess.RoleAccessSearchDto;
+import com.example.util.payload.dto.roleAccess.*;
 import com.example.util.payload.dto.table.TableResponse;
 import org.springframework.lang.Nullable;
 
@@ -12,7 +9,8 @@ import java.util.Optional;
 
 public interface RoleAccessService {
 
-    List<RoleAccessDto> findRoleAccessByRole(String roleName);
+    List<RoleAccessDto> findRoleAccessByRoleId(Long roleId);
+    List<RoleAccessDto> findRoleAccessByRoleName(String roleName);
 
     Optional<RoleAccessForm> findRoleAccessById(Long id);
 
@@ -23,4 +21,9 @@ public interface RoleAccessService {
     boolean roleAccessNameExists(@Nullable Long id, String roleAccessName);
 
     TableResponse<RoleAccessListDto> getRoleAccessList(RoleAccessSearchDto searchDto);
+
+    List<RoleAccessDto> findAllRoleAccess();
+
+    List<RoleAccessDetail> convertToRoleAccessDetail(List<RoleAccessDto> roleAccessList);
+
 }

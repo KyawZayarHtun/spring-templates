@@ -45,7 +45,7 @@ public class CustomAuthorizationManager implements AuthorizationManager<RequestA
             }
 
             var hasRoleAccess =
-                    roleAccessService.findRoleAccessByRole(currentUserRoleName)
+                    roleAccessService.findRoleAccessByRoleName(currentUserRoleName)
                             .stream()
                             .filter(ra -> ra.url().equals(requestUri) && ra.requestMethod().name().equals(requestMethod))
                             .findAny();

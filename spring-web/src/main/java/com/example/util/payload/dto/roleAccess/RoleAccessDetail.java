@@ -1,6 +1,5 @@
-package com.example.util.payload.dto.role;
+package com.example.util.payload.dto.roleAccess;
 
-import com.example.util.payload.dto.roleAccess.RoleAccessDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

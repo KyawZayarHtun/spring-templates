@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -31,6 +32,6 @@ public class Role extends BaseField implements Serializable {
     @JoinTable(name = "role_role_access",
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "role_access_id"))
-    private List<RoleAccess> roleAccesses;
+    private List<RoleAccess> roleAccesses = new ArrayList<>();
 
 }

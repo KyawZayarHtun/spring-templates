@@ -8,27 +8,39 @@
 <body>
 <main layout:fragment="content">
 
-  <form th:action="@{/role/role-detail}">
+  <!--<form th:action="@{/role/role-detail}" method="post" th:object="${roleAccessForm}">
+    <input type="hidden" name="roleId" th:value="${param.get('id')}">
     <div class="access-wrapper">
-      <div class="access-item" th:each="dto : ${roleAccess}">
+      <div class="access-item" th:each="dto : ${roleAccessList}">
         <h5 class="access-item-header" th:text="${dto.name}">Home</h5>
         <div class="access-list">
           <div class="form-group-check" th:each="ra : ${dto.roleAccessList}">
-            <input type="checkbox" th:id="${ra.id()}" th:value="${ra.id()}" th:name="${ra.id()}"
-                   class="form-input-check">
+            <input type="checkbox" th:id="${ra.id()}" th:value="${ra.id()}" name="idList"
+                   class="form-input-check" th:checked="${roleAccessForm.idList.contains(ra.id())}">
             <label th:for="${ra.id()}" th:text="${ra.name()}">User List Excel Export Api</label>
           </div>
         </div>
       </div>
     </div>
     <button class="primary-btn d-block mx-auto">Save</button>
-  </form>
-  <!--<div th:each="dto : ${roleAccess}" class="mb-5">
-    <p th:text="${dto.name}" class="mb-2"></p>
-    <div th:each="ra : ${dto.roleAccessList}">
-      <p th:text="${ra.url()}"></p>
+  </form>-->
+  <form th:action="@{/role/role-detail}" method="post" th:object="${roleAccessForm}">
+    <input type="hidden" name="roleId" th:value="${param.get('id')}">
+    <div class="access-wrapper">
+      <div class="access-item" th:each="raList : ${allRoleAccess}" th:object="${raList}">
+        <h5 class="access-item-header" th:text="*{name}"></h5>
+        <div class="access-list">
+          <div class="form-group-check" th:each="rd : *{roleAccessList}">
+            <input type="checkbox" class="form-input-check"
+                   th:id="${rd.id()}" th:value="${rd.id()}" name="idList"
+                   th:checked="${roleAccessForm.idList.contains(rd.id())}">
+            <label th:for="${rd.id()}" th:text="${rd.name()}"></label>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>-->
+    <button class="primary-btn d-block mx-auto">Save</button>
+  </form>
 </main>
 
 <!-- For Only Script Tags -->

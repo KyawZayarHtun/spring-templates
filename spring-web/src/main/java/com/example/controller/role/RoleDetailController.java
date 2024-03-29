@@ -1,12 +1,13 @@
 package com.example.controller.role;
 
 import com.example.model.service.role.RoleService;
+import com.example.model.service.roleAccess.RoleAccessService;
+import com.example.util.payload.dto.roleAccess.RoleAccessByRoleForm;
+import com.example.util.payload.dto.roleAccess.RoleAccessDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -14,19 +15,24 @@ import java.util.List;
 public class RoleDetailController {
 
     private final RoleService roleService;
+    private final RoleAccessService roleAccessService;
 
     @GetMapping("role-detail")
     public String roleDetail(@RequestParam Long id, ModelMap model) {
 
-        var r = roleService.roleDetailWithRoleAccess(id);
-        model.put("roleAccess", r);
+        var roleAccessList = roleAccessService.convertToRoleAccessDetail(roleAccessService.findAllRoleAccess());
+        var roleAccessIdListByRoleId = roleAccessService.findRoleAccessByRoleId(id)
+                .stream().map(RoleAccessDto::id).toList();
+
+        model.put("roleAccessForm", new RoleAccessByRoleForm(roleAccessIdListByRoleId));
+        model.put("allRoleAccess", roleAccessList);
         return "pages/role/role-detail";
     }
 
     @PostMapping("role-detail")
-    public String manageRoleDetail(Long ...id) {
-
-        return "redirect:/role/role-detail";
+    public String manageRoleDetail(@ModelAttribute("roleAccessForm") RoleAccessByRoleForm form) {
+        roleService.saveRoleAccessByRoleId(form);
+        return "redirect:/role/role-detail?id=%d".formatted(form.getRoleId());
     }
 
 }
