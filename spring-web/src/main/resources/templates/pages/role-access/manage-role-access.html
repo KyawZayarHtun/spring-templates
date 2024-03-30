@@ -8,7 +8,7 @@
 </head>
 <body>
 <main layout:fragment="content">
-  <div class="manage-form mb-5">
+  <div th:if="${accessUrls.^[url == '/role-access/manage-role-access' and requestMethod.name == 'POST']}" class="manage-form mb-5">
     <div class="d-flex justify-content-between">
       <h5 class="mb-2">Role Access [[${title}]]</h5>
       <div th:if="${title == 'Update'}">
@@ -16,7 +16,6 @@
           Access</a>
       </div>
     </div>
-
     <form th:action="@{/role-access/manage-role-access}" th:object="${roleAccessObject}"
           method="post">
       <input type="hidden" th:field="*{id}">
@@ -34,104 +33,108 @@
       </div>
       <button class="primary-btn d-block mx-auto" type="submit">Submit</button>
     </form>
-  </div>
-
-  <h5 class="">Search</h5>
-  <div class="table-actions align-items-end">
-    <div class="d-flex align-items-end gap-2">
-      <div>
-        <label for="raName">Name</label>
-        <input type="text" id="raName" class="form-input">
-      </div>
-      <button class="primary-btn" onclick="filterTable()">Filter</button>
-    </div>
-    <div th:include="~{fragments/fragments :: list-size}" class="action-list-size"></div>
-  </div>
-  <div class="table-responsive">
-    <table class="table" id="role-access-list">
-      <thead>
-      <tr>
-        <th>Actions</th>
-        <th>Id</th>
-        <th data-column-name="name">
-          <span>
-              Name
-              <span th:replace="fragments/fragments :: sort-asc-icon"></span>
-          </span>
-        </th>
-        <th data-column-name="url">
-          <span>
-            Url
-          </span>
-        </th>
-        <th data-column-name="requestMethod">
-          <span>
-            Request Method
-          </span>
-        </th>
-        <th data-column-name="crudOperation">
-          <span>
-            Request Operation
-          </span>
-        </th>
-        <th data-column-name="description">
-          <span>
-            Description
-          </span>
-        </th>
-        <th data-column-name="createdAt">
-          <span>
-              Created At
-          </span>
-        </th>
-        <th data-column-name="updatedAt">
-          <span>
-              Updated At
-          </span>
-        </th>
-      </tr>
-      </thead>
-      <tbody>
-
-      </tbody>
-    </table>
-  </div>
-  <div th:replace="~{fragments/fragments :: table-footer}"></div>
-
-  <div
-      layout:include="~{fragments/fragments :: toast (toastId='editToast', showToast=${showToast} )}">
-    <div layout:fragment="toast-header-body">
-      <div class="toast-body toast-success">
-        <img src="/images/icon/check-badge.svg" alt="success">
-        Successfully [[${prevTitle}]]!!
-      </div>
-    </div>
-  </div>
-
-  <div
-      layout:include="~{fragments/fragments :: toast (toastId='editToast', showToast=${deleteSuccess} )}">
-    <div layout:fragment="toast-header-body">
-      <div class="toast-body toast-success">
-        <img src="/images/icon/check-badge.svg" alt="success">
-        Successfully Deleted!
-      </div>
-    </div>
-  </div>
-
-  <div
-      layout:include="~{fragments/fragments :: modal-box (id = 'deleteModal',name = 'Confirmation', type = 'secondary')}">
-    <div layout:fragment="modal-body-and-footer">
-      <form th:action="@{/role-access/delete-role-access}" method="post">
-        <input type="hidden" id="deleteId" name="roleAccessId">
-        <div class="modal-body">
-          Are you sure you want to delete this? It will delete from all role who can access this!
+    <!-- Toast -->
+    <div
+        layout:include="~{fragments/fragments :: toast (toastId='editToast', showToast=${showToast} )}">
+      <div layout:fragment="toast-header-body">
+        <div class="toast-body toast-success">
+          <img src="/images/icon/check-badge.svg" alt="success">
+          Successfully [[${prevTitle}]]!!
         </div>
-        <div class="modal-footer">
-          <button type="button" class="text-btn" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="danger-btn">Delete</button>
-        </div>
-      </form>
+      </div>
     </div>
+  </div>
+  <div th:if="${accessUrls.^[url == '/role-access/role-access-list' and requestMethod.name == 'POST']}">
+    <h5 class="">Search</h5>
+    <div class="table-actions align-items-end">
+      <div class="d-flex align-items-end gap-2">
+        <div>
+          <label for="raName">Name</label>
+          <input type="text" id="raName" class="form-input">
+        </div>
+        <button class="primary-btn" onclick="filterTable()">Filter</button>
+      </div>
+      <div th:include="~{fragments/fragments :: list-size}" class="action-list-size"></div>
+    </div>
+    <div class="table-responsive">
+      <table class="table" id="role-access-list">
+        <thead>
+        <tr>
+          <th>Actions</th>
+          <th>Id</th>
+          <th data-column-name="name">
+            <span>
+                Name
+                <span th:replace="fragments/fragments :: sort-asc-icon"></span>
+            </span>
+          </th>
+          <th data-column-name="url">
+            <span>
+              Url
+            </span>
+          </th>
+          <th data-column-name="requestMethod">
+            <span>
+              Request Method
+            </span>
+          </th>
+          <th data-column-name="crudOperation">
+            <span>
+              Request Operation
+            </span>
+          </th>
+          <th data-column-name="description">
+            <span>
+              Description
+            </span>
+          </th>
+          <th data-column-name="createdAt">
+            <span>
+                Created At
+            </span>
+          </th>
+          <th data-column-name="updatedAt">
+            <span>
+                Updated At
+            </span>
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+      </table>
+    </div>
+    <div th:replace="~{fragments/fragments :: table-footer}"></div>
+    <!-- Delete Toast -->
+    <div
+        layout:include="~{fragments/fragments :: toast (toastId='editToast', showToast=${deleteSuccess} )}">
+      <div layout:fragment="toast-header-body">
+        <div class="toast-body toast-success">
+          <img src="/images/icon/check-badge.svg" alt="success">
+          Successfully Deleted!
+        </div>
+      </div>
+    </div>
+    <!-- Delete Modal -->
+    <div
+        layout:include="~{fragments/fragments :: modal-box (id = 'deleteModal',name = 'Confirmation', type = 'secondary')}">
+      <div layout:fragment="modal-body-and-footer">
+        <form th:action="@{/role-access/delete-role-access}" method="post">
+          <input type="hidden" id="deleteId" name="roleAccessId">
+          <div class="modal-body">
+            Are you sure you want to delete this? It will delete from all role who can access this!
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="text-btn" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="danger-btn">Delete</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div th:unless="${accessUrls.^[(url == '/role-access/manage-role-access' and requestMethod.name == 'POST') or (url == '/role-access/role-access-list' and requestMethod.name == 'POST')]}">
+    <div th:replace="~{fragments/fragments :: 404-image}"></div>
   </div>
 </main>
 
@@ -143,6 +146,8 @@
 
 <!-- For Javascript Codes -->
 <script layout:fragment="js" th:inline="javascript">
+  let canAccessManageRoleAccess = [[${accessUrls.^[url == '/role-access/manage-role-access' and requestMethod.name == 'POST']}]] != null;
+  let canAccessDeleteRoleAccess = [[${accessUrls.^[url == '/role-access/delete-role-access' and requestMethod.name == 'POST']}]] != null;
   // For search Payload
   const searchPayload = {
     name: '',
@@ -159,18 +164,28 @@
     let rows = ''
     apiResponse.contents.forEach((data, index) => {
       const {id, name, url, requestMethod, requestOperation, description, createdAt, updatedAt} = data;
+
+      let actions = ``;
+      if (canAccessManageRoleAccess) {
+        actions += `
+          <span>
+            ${getEditIcon(`/role-access/manage-role-access?id=${id}`)}
+          </span>
+        `;
+      }
+      if (canAccessDeleteRoleAccess) {
+        actions += `
+          <span>
+            <a id="delete-btn" class="data-table-action"
+              data-bs-toggle="modal" data-bs-target="#deleteModal">
+              <img src="/images/icon/trash.svg" alt="delete" class="table-action-icon" onclick="setId(${id})">
+            </a>
+          </span>
+        `;
+      }
+
       rows += `<tr>
-                <td>
-                  <span>
-                    ${getEditIcon(`/role-access/manage-role-access?id=${id}`)}
-                  </span>
-                  <span>
-                    <a id="delete-btn" class="data-table-action"
-                      data-bs-toggle="modal" data-bs-target="#deleteModal">
-                      <img src="/images/icon/trash.svg" alt="delete" class="table-action-icon" onclick="setId(${id})">
-                    </a>
-                  </span>
-                </td>
+                <td>${actions}</td>
                 <td>${getDummyTableNumber(searchPayload, index)}</td>
                 <td style="min-width: 200px;">${name}</td>
                 <td style="min-width: 300px;">${url}</td>

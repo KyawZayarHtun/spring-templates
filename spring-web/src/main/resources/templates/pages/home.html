@@ -6,7 +6,7 @@
     <title>Home</title>
 </head>
 <body>
-<main layout:fragment="content">
+<main layout:fragment="content" th:if="${accessUrls.^[url == '/' and requestMethod.name == 'GET']}">
     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi beatae culpa enim fugit
     necessitatibus quaerat sed unde voluptatem. Consequuntur doloremque exercitationem impedit
     maxime nam nemo numquam obcaecati praesentium qui quibusdam quidem sapiente tempore temporibus

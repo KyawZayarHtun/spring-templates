@@ -7,37 +7,40 @@
 </head>
 <body>
 <main layout:fragment="content">
-
-  <form th:action="@{/role/role-detail}" method="post" th:object="${roleAccessForm}">
-    <input type="hidden" name="roleId" th:value="${param.get('id')}">
-    <div class="access-wrapper">
-      <div class="access-item" th:each="raList : ${allRoleAccess}" th:object="${raList}">
-        <h5 class="access-item-header" th:text="*{name}"></h5>
-        <div class="access-list">
-          <div class="form-group-check" th:each="rd : *{roleAccessList}">
-            <input type="checkbox" class="form-input-check"
-                   th:id="${rd.id()}" th:value="${rd.id()}" name="idList"
-                   th:checked="${roleAccessForm.idList.contains(rd.id())}">
-            <label th:for="${rd.id()}" th:text="${rd.name()}"></label>
+  <div th:if="${accessUrls.^[url == '/role/role-detail' and requestMethod.name == 'POST']}">
+    <form th:action="@{/role/role-detail}" method="post" th:object="${roleAccessForm}">
+      <input type="hidden" name="roleId" th:value="${param.get('id')}">
+      <div class="access-wrapper">
+        <div class="access-item" th:each="raList : ${allRoleAccess}" th:object="${raList}">
+          <h5 class="access-item-header" th:text="*{name}"></h5>
+          <div class="access-list">
+            <div class="form-group-check" th:each="rd : *{roleAccessList}">
+              <input type="checkbox" class="form-input-check"
+                     th:id="${rd.id()}" th:value="${rd.id()}" name="idList"
+                     th:checked="${roleAccessForm.idList.contains(rd.id())}">
+              <label th:for="${rd.id()}" th:text="${rd.name()}"></label>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="d-flex justify-content-center">
-      <a class="text-btn" th:href="@{/role/manage-role}">Back</a>
-      <button class="primary-btn">Save</button>
-    </div>
-  </form>
-
-  <!-- Toast -->
-  <div
-      layout:include="~{fragments/fragments :: toast (toastId='editToast', showToast=${showToast} )}">
-    <div layout:fragment="toast-header-body">
-      <div class="toast-body toast-success">
-        <img src="/images/icon/check-badge.svg" alt="success">
-        Successfully Updated!!
+      <div class="d-flex justify-content-center">
+        <a class="text-btn" th:href="@{/role/manage-role}">Back</a>
+        <button class="primary-btn">Save</button>
+      </div>
+    </form>
+    <!-- Toast -->
+    <div
+        layout:include="~{fragments/fragments :: toast (toastId='editToast', showToast=${showToast} )}">
+      <div layout:fragment="toast-header-body">
+        <div class="toast-body toast-success">
+          <img src="/images/icon/check-badge.svg" alt="success">
+          Successfully Updated!!
+        </div>
       </div>
     </div>
+  </div>
+  <div th:unless="${accessUrls.^[url == '/role/role-detail' and requestMethod.name == 'POST']}">
+    <div th:replace="~{fragments/fragments :: 404-image}"></div>
   </div>
 </main>
 

@@ -661,3 +661,17 @@ button[disabled] {
 .access-list label {
     cursor: pointer;
 }
+
+/* Error image */
+.error-image-wrapper {
+    height: calc(100vh - 130px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.error-image {
+    width: 300px;
+}

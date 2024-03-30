@@ -8,63 +8,68 @@
 </head>
 <body>
 <main layout:fragment="content">
-  <div class="profile-wrapper">
-    <div class="profile-header" th:object="${userDetail}">
-      <div class="profile-pic" th:if="*{#strings.isEmpty(profileImagePath)}">
-        <img class="profile-pic_img" th:if="*{#strings.equals(gender, 'Male')}"
-             th:src="@{/images/image/profile/male-profile.svg}" alt="Default Profile Pic">
-        <img class="profile-pic_img" th:if="*{#strings.equals(gender, 'Female')}"
-             th:src="@{/images/image/profile/female-profile.svg}"
-             alt="Default Profile Pic">
-        <img class="profile-pic_img" th:if="*{#strings.equals(gender, 'Other')}"
-             th:src="@{/images/image/profile/other-profile.png}" alt="Default Profile Pic">
-      </div>
-      <div class="profile-pic" th:unless="*{#strings.isEmpty(profileImagePath)}">
-        <img class="profile-pic_img"
-             th:src="*{profileImagePath}" alt="Default Profile Pic">
-      </div>
-      <div class="profile-summery">
-        <div class="profile-summery_name">
-          <p class="profile-name" th:text="*{name}"></p>
-          <div class="chip secondary-color text-nowrap" th:text="*{role}"></div>
+  <div th:if="${accessUrls.^[url == '/user/edit-user-profile' and requestMethod.name == 'POST']}">
+    <div class="profile-wrapper">
+      <div class="profile-header" th:object="${userDetail}">
+        <div class="profile-pic" th:if="*{#strings.isEmpty(profileImagePath)}">
+          <img class="profile-pic_img" th:if="*{#strings.equals(gender, 'Male')}"
+               th:src="@{/images/image/profile/male-profile.svg}" alt="Default Profile Pic">
+          <img class="profile-pic_img" th:if="*{#strings.equals(gender, 'Female')}"
+               th:src="@{/images/image/profile/female-profile.svg}"
+               alt="Default Profile Pic">
+          <img class="profile-pic_img" th:if="*{#strings.equals(gender, 'Other')}"
+               th:src="@{/images/image/profile/other-profile.png}" alt="Default Profile Pic">
         </div>
-        <div class="profile-summery_phone">
-          <p>Phone Number: <strong>[[*{phoneNo}]]</strong></p>
+        <div class="profile-pic" th:unless="*{#strings.isEmpty(profileImagePath)}">
+          <img class="profile-pic_img"
+               th:src="*{profileImagePath}" alt="Default Profile Pic">
+        </div>
+        <div class="profile-summery">
+          <div class="profile-summery_name">
+            <p class="profile-name" th:text="*{name}"></p>
+            <div class="chip secondary-color text-nowrap" th:text="*{role}"></div>
+          </div>
+          <div class="profile-summery_phone">
+            <p>Phone Number: <strong>[[*{phoneNo}]]</strong></p>
+          </div>
+        </div>
+      </div>
+      <div class="profile-body">
+        <p class="profile-body_title">Profile Detail</p>
+        <div class="d-lg-flex justify-content-lg-between align-items-lg-center">
+          <form th:action="@{/user/edit-user-profile}" th:object="${userDetail}" class="profile-form"
+                method="post"
+                enctype="multipart/form-data">
+
+            <div th:replace="~{fragments/fragments :: input-box(name='Name', id='name', type='text', field='name', disable=false, require=true)}"></div>
+            <div th:replace="~{fragments/fragments :: input-box(name='Email', id='email', type='email', field='email', disable=true, require=false)}"></div>
+            <div th:replace="~{fragments/fragments :: input-box(name='Phone Number', id='phoneNo', type='text', field='phoneNo', disable=false, require=true)}"></div>
+            <div th:replace="~{fragments/fragments :: input-box(name='Date of Birth', id='dob', type='date', field='dob', disable=false, require=false)}"></div>
+            <div th:replace="~{fragments/fragments :: input-box(name='Update Profile Pic', id='profileImage', type='file', field='profileImage', disable=false, require=false)}"></div>
+            <div th:replace="~{fragments/fragments :: image-preview(id='profileImage')}"></div>
+            <div class="my-3 d-flex justify-content-end">
+              <button type="submit" class="primary-btn">Edit</button>
+            </div>
+          </form>
+          <div class="whitespace-cover-up d-none d-lg-block">
+            <img class="whitespace-cover-up_img"
+                 th:src="@{/images/image/profile/whitespace-cover-up.svg}"
+                 alt="Default Profile Pic">
+          </div>
         </div>
       </div>
     </div>
-    <div class="profile-body">
-      <p class="profile-body_title">Profile Detail</p>
-      <div class="d-lg-flex justify-content-lg-between align-items-lg-center">
-        <form th:action="@{/user/edit-user-profile}" th:object="${userDetail}" class="profile-form"
-              method="post"
-              enctype="multipart/form-data">
-
-          <div th:replace="~{fragments/fragments :: input-box(name='Name', id='name', type='text', field='name', disable=false, require=true)}"></div>
-          <div th:replace="~{fragments/fragments :: input-box(name='Email', id='email', type='email', field='email', disable=true, require=false)}"></div>
-          <div th:replace="~{fragments/fragments :: input-box(name='Phone Number', id='phoneNo', type='text', field='phoneNo', disable=false, require=true)}"></div>
-          <div th:replace="~{fragments/fragments :: input-box(name='Date of Birth', id='dob', type='date', field='dob', disable=false, require=false)}"></div>
-          <div th:replace="~{fragments/fragments :: input-box(name='Update Profile Pic', id='profileImage', type='file', field='profileImage', disable=false, require=false)}"></div>
-          <div th:replace="~{fragments/fragments :: image-preview(id='profileImage')}"></div>
-          <div class="my-3 d-flex justify-content-end">
-            <button type="submit" class="primary-btn">Edit</button>
-          </div>
-        </form>
-        <div class="whitespace-cover-up d-none d-lg-block">
-          <img class="whitespace-cover-up_img"
-               th:src="@{/images/image/profile/whitespace-cover-up.svg}"
-               alt="Default Profile Pic">
+    <div layout:include="~{fragments/fragments :: toast (toastId='editToast', showToast=${showToast} )}">
+        <div layout:fragment="toast-header-body">
+            <div class="toast-body toast-success">
+                <img src="/images/icon/check-badge.svg" alt="success">
+                Successfully Edited!!
+            </div>
         </div>
-      </div>
     </div>
   </div>
-  <div layout:include="~{fragments/fragments :: toast (toastId='editToast', showToast=${showToast} )}">
-      <div layout:fragment="toast-header-body">
-          <div class="toast-body toast-success">
-              <img src="/images/icon/check-badge.svg" alt="success">
-              Successfully Edited!!
-          </div>
-      </div>
+  <div th:unless="${accessUrls.^[url == '/user/edit-user-profile' and requestMethod.name == 'POST']}">
+    <div th:replace="~{fragments/fragments :: 404-image}"></div>
   </div>
 </main>
 

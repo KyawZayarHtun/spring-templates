@@ -8,6 +8,7 @@
 </head>
 <body>
 <main layout:fragment="content">
+  <div th:if="${accessUrls.^[url == '/user/user-list' and requestMethod.name == 'POST']}">
     <div class="table-search">
         <h5 class="mb-2">Search</h5>
         <div class="d-flex align-items-end gap-2">
@@ -20,19 +21,12 @@
     </div>
     <div class="table-actions">
         <div class="action-buttons">
-            <button class="primary-btn me-2" onclick="exportExcel()">
+            <button class="primary-btn me-2" onclick="exportExcel()" th:if="${accessUrls.^[url == '/user/export-excel' and requestMethod.name == 'POST']}">
                     <span>
                         <img th:src="@{/images/icon/download.svg}" alt=""
                              class="btn-icon me-2">
                     </span>
                 Excel Export
-            </button>
-            <button class="border-btn">
-                    <span>
-                        <img th:src="@{/images/icon/upload.svg}" alt=""
-                             class="btn-icon me-2">
-                    </span>
-                Excel Import
             </button>
         </div>
         <div th:include="~{fragments/fragments :: list-size}" class="action-list-size"></div>
@@ -96,6 +90,10 @@
         </table>
     </div>
     <div th:replace="~{fragments/fragments :: table-footer}"></div>
+  </div>
+  <div th:unless="${accessUrls.^[url == '/user/user-list' and requestMethod.name == 'POST']}">
+    <div th:replace="~{fragments/fragments :: 404-image}"></div>
+  </div>
 </main>
 
 <!-- For Only Script Tags -->
