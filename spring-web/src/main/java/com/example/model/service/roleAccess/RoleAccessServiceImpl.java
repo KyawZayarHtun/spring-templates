@@ -1,9 +1,11 @@
 package com.example.model.service.roleAccess;
 
+import com.example.model.entity.Role;
 import com.example.model.entity.RoleAccess;
 import com.example.model.entity.RoleAccess_;
 import com.example.model.entity.Role_;
 import com.example.model.repo.RoleAccessRepo;
+import com.example.model.repo.RoleRepo;
 import com.example.model.service.table.TableService;
 import com.example.util.payload.dto.roleAccess.*;
 import com.example.util.payload.dto.table.TableResponse;
@@ -26,6 +28,7 @@ public class RoleAccessServiceImpl implements RoleAccessService {
 
     private final RoleAccessRepo roleAccessRepo;
     private final TableService tableService;
+    private final RoleRepo roleRepo;
 
     @Override
     public List<RoleAccessDto> findRoleAccessByRoleId(Long roleId) {
@@ -150,6 +153,20 @@ public class RoleAccessServiceImpl implements RoleAccessService {
                 .map(RoleAccessDetail::new)
                 .sorted((r, r1) -> r1.getRoleAccessList().size() - r.getRoleAccessList().size())
                 .toList();
+    }
+
+    @Transactional
+    @Override
+    public void deleteRoleAccessWithAllInheritance(Long roleAccessId) {
+//        Function<CriteriaBuilder, CriteriaQuery<>>Role
+        var ra = roleAccessRepo.findById(roleAccessId).orElseThrow();
+        var raIdList = ra.getRoles().stream().map(Role::getId).toList();
+        raIdList.forEach(id -> {
+            var role = roleRepo.findById(id).orElseThrow();
+            var newRoleAccessWithoutGivenRoleAccessId = role.getRoleAccesses().stream().filter(roleAccess -> !roleAccess.getId().equals(roleAccessId)).toList();
+            role.setRoleAccesses(newRoleAccessWithoutGivenRoleAccessId);
+        });
+        roleAccessRepo.deleteById(roleAccessId);
     }
 
     private void editRoleAccess(RoleAccessForm dto) {

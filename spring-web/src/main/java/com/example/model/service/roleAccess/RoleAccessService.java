@@ -26,4 +26,5 @@ public interface RoleAccessService {
 
     List<RoleAccessDetail> convertToRoleAccessDetail(List<RoleAccessDto> roleAccessList);
 
+    void deleteRoleAccessWithAllInheritance(Long roleAccessId);
 }

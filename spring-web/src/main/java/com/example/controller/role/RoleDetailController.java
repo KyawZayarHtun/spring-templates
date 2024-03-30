@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,8 +31,9 @@ public class RoleDetailController {
     }
 
     @PostMapping("role-detail")
-    public String manageRoleDetail(@ModelAttribute("roleAccessForm") RoleAccessByRoleForm form) {
+    public String manageRoleDetail(@ModelAttribute("roleAccessForm") RoleAccessByRoleForm form, RedirectAttributes attr) {
         roleService.saveRoleAccessByRoleId(form);
+        attr.addFlashAttribute("showToast", true);
         return "redirect:/role/role-detail?id=%d".formatted(form.getRoleId());
     }
 

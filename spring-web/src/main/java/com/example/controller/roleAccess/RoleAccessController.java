@@ -78,4 +78,11 @@ public class RoleAccessController {
     public TableResponse<RoleAccessListDto> roleList(@RequestBody RoleAccessSearchDto searchDto) {
         return roleAccessService.getRoleAccessList(searchDto);
     }
+
+    @PostMapping("/delete-role-access")
+    public String deleteRoleAccess(Long roleAccessId, RedirectAttributes attr) {
+        roleAccessService.deleteRoleAccessWithAllInheritance(roleAccessId);
+        attr.addFlashAttribute("deleteSuccess", true);
+        return "redirect:/role-access/manage-role-access";
+    }
 }

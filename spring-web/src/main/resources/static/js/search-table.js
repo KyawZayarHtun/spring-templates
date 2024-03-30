@@ -83,6 +83,10 @@ const getDetailIcon = url => {
             </a>`;
 }
 
+const getModalBox = (url, svgName) => {
+    return ``
+}
+
 const createDataTable = (searchPayload, addTableBody, tableId) => {
 
     const essentialData = {

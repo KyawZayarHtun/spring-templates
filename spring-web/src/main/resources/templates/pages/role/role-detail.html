@@ -8,22 +8,6 @@
 <body>
 <main layout:fragment="content">
 
-  <!--<form th:action="@{/role/role-detail}" method="post" th:object="${roleAccessForm}">
-    <input type="hidden" name="roleId" th:value="${param.get('id')}">
-    <div class="access-wrapper">
-      <div class="access-item" th:each="dto : ${roleAccessList}">
-        <h5 class="access-item-header" th:text="${dto.name}">Home</h5>
-        <div class="access-list">
-          <div class="form-group-check" th:each="ra : ${dto.roleAccessList}">
-            <input type="checkbox" th:id="${ra.id()}" th:value="${ra.id()}" name="idList"
-                   class="form-input-check" th:checked="${roleAccessForm.idList.contains(ra.id())}">
-            <label th:for="${ra.id()}" th:text="${ra.name()}">User List Excel Export Api</label>
-          </div>
-        </div>
-      </div>
-    </div>
-    <button class="primary-btn d-block mx-auto">Save</button>
-  </form>-->
   <form th:action="@{/role/role-detail}" method="post" th:object="${roleAccessForm}">
     <input type="hidden" name="roleId" th:value="${param.get('id')}">
     <div class="access-wrapper">
@@ -39,8 +23,22 @@
         </div>
       </div>
     </div>
-    <button class="primary-btn d-block mx-auto">Save</button>
+    <div class="d-flex justify-content-center">
+      <a class="text-btn" th:href="@{/role/manage-role}">Back</a>
+      <button class="primary-btn">Save</button>
+    </div>
   </form>
+
+  <!-- Toast -->
+  <div
+      layout:include="~{fragments/fragments :: toast (toastId='editToast', showToast=${showToast} )}">
+    <div layout:fragment="toast-header-body">
+      <div class="toast-body toast-success">
+        <img src="/images/icon/check-badge.svg" alt="success">
+        Successfully Updated!!
+      </div>
+    </div>
+  </div>
 </main>
 
 <!-- For Only Script Tags -->
