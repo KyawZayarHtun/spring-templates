@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: spring-api
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/api_template
+    username: root
+    password: kyawzayar
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+  jackson:
+    format:
+      date: dd MMM yyyy
+      time: HH:mm a
+      date-time: dd MMM yyyy hh:mm:ss a
+      excel-date-time: dd_MMM_yyyy-hh:mm:ss_a
+
+server:
+#  address: 192.168.1.6
+  port: 8080
