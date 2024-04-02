@@ -4,13 +4,13 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/api_template
+    url: jdbc:mysql://localhost:3306/web_template
     username: root
     password: kyawzayar
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true
@@ -26,3 +26,15 @@ spring:
 server:
 #  address: 192.168.1.6
   port: 8080
+
+# For image saver
+img-server:
+  path: "/image-server/"
+  folder-path: C:/image-server/
+
+# For Jwt
+jwt:
+  issuer: 3(pk[MNs9`h4v^g4(lw~SE5P,
+  lifespan: 2
+  refreshLifespan: 5
+  secret: IkO6jiPErffhxZ33B5+H+9eIFu6mCZpzYEPejt73yc617nOkV4+DGGsYUe072I7moLsnt8itXh9LkyH9+xA9Aw==

@@ -18,10 +18,11 @@ public class BaseRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> implem
 
     private final EntityManager entityManager;
 
-    public BaseRepositoryImpl(JpaEntityInformation<T, ?> entityInformation, EntityManager entityManager, EntityManager entityManager1) {
+    public BaseRepositoryImpl(JpaEntityInformation<T, ?> entityInformation, EntityManager entityManager) {
         super(entityInformation, entityManager);
-        this.entityManager = entityManager1;
+        this.entityManager = entityManager;
     }
+
 
     @Override
     public <R> Optional<R> findOne(Function<CriteriaBuilder, CriteriaQuery<R>> searchFunction) {
