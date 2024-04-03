@@ -32,10 +32,7 @@ public class SecurityController {
     private final UserService userService;
 
     @PostMapping("login")
-    public ApiResponse<LoginResult> signIn(@RequestBody @Valid LoginReq loginForm, BindingResult result) {
-        if (result.hasErrors()) {
-            throw new DtoValidationException(result);
-        }
+    public ApiResponse<LoginResult> signIn(@RequestBody @Valid LoginReq loginForm, BindingResult bindingResult) {
         var authentication = authenticationManager
                 .authenticate(UsernamePasswordAuthenticationToken.unauthenticated(loginForm.email(), loginForm.password()));
         var accessToken = jwtTokenProvider.generateToken(authentication, false);
@@ -45,16 +42,13 @@ public class SecurityController {
 
     @PostMapping("refreshToken")
     public ApiResponse<LoginResult> refreshToken(@RequestBody @Valid RefreshTokenReq refreshTokenReq,
-                                                 BindingResult result) {
-        if (result.hasErrors()) {
-            throw new DtoValidationException(result);
-        }
+                                                 BindingResult bindingResult) {
 
         try {
             Authentication authentication = jwtTokenProvider.parse(refreshTokenReq.refreshToken());
             var email = authentication.getName();
             userService.getUserDetailByEmail(email)
-                    .orElseThrow(() -> new WrongRefreshTokenException("Wrong Refresh Token"));
+                    .orElseThrow(() -> new WrongRefreshTokenException("Wrong Refresh Token!"));
 
             if (authentication.isAuthenticated())
                 SecurityContextHolder.getContext().setAuthentication(authentication);

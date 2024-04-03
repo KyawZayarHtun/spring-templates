@@ -35,6 +35,6 @@ img-server:
 # For Jwt
 jwt:
   issuer: 3(pk[MNs9`h4v^g4(lw~SE5P,
-  lifespan: 2
-  refreshLifespan: 5
+  lifespan: 30
+  refreshLifespan: 60
   secret: IkO6jiPErffhxZ33B5+H+9eIFu6mCZpzYEPejt73yc617nOkV4+DGGsYUe072I7moLsnt8itXh9LkyH9+xA9Aw==

@@ -1,4 +1,4 @@
-package com.example.util.exception;
+package com.example.util.exception.resolver;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

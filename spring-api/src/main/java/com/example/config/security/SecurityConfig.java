@@ -1,7 +1,7 @@
 package com.example.config.security;
 
 import com.example.config.security.jwt.JwtTokenFilter;
-import com.example.util.exception.ApiSecurityExceptionResolver;
+import com.example.util.exception.resolver.ApiSecurityExceptionResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
