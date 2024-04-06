@@ -1,22 +1,17 @@
 package com.example.util.payload.dto.roleAccess;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
-import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
-public class RoleAccessByRoleForm {
+public record RoleAccessByRoleForm(
 
-    private Long roleId;
-    private List<Long> idList = new ArrayList<>();
-
-    public RoleAccessByRoleForm(List<Long> ids) {
-        idList.addAll(ids);
-    }
+        @NotNull(message = "Role id can't be empty or null!")
+        @Positive(message = "Id must be positive number")
+        Long roleId,
+        @NotNull(message = "Role Access Id can't be empty")
+        List<Long> roleAccessIdList
+) {
 
 }

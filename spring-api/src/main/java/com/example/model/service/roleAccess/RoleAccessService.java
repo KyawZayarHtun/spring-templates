@@ -1,6 +1,5 @@
 package com.example.model.service.roleAccess;
 
-import com.example.util.payload.dto.role.RoleWithRoleAccessList;
 import com.example.util.payload.dto.roleAccess.RoleAccessCreateForm;
 import com.example.util.payload.dto.roleAccess.RoleAccessDetail;
 import com.example.util.payload.dto.roleAccess.RoleAccessSearchDto;
@@ -14,7 +13,7 @@ import java.util.Optional;
 
 public interface RoleAccessService {
 
-    List<RoleAccessDetail> findRoleAccessByRoleId(Long roleId);
+    List<RoleAccessDetail> findRoleAccessByRoleId(Long roleId) throws BadRequestException;
     List<RoleAccessDetail> findRoleAccessByRoleName(String roleName); // used
 
     Optional<RoleAccessDetail> findRoleAccessById(Long id); // used
@@ -31,8 +30,6 @@ public interface RoleAccessService {
     TableResponse<RoleAccessDetail> getRoleAccessList(RoleAccessSearchDto searchDto);
 
     List<RoleAccessDetail> findAllRoleAccess();
-
-    List<RoleWithRoleAccessList> convertToRoleAccessDetail(List<RoleAccessDetail> roleAccessList);
 
     void deleteRoleAccessWithAllInheritance(Long roleAccessId);
 }

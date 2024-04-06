@@ -5,7 +5,7 @@ import com.example.util.exception.ExpiredRefreshTokenException;
 import com.example.util.exception.SomethingWrongException;
 import com.example.util.exception.WrongRefreshTokenException;
 import com.example.util.payload.ApiResponse;
-import com.example.util.payload.dto.error.ErrorRes;
+import com.example.util.payload.MessageRes;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.security.SignatureException;
@@ -35,66 +35,66 @@ public class GlobalErrorsHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiResponse<ErrorRes> httpConvertError(HttpMessageNotReadableException e) {
-        return ApiResponse.badRequest(new ErrorRes(e.getMessage()));
+    public ApiResponse<MessageRes> httpConvertError(HttpMessageNotReadableException e) {
+        return ApiResponse.badRequest(new MessageRes(e.getMessage()));
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiResponse<ErrorRes> missingParamError(MissingServletRequestParameterException e) {
-        return ApiResponse.badRequest(new ErrorRes(e.getMessage()));
+    public ApiResponse<MessageRes> missingParamError(MissingServletRequestParameterException e) {
+        return ApiResponse.badRequest(new MessageRes(e.getMessage()));
     }
 
     @ExceptionHandler
-    public ApiResponse<ErrorRes> usernameNotFoundError(AuthenticationException e) {
+    public ApiResponse<MessageRes> usernameNotFoundError(AuthenticationException e) {
         if (e instanceof UsernameNotFoundException  )
-            return ApiResponse.authenticationError(new ErrorRes("Login Fail! Something was wrong!"));
+            return ApiResponse.authenticationError(new MessageRes("Login Fail! Something was wrong!"));
         if (e instanceof LockedException)
-            return ApiResponse.authenticationError(new ErrorRes("Please contact to admin for you account! Your Account is locked by admin."));
+            return ApiResponse.authenticationError(new MessageRes("Please contact to admin for you account! Your Account is locked by admin."));
         if (e instanceof DisabledException)
-            return ApiResponse.authenticationError(new ErrorRes("Please contact to admin for you account! Your Account is inactive by admin."));
-        return ApiResponse.authenticationError(new ErrorRes(e.getMessage()));
+            return ApiResponse.authenticationError(new MessageRes("Please contact to admin for you account! Your Account is inactive by admin."));
+        return ApiResponse.authenticationError(new MessageRes(e.getMessage()));
     }
 
     // for access denied exception
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ApiResponse<ErrorRes> accessDeniedError() {
-        return ApiResponse.accessDeniedError(new ErrorRes("You Don't have access to reach this page! If you have any query, kindly ask admin."));
+    public ApiResponse<MessageRes> accessDeniedError() {
+        return ApiResponse.accessDeniedError(new MessageRes("You Don't have access to reach this page! If you have any query, kindly ask admin."));
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiResponse<ErrorRes> expiredJwtError(JwtException e) {
+    public ApiResponse<MessageRes> expiredJwtError(JwtException e) {
         if (e instanceof ExpiredJwtException)
-            return ApiResponse.jwtExpiredError(new ErrorRes("Your Jwt token is Expired!"));
+            return ApiResponse.jwtExpiredError(new MessageRes("Your Jwt token is Expired!"));
         if (e instanceof SignatureException)
-            return ApiResponse.wrongJwtSignature(new ErrorRes("Wrong Jwt token!"));
-        return ApiResponse.jwtError(new ErrorRes(e.getMessage()));
+            return ApiResponse.wrongJwtSignature(new MessageRes("Wrong Jwt token!"));
+        return ApiResponse.jwtError(new MessageRes(e.getMessage()));
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiResponse<ErrorRes> expiredJwtError(WrongRefreshTokenException e) {
-        return ApiResponse.wrongRefreshTokenError(new ErrorRes(e.getMessage()));
+    public ApiResponse<MessageRes> expiredJwtError(WrongRefreshTokenException e) {
+        return ApiResponse.wrongRefreshTokenError(new MessageRes(e.getMessage()));
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiResponse<ErrorRes> expiredJwtError(ExpiredRefreshTokenException e) {
-        return ApiResponse.refreshTokenExpiredError(new ErrorRes(e.getMessage()));
+    public ApiResponse<MessageRes> expiredJwtError(ExpiredRefreshTokenException e) {
+        return ApiResponse.refreshTokenExpiredError(new MessageRes(e.getMessage()));
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiResponse<ErrorRes> someThingWrongError(SomethingWrongException e) {
-        return ApiResponse.badRequest(new ErrorRes(e.getMessage()));
+    public ApiResponse<MessageRes> someThingWrongError(SomethingWrongException e) {
+        return ApiResponse.badRequest(new MessageRes(e.getMessage()));
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiResponse<ErrorRes> badRequest(BadRequestException e) {
-        return ApiResponse.badRequest(new ErrorRes(e.getMessage()));
+    public ApiResponse<MessageRes> badRequest(BadRequestException e) {
+        return ApiResponse.badRequest(new MessageRes(e.getMessage()));
     }
 
 }

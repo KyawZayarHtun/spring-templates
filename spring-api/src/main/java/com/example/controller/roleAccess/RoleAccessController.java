@@ -5,7 +5,10 @@ import com.example.model.service.roleAccess.RoleAccessService;
 import com.example.util.exception.handler.BindingResultHandler;
 import com.example.util.payload.ApiResponse;
 import com.example.util.payload.IdResponse;
-import com.example.util.payload.dto.roleAccess.*;
+import com.example.util.payload.dto.roleAccess.RoleAccessCreateForm;
+import com.example.util.payload.dto.roleAccess.RoleAccessDetail;
+import com.example.util.payload.dto.roleAccess.RoleAccessSearchDto;
+import com.example.util.payload.dto.roleAccess.RoleAccessUpdateForm;
 import com.example.util.payload.dto.table.TableResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -70,9 +73,15 @@ public class RoleAccessController {
     }
 
     @PostMapping("/role-access-list")
-    public ApiResponse<TableResponse<RoleAccessDetail>> roleList(@RequestBody @Valid RoleAccessSearchDto searchDto, BindingResult bindingResult) {
+    public ApiResponse<TableResponse<RoleAccessDetail>> roleAccessList(@RequestBody @Valid RoleAccessSearchDto searchDto, BindingResult bindingResult) {
         BindingResultHandler.checkBindingResultError(bindingResult);
         return ApiResponse.success(roleAccessService.getRoleAccessList(searchDto));
+    }
+
+    @GetMapping("role-access-list-by-role")
+    public ApiResponse<List<RoleAccessDetail>> roleAccessListByRoleId(@RequestParam Long id) throws BadRequestException {
+        var dto = roleAccessService.findRoleAccessByRoleId(id);
+        return ApiResponse.success(dto);
     }
 
     private void checkRoleAccessNameExists(Long id, String name, BindingResult bindingResult) {

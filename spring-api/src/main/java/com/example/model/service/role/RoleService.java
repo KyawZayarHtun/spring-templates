@@ -7,7 +7,6 @@ import org.apache.coyote.BadRequestException;
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.Authentication;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface RoleService {
@@ -30,5 +29,5 @@ public interface RoleService {
 
     boolean roleNameExist(@Nullable Long id, String roleName);
 
-    void saveRoleAccessByRoleId(RoleAccessByRoleForm form);
+    void updateRoleAccessByRole(RoleAccessByRoleForm form) throws BadRequestException;
 }

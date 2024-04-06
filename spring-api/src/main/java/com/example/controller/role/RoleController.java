@@ -4,7 +4,9 @@ import com.example.model.service.role.RoleService;
 import com.example.util.exception.handler.BindingResultHandler;
 import com.example.util.payload.ApiResponse;
 import com.example.util.payload.IdResponse;
+import com.example.util.payload.MessageRes;
 import com.example.util.payload.dto.role.*;
+import com.example.util.payload.dto.roleAccess.RoleAccessByRoleForm;
 import com.example.util.payload.dto.table.TableResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -45,8 +47,14 @@ public class RoleController {
     @GetMapping("role-detail")
     public ApiResponse<RoleDetail> roleDetail(@RequestParam Long id) throws BadRequestException {
         var dto = roleService.findByRoleId(id).orElseThrow(() -> new BadRequestException("Given id doesn't exist!"));
-//        var a = roleService.find
         return ApiResponse.success(dto);
+    }
+
+    @PostMapping("update-role-access")
+    public ApiResponse<MessageRes> updateRoleAccess(@RequestBody @Valid RoleAccessByRoleForm form, BindingResult bindingResult) throws BadRequestException {
+        BindingResultHandler.checkBindingResultError(bindingResult);
+        roleService.updateRoleAccessByRole(form);
+        return ApiResponse.success(new MessageRes("Successfully updated!"));
     }
 
     private void checkRoleNameExists(Long id, String name, BindingResult bindingResult) {

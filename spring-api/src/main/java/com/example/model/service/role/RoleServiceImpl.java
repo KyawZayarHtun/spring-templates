@@ -139,10 +139,14 @@ public class RoleServiceImpl implements RoleService {
 
     @Transactional
     @Override
-    public void saveRoleAccessByRoleId(RoleAccessByRoleForm form) {
-        var role = roleRepo.findById(form.getRoleId()).orElseThrow();
+    public void updateRoleAccessByRole(RoleAccessByRoleForm form) throws BadRequestException {
+        var role = roleRepo.findById(form.roleId()).orElseThrow(() -> new BadRequestException("Given id doesn't exist!"));
         List<RoleAccess> roleAccesses = new ArrayList<>();
-        form.getIdList().forEach(id -> roleAccesses.add(roleAccessRepo.findById(id).orElseThrow()));
+        for (Long id : form.roleAccessIdList()) {
+            var a = roleAccessRepo.findById(id)
+                    .orElseThrow(() -> new BadRequestException("The {%s} not exists!".formatted(id)));
+            roleAccesses.add(a);
+        }
         role.setRoleAccesses(roleAccesses);
     }
 

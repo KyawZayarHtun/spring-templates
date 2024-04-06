@@ -7,8 +7,10 @@ import com.example.model.entity.Role_;
 import com.example.model.repo.RoleAccessRepo;
 import com.example.model.repo.RoleRepo;
 import com.example.model.service.table.TableService;
-import com.example.util.payload.dto.role.RoleWithRoleAccessList;
-import com.example.util.payload.dto.roleAccess.*;
+import com.example.util.payload.dto.roleAccess.RoleAccessCreateForm;
+import com.example.util.payload.dto.roleAccess.RoleAccessDetail;
+import com.example.util.payload.dto.roleAccess.RoleAccessSearchDto;
+import com.example.util.payload.dto.roleAccess.RoleAccessUpdateForm;
 import com.example.util.payload.dto.table.TableResponse;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -21,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +34,8 @@ public class RoleAccessServiceImpl implements RoleAccessService {
     private final RoleRepo roleRepo;
 
     @Override
-    public List<RoleAccessDetail> findRoleAccessByRoleId(Long roleId) {
+    public List<RoleAccessDetail> findRoleAccessByRoleId(Long roleId) throws BadRequestException {
+        roleRepo.findById(roleId).orElseThrow(() -> new BadRequestException("Given id doesn't exist!"));
         Function<CriteriaBuilder, CriteriaQuery<RoleAccessDetail>> searchQuery = cb -> {
             var cq = cb.createQuery(RoleAccessDetail.class);
             var root = cq.from(RoleAccess.class);
@@ -136,15 +138,6 @@ public class RoleAccessServiceImpl implements RoleAccessService {
             return cq;
         };
         return roleAccessRepo.findAll(searchQuery);
-    }
-
-    public List<RoleWithRoleAccessList> convertToRoleAccessDetail(List<RoleAccessDetail> roleAccessList) {
-        return roleAccessList.stream()
-                .collect(Collectors.groupingBy(ra -> RoleAccessDetail.getUrlStartName(ra.url())))
-                .entrySet().stream()
-                .map(RoleWithRoleAccessList::new)
-                .sorted((r, r1) -> r1.getRoleAccessList().size() - r.getRoleAccessList().size())
-                .toList();
     }
 
     @Transactional
