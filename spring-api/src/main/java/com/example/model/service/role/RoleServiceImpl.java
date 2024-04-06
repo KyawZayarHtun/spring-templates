@@ -7,14 +7,16 @@ import com.example.model.repo.RoleAccessRepo;
 import com.example.model.repo.RoleRepo;
 import com.example.model.service.table.TableService;
 import com.example.util.exception.RoleNotFoundException;
-import com.example.util.payload.dto.role.RoleForm;
-import com.example.util.payload.dto.role.RoleListDto;
+import com.example.util.payload.dto.role.RoleCreateForm;
+import com.example.util.payload.dto.role.RoleDetail;
 import com.example.util.payload.dto.role.RoleSearchDto;
+import com.example.util.payload.dto.role.RoleUpdateForm;
 import com.example.util.payload.dto.roleAccess.RoleAccessByRoleForm;
 import com.example.util.payload.dto.table.TableResponse;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -48,14 +50,11 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Optional<RoleForm> findByRoleId(Long id) {
-        Function<CriteriaBuilder, CriteriaQuery<RoleForm>> searchQuery = cb -> {
-            var cq = cb.createQuery(RoleForm.class);
+    public Optional<RoleDetail> findByRoleId(Long id) {
+        Function<CriteriaBuilder, CriteriaQuery<RoleDetail>> searchQuery = cb -> {
+            var cq = cb.createQuery(RoleDetail.class);
             var root = cq.from(Role.class);
-            cq.multiselect(
-                    root.get(Role_.id),
-                    root.get(Role_.name)
-            );
+            RoleDetail.select(cq, root);
             cq.where(cb.equal(root.get(Role_.id), id));
             return cq;
         };
@@ -63,47 +62,39 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Optional<RoleForm> findByRoleName(String name) {
-        Function<CriteriaBuilder, CriteriaQuery<RoleForm>> searchQuery = cb -> {
-            var cq = cb.createQuery(RoleForm.class);
+    public Optional<RoleDetail> findByRoleName(String name) {
+        Function<CriteriaBuilder, CriteriaQuery<RoleDetail>> searchQuery = cb -> {
+            var cq = cb.createQuery(RoleDetail.class);
             var root = cq.from(Role.class);
-            cq.multiselect(
-                    root.get(Role_.id),
-                    root.get(Role_.name)
-            );
+            RoleDetail.select(cq, root);
             cq.where(cb.equal(root.get(Role_.name), name));
             return cq;
         };
         return roleRepo.findOne(searchQuery);
     }
 
+    @Override
     @Transactional
+    public Long updateRole(RoleUpdateForm dto) throws BadRequestException {
+        var role = roleRepo.findById(dto.id()).orElseThrow(() -> new BadRequestException("Given id doesn't exist!"));
+        role.setName(dto.name());
+        return dto.id();
+    }
+
     @Override
-    public void manageRole(RoleForm dto) {
-        if (dto.getId() == null || dto.getId() <= 0) {
-            createRole(dto.getName());
-        } else {
-            editRole(dto);
-        }
-    }
-
-    private void editRole(RoleForm dto) {
-        var role = roleRepo.findById(dto.getId()).orElseThrow();
-        role.setName(dto.getName());
-    }
-
-    private void createRole(String name) {
+    @Transactional
+    public Long createRole(RoleCreateForm form) {
         var role = new Role();
-        role.setName(name);
-        roleRepo.save(role);
+        role.setName(form.name());
+        return roleRepo.save(role).getId();
     }
 
     @Override
-    public TableResponse<RoleListDto> getRoleList(RoleSearchDto searchDto) {
-        Function<CriteriaBuilder, CriteriaQuery<RoleListDto>> searchFunction = cb -> {
-            var cq = cb.createQuery(RoleListDto.class);
+    public TableResponse<RoleDetail> getRoleList(RoleSearchDto searchDto) {
+        Function<CriteriaBuilder, CriteriaQuery<RoleDetail>> searchFunction = cb -> {
+            var cq = cb.createQuery(RoleDetail.class);
             var root = cq.from(Role.class);
-            RoleListDto.select(cq, root);
+            RoleDetail.select(cq, root);
             tableService.sort(cb, cq, root, searchDto.getSortColumnName(), searchDto.getSortDir());
             cq.where(searchDto.predicates(cb, root));
             return cq;

@@ -1,8 +1,12 @@
 package com.example.model.service.roleAccess;
 
 import com.example.util.payload.dto.role.RoleWithRoleAccessList;
-import com.example.util.payload.dto.roleAccess.*;
+import com.example.util.payload.dto.roleAccess.RoleAccessCreateForm;
+import com.example.util.payload.dto.roleAccess.RoleAccessDetail;
+import com.example.util.payload.dto.roleAccess.RoleAccessSearchDto;
+import com.example.util.payload.dto.roleAccess.RoleAccessUpdateForm;
 import com.example.util.payload.dto.table.TableResponse;
+import org.apache.coyote.BadRequestException;
 import org.springframework.lang.Nullable;
 
 import java.util.List;
@@ -20,11 +24,11 @@ public interface RoleAccessService {
     Long createRoleAccess(RoleAccessCreateForm dto); // used
 
 
-    Long updateRoleAccess(RoleAccessUpdateForm dto); // used
+    Long updateRoleAccess(RoleAccessUpdateForm dto) throws BadRequestException; // used
 
     boolean roleAccessNameExists(@Nullable Long id, String roleAccessName); // used
 
-    TableResponse<RoleAccessListDto> getRoleAccessList(RoleAccessSearchDto searchDto);
+    TableResponse<RoleAccessDetail> getRoleAccessList(RoleAccessSearchDto searchDto);
 
     List<RoleAccessDetail> findAllRoleAccess();
 

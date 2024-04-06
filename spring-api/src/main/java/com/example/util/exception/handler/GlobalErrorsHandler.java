@@ -17,6 +17,7 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -35,6 +36,12 @@ public class GlobalErrorsHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiResponse<ErrorRes> httpConvertError(HttpMessageNotReadableException e) {
+        return ApiResponse.badRequest(new ErrorRes(e.getMessage()));
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiResponse<ErrorRes> missingParamError(MissingServletRequestParameterException e) {
         return ApiResponse.badRequest(new ErrorRes(e.getMessage()));
     }
 

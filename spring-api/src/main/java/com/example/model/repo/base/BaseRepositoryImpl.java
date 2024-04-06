@@ -4,7 +4,6 @@ package com.example.model.repo.base;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -40,14 +39,14 @@ public class BaseRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> implem
     @Override
     public <R> Page<R> findAll(Function<CriteriaBuilder, CriteriaQuery<R>> searchFunction,
                                Function<CriteriaBuilder, CriteriaQuery<Long>> countFunction,
-                               int pageNo, int size) {
+                               int pageNo, Integer size) {
         var totalCount = findOne(countFunction).orElse(0L);
 
         var cq = searchFunction.apply(entityManager.getCriteriaBuilder());
         var query = entityManager.createQuery(cq);
 
-        if (size <= 0)
-            size = 10;
+        if (size == null || size <= 0)
+            size = Integer.MAX_VALUE;
 
         query.setFirstResult((pageNo - 1) * size);
         query.setMaxResults(size);

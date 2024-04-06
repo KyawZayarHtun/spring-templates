@@ -5,7 +5,6 @@ import com.example.model.service.roleAccess.RoleAccessService;
 import com.example.util.exception.handler.BindingResultHandler;
 import com.example.util.payload.ApiResponse;
 import com.example.util.payload.IdResponse;
-import com.example.util.payload.dto.IdRequest;
 import com.example.util.payload.dto.roleAccess.*;
 import com.example.util.payload.dto.table.TableResponse;
 import jakarta.validation.Valid;
@@ -18,7 +17,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,19 +27,17 @@ public class RoleAccessController {
     private final RoleAccessService roleAccessService;
 
     @GetMapping("current-role-access")
-    public List<RoleAccessDetail> accessUrls(Authentication auth) {
+    public ApiResponse<List<RoleAccessDetail>> accessUrls(Authentication auth) {
         if (auth == null || auth instanceof AnonymousAuthenticationToken)
             throw new AccessDeniedException("You don't have access for this route!");
         String role = roleService.getCurrentUserRoleName(auth);
-        return roleAccessService.findRoleAccessByRoleName(role);
+        return ApiResponse.success(roleAccessService.findRoleAccessByRoleName(role));
     }
 
     @GetMapping("role-access-detail")
-    public RoleAccessDetail findByRoleAccessId(@RequestParam Long id) throws BadRequestException {
-        Optional<RoleAccessDetail> dto = roleAccessService.findRoleAccessById(id);
-        if (dto.isEmpty())
-            throw new BadRequestException("Given Id is wrong");
-        return dto.get();
+    public ApiResponse<RoleAccessDetail> findByRoleAccessId(@RequestParam Long id) throws BadRequestException {
+        var dto = roleAccessService.findRoleAccessById(id).orElseThrow(() -> new BadRequestException("Given id doesn't exist!"));
+        return ApiResponse.success(dto);
     }
 
     @PostMapping("/create-role-access")
@@ -57,7 +53,7 @@ public class RoleAccessController {
 
     @PutMapping("/update-role-access")
     public ApiResponse<IdResponse> updateRoleAccess(@RequestBody @Valid RoleAccessUpdateForm dto,
-                                                    BindingResult bindingResult) {
+                                                    BindingResult bindingResult) throws BadRequestException {
 
         checkRoleAccessNameExists(dto.id(), dto.name(), bindingResult);
         BindingResultHandler.checkBindingResultError(bindingResult);
@@ -67,13 +63,14 @@ public class RoleAccessController {
     }
 
     @DeleteMapping("/delete-role-access")
-    public ApiResponse<String> deleteRoleAccess(@RequestBody @Valid IdRequest roleAccessId) {
-        roleAccessService.deleteRoleAccessWithAllInheritance(roleAccessId.id());
+    public ApiResponse<String> deleteRoleAccess(@RequestParam Long id) throws BadRequestException {
+        roleAccessService.findRoleAccessById(id).orElseThrow(() -> new BadRequestException("Given id is wrong"));
+        roleAccessService.deleteRoleAccessWithAllInheritance(id);
         return ApiResponse.success("Delete Successfully.");
     }
 
     @PostMapping("/role-access-list")
-    public ApiResponse<TableResponse<RoleAccessListDto>> roleList(@RequestBody @Valid RoleAccessSearchDto searchDto, BindingResult bindingResult) {
+    public ApiResponse<TableResponse<RoleAccessDetail>> roleList(@RequestBody @Valid RoleAccessSearchDto searchDto, BindingResult bindingResult) {
         BindingResultHandler.checkBindingResultError(bindingResult);
         return ApiResponse.success(roleAccessService.getRoleAccessList(searchDto));
     }

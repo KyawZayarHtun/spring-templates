@@ -13,6 +13,7 @@ import com.example.util.payload.dto.table.TableResponse;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -102,11 +103,11 @@ public class RoleAccessServiceImpl implements RoleAccessService {
     }
 
     @Override
-    public TableResponse<RoleAccessListDto> getRoleAccessList(RoleAccessSearchDto searchDto) {
-        Function<CriteriaBuilder, CriteriaQuery<RoleAccessListDto>> searchFunction = cb -> {
-            var cq = cb.createQuery(RoleAccessListDto.class);
+    public TableResponse<RoleAccessDetail> getRoleAccessList(RoleAccessSearchDto searchDto) {
+        Function<CriteriaBuilder, CriteriaQuery<RoleAccessDetail>> searchFunction = cb -> {
+            var cq = cb.createQuery(RoleAccessDetail.class);
             var root = cq.from(RoleAccess.class);
-            RoleAccessListDto.select(cq, root);
+            RoleAccessDetail.select(cq, root);
             tableService.sort(cb, cq, root, searchDto.getSortColumnName(), searchDto.getSortDir());
             cq.where(searchDto.predicates(cb, root));
             return cq;
@@ -149,7 +150,6 @@ public class RoleAccessServiceImpl implements RoleAccessService {
     @Transactional
     @Override
     public void deleteRoleAccessWithAllInheritance(Long roleAccessId) {
-//        Function<CriteriaBuilder, CriteriaQuery<>>Role
         var ra = roleAccessRepo.findById(roleAccessId).orElseThrow();
         var raIdList = ra.getRoles().stream().map(Role::getId).toList();
         raIdList.forEach(id -> {
@@ -160,10 +160,10 @@ public class RoleAccessServiceImpl implements RoleAccessService {
         roleAccessRepo.deleteById(roleAccessId);
     }
 
-    @Transactional
     @Override
-    public Long updateRoleAccess(RoleAccessUpdateForm dto) {
-        var roleAccess = roleAccessRepo.findById(dto.id()).orElseThrow();
+    @Transactional
+    public Long updateRoleAccess(RoleAccessUpdateForm dto) throws BadRequestException {
+        var roleAccess = roleAccessRepo.findById(dto.id()).orElseThrow(() -> new BadRequestException("Given id doesn't exist!"));
         roleAccess.setName(dto.name());
         roleAccess.setUrl(roleAccessUrlWithSlash(dto.url()));
         roleAccess.setRequestMethod(dto.requestMethod());
@@ -172,8 +172,8 @@ public class RoleAccessServiceImpl implements RoleAccessService {
         return dto.id();
     }
 
-    @Transactional
     @Override
+    @Transactional
     public Long createRoleAccess(RoleAccessCreateForm dto) {
         var roleAccess = new RoleAccess();
         roleAccess.setName(dto.name());

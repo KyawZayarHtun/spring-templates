@@ -17,6 +17,6 @@ public interface BaseRepository<T, ID> extends JpaRepositoryImplementation<T, ID
     <R> List<R> findAll(Function<CriteriaBuilder, CriteriaQuery<R>> searchFunction);
     <R> Page<R> findAll(Function<CriteriaBuilder, CriteriaQuery<R>> searchFunction,
                         Function<CriteriaBuilder, CriteriaQuery<Long>> countFunction,
-                        int pageNo, int size);
+                        int pageNo, Integer size);
 
 }
