@@ -1,24 +1,37 @@
 package com.example.util.payload.dto.roleAccess;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.example.model.entity.RoleAccess;
+import com.example.model.entity.RoleAccess_;
+import com.example.util.constant.CrudOperation;
+import com.example.util.constant.RequestMethod;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 
-import java.util.List;
-import java.util.Map;
+public record RoleAccessDetail(
+        Long id,
+        String name,
+        String url,
+        RequestMethod requestMethod,
+        CrudOperation requestOperation,
+        String description
+) {
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class RoleAccessDetail {
-
-    private String name;
-    private List<RoleAccessDto> roleAccessList;
-
-    public RoleAccessDetail(Map.Entry<String, List<RoleAccessDto>> dto) {
-        this.name = dto.getKey();
-        this.roleAccessList = dto.getValue();
+    public static void select(CriteriaQuery<RoleAccessDetail> cq, Root<RoleAccess> root) {
+        cq.multiselect(
+                root.get(RoleAccess_.id),
+                root.get(RoleAccess_.name),
+                root.get(RoleAccess_.url),
+                root.get(RoleAccess_.requestMethod),
+                root.get(RoleAccess_.crudOperation),
+                root.get(RoleAccess_.description)
+        );
     }
+
+    public static String getUrlStartName(String url) {
+        String[] split = url.split("/");
+        if (split.length == 0)
+            return "home";
+        return split[1];
+    }
+
 }

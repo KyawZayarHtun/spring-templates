@@ -1,5 +1,6 @@
 package com.example.model.service.roleAccess;
 
+import com.example.util.payload.dto.role.RoleWithRoleAccessList;
 import com.example.util.payload.dto.roleAccess.*;
 import com.example.util.payload.dto.table.TableResponse;
 import org.springframework.lang.Nullable;
@@ -9,22 +10,25 @@ import java.util.Optional;
 
 public interface RoleAccessService {
 
-    List<RoleAccessDto> findRoleAccessByRoleId(Long roleId);
-    List<RoleAccessDto> findRoleAccessByRoleName(String roleName);
+    List<RoleAccessDetail> findRoleAccessByRoleId(Long roleId);
+    List<RoleAccessDetail> findRoleAccessByRoleName(String roleName); // used
 
-    Optional<RoleAccessForm> findRoleAccessById(Long id);
+    Optional<RoleAccessDetail> findRoleAccessById(Long id); // used
 
-    Optional<RoleAccessForm> findRoleAccessByName(String roleAccessName);
+    Optional<RoleAccessDetail> findRoleAccessByName(String roleAccessName);
 
-    void manageRoleAccess(RoleAccessForm dto);
+    Long createRoleAccess(RoleAccessCreateForm dto); // used
 
-    boolean roleAccessNameExists(@Nullable Long id, String roleAccessName);
+
+    Long updateRoleAccess(RoleAccessUpdateForm dto); // used
+
+    boolean roleAccessNameExists(@Nullable Long id, String roleAccessName); // used
 
     TableResponse<RoleAccessListDto> getRoleAccessList(RoleAccessSearchDto searchDto);
 
-    List<RoleAccessDto> findAllRoleAccess();
+    List<RoleAccessDetail> findAllRoleAccess();
 
-    List<RoleAccessDetail> convertToRoleAccessDetail(List<RoleAccessDto> roleAccessList);
+    List<RoleWithRoleAccessList> convertToRoleAccessDetail(List<RoleAccessDetail> roleAccessList);
 
     void deleteRoleAccessWithAllInheritance(Long roleAccessId);
 }

@@ -11,6 +11,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.security.SignatureException;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
@@ -29,6 +30,12 @@ public class GlobalErrorsHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiResponse<Map<String, String>> validationError(DtoValidationException e) {
         return ApiResponse.validationError(e.getMessages());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiResponse<ErrorRes> httpConvertError(HttpMessageNotReadableException e) {
+        return ApiResponse.badRequest(new ErrorRes(e.getMessage()));
     }
 
     @ExceptionHandler

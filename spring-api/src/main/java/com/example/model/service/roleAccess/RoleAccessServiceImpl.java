@@ -7,6 +7,7 @@ import com.example.model.entity.Role_;
 import com.example.model.repo.RoleAccessRepo;
 import com.example.model.repo.RoleRepo;
 import com.example.model.service.table.TableService;
+import com.example.util.payload.dto.role.RoleWithRoleAccessList;
 import com.example.util.payload.dto.roleAccess.*;
 import com.example.util.payload.dto.table.TableResponse;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -31,25 +32,25 @@ public class RoleAccessServiceImpl implements RoleAccessService {
     private final RoleRepo roleRepo;
 
     @Override
-    public List<RoleAccessDto> findRoleAccessByRoleId(Long roleId) {
-        Function<CriteriaBuilder, CriteriaQuery<RoleAccessDto>> searchQuery = cb -> {
-          var cq = cb.createQuery(RoleAccessDto.class);
-          var root = cq.from(RoleAccess.class);
-          var role = root.join(RoleAccess_.roles);
-          RoleAccessDto.select(cq, root);
-          cq.where(cb.equal(role.get(Role_.id), roleId));
-          return cq;
+    public List<RoleAccessDetail> findRoleAccessByRoleId(Long roleId) {
+        Function<CriteriaBuilder, CriteriaQuery<RoleAccessDetail>> searchQuery = cb -> {
+            var cq = cb.createQuery(RoleAccessDetail.class);
+            var root = cq.from(RoleAccess.class);
+            var role = root.join(RoleAccess_.roles);
+            RoleAccessDetail.select(cq, root);
+            cq.where(cb.equal(role.get(Role_.id), roleId));
+            return cq;
         };
         return roleAccessRepo.findAll(searchQuery);
     }
 
     @Override
-    public List<RoleAccessDto> findRoleAccessByRoleName(String roleName) {
-        Function<CriteriaBuilder, CriteriaQuery<RoleAccessDto>> searchQuery = cb -> {
-            var cq = cb.createQuery(RoleAccessDto.class);
+    public List<RoleAccessDetail> findRoleAccessByRoleName(String roleName) {
+        Function<CriteriaBuilder, CriteriaQuery<RoleAccessDetail>> searchQuery = cb -> {
+            var cq = cb.createQuery(RoleAccessDetail.class);
             var root = cq.from(RoleAccess.class);
             var role = root.join(RoleAccess_.roles);
-            RoleAccessDto.select(cq, root);
+            RoleAccessDetail.select(cq, root);
             cq.where(cb.equal(role.get(Role_.name), roleName));
             return cq;
         };
@@ -57,11 +58,11 @@ public class RoleAccessServiceImpl implements RoleAccessService {
     }
 
     @Override
-    public Optional<RoleAccessForm> findRoleAccessById(Long id) {
-        Function<CriteriaBuilder, CriteriaQuery<RoleAccessForm>> searchQuery = cb -> {
-            var cq = cb.createQuery(RoleAccessForm.class);
+    public Optional<RoleAccessDetail> findRoleAccessById(Long id) {
+        Function<CriteriaBuilder, CriteriaQuery<RoleAccessDetail>> searchQuery = cb -> {
+            var cq = cb.createQuery(RoleAccessDetail.class);
             var root = cq.from(RoleAccess.class);
-            RoleAccessForm.select(cq, root);
+            RoleAccessDetail.select(cq, root);
             cq.where(cb.equal(root.get(RoleAccess_.id), id));
             return cq;
         };
@@ -69,25 +70,15 @@ public class RoleAccessServiceImpl implements RoleAccessService {
     }
 
     @Override
-    public Optional<RoleAccessForm> findRoleAccessByName(String roleAccessName) {
-        Function<CriteriaBuilder, CriteriaQuery<RoleAccessForm>> searchQuery = cb -> {
-            var cq = cb.createQuery(RoleAccessForm.class);
+    public Optional<RoleAccessDetail> findRoleAccessByName(String roleAccessName) {
+        Function<CriteriaBuilder, CriteriaQuery<RoleAccessDetail>> searchQuery = cb -> {
+            var cq = cb.createQuery(RoleAccessDetail.class);
             var root = cq.from(RoleAccess.class);
-            RoleAccessForm.select(cq, root);
+            RoleAccessDetail.select(cq, root);
             cq.where(cb.equal(root.get(RoleAccess_.name), roleAccessName));
             return cq;
         };
         return roleAccessRepo.findOne(searchQuery);
-    }
-
-    @Transactional
-    @Override
-    public void manageRoleAccess(RoleAccessForm dto) {
-        if (dto.getId() == null || dto.getId() <= 0) {
-            createRoleAccess(dto);
-        } else {
-            editRoleAccess(dto);
-        }
     }
 
     @Override
@@ -136,21 +127,21 @@ public class RoleAccessServiceImpl implements RoleAccessService {
     }
 
     @Override
-    public List<RoleAccessDto> findAllRoleAccess() {
-        Function<CriteriaBuilder, CriteriaQuery<RoleAccessDto>> searchQuery = cb -> {
-          var cq = cb.createQuery(RoleAccessDto.class);
-          var root = cq.from(RoleAccess.class);
-          RoleAccessDto.select(cq, root);
-          return cq;
+    public List<RoleAccessDetail> findAllRoleAccess() {
+        Function<CriteriaBuilder, CriteriaQuery<RoleAccessDetail>> searchQuery = cb -> {
+            var cq = cb.createQuery(RoleAccessDetail.class);
+            var root = cq.from(RoleAccess.class);
+            RoleAccessDetail.select(cq, root);
+            return cq;
         };
         return roleAccessRepo.findAll(searchQuery);
     }
 
-    public List<RoleAccessDetail> convertToRoleAccessDetail(List<RoleAccessDto> roleAccessList) {
+    public List<RoleWithRoleAccessList> convertToRoleAccessDetail(List<RoleAccessDetail> roleAccessList) {
         return roleAccessList.stream()
-                .collect(Collectors.groupingBy(ra -> RoleAccessDto.getUrlStartName(ra.url())))
+                .collect(Collectors.groupingBy(ra -> RoleAccessDetail.getUrlStartName(ra.url())))
                 .entrySet().stream()
-                .map(RoleAccessDetail::new)
+                .map(RoleWithRoleAccessList::new)
                 .sorted((r, r1) -> r1.getRoleAccessList().size() - r.getRoleAccessList().size())
                 .toList();
     }
@@ -169,23 +160,34 @@ public class RoleAccessServiceImpl implements RoleAccessService {
         roleAccessRepo.deleteById(roleAccessId);
     }
 
-    private void editRoleAccess(RoleAccessForm dto) {
-        var roleAccess = roleAccessRepo.findById(dto.getId()).orElseThrow();
-        roleAccess.setName(dto.getName());
-        roleAccess.setUrl(dto.getUrl());
-        roleAccess.setRequestMethod(dto.getRequestMethod());
-        roleAccess.setCrudOperation(dto.getRequestOperation());
-        roleAccess.setDescription(dto.getDescription());
+    @Transactional
+    @Override
+    public Long updateRoleAccess(RoleAccessUpdateForm dto) {
+        var roleAccess = roleAccessRepo.findById(dto.id()).orElseThrow();
+        roleAccess.setName(dto.name());
+        roleAccess.setUrl(roleAccessUrlWithSlash(dto.url()));
+        roleAccess.setRequestMethod(dto.requestMethod());
+        roleAccess.setCrudOperation(dto.requestOperation());
+        roleAccess.setDescription(dto.description());
+        return dto.id();
     }
 
-    private void createRoleAccess(RoleAccessForm dto) {
+    @Transactional
+    @Override
+    public Long createRoleAccess(RoleAccessCreateForm dto) {
         var roleAccess = new RoleAccess();
-        roleAccess.setName(dto.getName());
-        roleAccess.setUrl(dto.getUrl());
-        roleAccess.setRequestMethod(dto.getRequestMethod());
-        roleAccess.setCrudOperation(dto.getRequestOperation());
-        roleAccess.setDescription(dto.getDescription());
-        roleAccessRepo.save(roleAccess);
+        roleAccess.setName(dto.name());
+        roleAccess.setUrl(roleAccessUrlWithSlash(dto.url()));
+        roleAccess.setRequestMethod(dto.requestMethod());
+        roleAccess.setCrudOperation(dto.requestOperation());
+        roleAccess.setDescription(dto.description());
+        return roleAccessRepo.save(roleAccess).getId();
+    }
+
+    private String roleAccessUrlWithSlash(String url) {
+        if (!url.startsWith("/"))
+           return "/".concat(url);
+        return url;
     }
 
 

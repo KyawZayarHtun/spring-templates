@@ -12,10 +12,10 @@ public class TableServiceImpl implements TableService{
     @Override
     public void sort(CriteriaBuilder cb, CriteriaQuery<?> cq, Root<?> root, String sortColumnName, String sortDir) {
         if (!StringUtils.hasText(sortDir))
-            sortDir = "asc";
+            sortDir = "desc";
 
         if (!StringUtils.hasText(sortColumnName))
-            sortColumnName = "name";
+            sortColumnName = "createdAt";
 
         switch (sortDir) {
             case "asc" -> cq.orderBy(cb.asc(root.get(sortColumnName)));

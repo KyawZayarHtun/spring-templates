@@ -33,6 +33,11 @@ public class SecurityController {
 
     @PostMapping("login")
     public ApiResponse<LoginResult> signIn(@RequestBody @Valid LoginReq loginForm, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            throw new DtoValidationException(bindingResult);
+        }
+
         var authentication = authenticationManager
                 .authenticate(UsernamePasswordAuthenticationToken.unauthenticated(loginForm.email(), loginForm.password()));
         var accessToken = jwtTokenProvider.generateToken(authentication, false);
@@ -43,6 +48,10 @@ public class SecurityController {
     @PostMapping("refreshToken")
     public ApiResponse<LoginResult> refreshToken(@RequestBody @Valid RefreshTokenReq refreshTokenReq,
                                                  BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            throw new DtoValidationException(bindingResult);
+        }
 
         try {
             Authentication authentication = jwtTokenProvider.parse(refreshTokenReq.refreshToken());
