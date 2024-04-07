@@ -6,13 +6,12 @@ import com.example.util.payload.dto.table.EssentialDataForTable;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
-import lombok.*;
+import lombok.Getter;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
+@Getter
 public class UserSearchDto extends EssentialDataForTable {
 
     private String name;

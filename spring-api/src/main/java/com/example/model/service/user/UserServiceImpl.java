@@ -12,14 +12,12 @@ import com.example.util.payload.dto.document.excel.ExcelExportHeadersAndByteStre
 import com.example.util.payload.dto.document.excel.ExcelRow;
 import com.example.util.payload.dto.document.excel.ExcelSetting;
 import com.example.util.payload.dto.table.TableResponse;
-import com.example.util.payload.dto.user.UserDetailDtoForProfile;
-import com.example.util.payload.dto.user.UserDetailDtoForSecurity;
-import com.example.util.payload.dto.user.UserListDto;
-import com.example.util.payload.dto.user.UserSearchDto;
+import com.example.util.payload.dto.user.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -47,7 +45,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public TableResponse<UserListDto> userList(UserSearchDto searchDto) {
+    public TableResponse<UserDetail> userList(UserSearchDto searchDto) {
         var queryFunction = userSearchQuery(searchDto);
 
         Function<CriteriaBuilder, CriteriaQuery<Long>> countFunction = cb -> {
@@ -101,6 +99,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDetail getUserByEmail(String email) throws BadRequestException {
+        Function<CriteriaBuilder, CriteriaQuery<UserDetail>> searchByEmail = cb -> {
+            var cq = cb.createQuery(UserDetail.class);
+            var root = cq.from(User.class);
+            UserDetail.select(cq, root);
+            cq.where(cb.equal(root.get(User_.email), email));
+            return cq;
+        };
+        return userRepo.findOne(searchByEmail)
+                .orElseThrow(() -> new BadRequestException("Given email doesn't exist!"));
+    }
+
+    @Override
     public String getLoginUserEmail() {
         var auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -111,12 +122,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDetailDtoForProfile getUserProfile() {
+    public UserDetail getUserProfile() {
 
-        Function<CriteriaBuilder, CriteriaQuery<UserDetailDtoForProfile>> searchQuery = cb -> {
-            var cq = cb.createQuery(UserDetailDtoForProfile.class);
+        Function<CriteriaBuilder, CriteriaQuery<UserDetail>> searchQuery = cb -> {
+            var cq = cb.createQuery(UserDetail.class);
             var root = cq.from(User.class);
-            UserDetailDtoForProfile.select(cq, root);
+            UserDetail.select(cq, root);
             cq.where(cb.equal(root.get(User_.email), getLoginUserEmail()));
             return cq;
         };
@@ -138,24 +149,28 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void updateUserProfile(UserDetailDtoForProfile userDetail) throws IOException {
+    public Long updateUserProfile(UserUpdateForm form) throws IOException {
 
-        var currentUser = userRepo.findByEmail(getLoginUserEmail()).orElseThrow();
-        currentUser.setName(userDetail.getName());
-        currentUser.setPhoneNo(userDetail.getPhoneNo());
-        currentUser.setDob(userDetail.getDob());
+        var currentUser = userRepo.findByEmail(getLoginUserEmail()).orElseThrow(() -> new BadRequestException("Given id doesn't exist!"));
+        currentUser.setName(form.name());
+        currentUser.setPhoneNo(form.phoneNo());
+        currentUser.setDob(form.dob());
+        currentUser.setGender(form.gender());
 
-        var fileName = imageService.saveImageToDesireLocation("profile", userDetail.getProfileImage());
+        String fileName = "";
+        if (form.profileImage() != null)
+            fileName = imageService.saveImageToDesireLocation("profile", form.profileImage());
 
         if (StringUtils.hasLength(fileName))
             currentUser.setProfileImagePath(fileName);
+        return form.id();
     }
 
-    Function<CriteriaBuilder, CriteriaQuery<UserListDto>> userSearchQuery(UserSearchDto searchDto) {
+    Function<CriteriaBuilder, CriteriaQuery<UserDetail>> userSearchQuery(UserSearchDto searchDto) {
         return cb -> {
-            var cq = cb.createQuery(UserListDto.class);
+            var cq = cb.createQuery(UserDetail.class);
             var root = cq.from(User.class);
-            UserListDto.select(cq, root);
+            UserDetail.select(cq, root);
             tableService.sort(cb, cq, root, searchDto.getSortColumnName(), searchDto.getSortDir());
             cq.where(searchDto.predicates(cb, root));
             return cq;
